@@ -11,14 +11,28 @@
             <p>Thay đổi mật khẩu</p>
         </div>
         <div class="card-body">
-            <form action="recover-password.html" method="post">
+            <form action="{{route('admin.reset.password.post')}}" method="post" id="myForm">
+                @csrf
                 <div class="input-group mb-3">
-                    <label style="padding-top: 6px; padding-right: 5px">Mật khẩu<span style="color: red;">*</span></label>
-                    <input type="text" class="form-control" placeholder="Nhập mật khẩu">
+                    <input type="hidden" name="email"  value="{{ $email }}">
                 </div>
-                <div class="input-group mb-3">
-                    <label style="width: 77px;padding-right: 5px">Mật khẩu confirm<span style="color: red;">*</span></label>
-                    <input type="text" class="form-control" placeholder="Nhập mật khẩu confirm">
+                <div class="form-group" >
+                    <div style="display: flex;">
+                        <label style="width: 104px;padding-top: 6px;">Mật khẩu<span style="color: red;">*</span></label>
+                        <input type="password" class="form-control" name="password" placeholder="Nhập mật khẩu">
+
+                    </div>
+
+                    @if ($errors->has('password'))
+                        <p class="text-danger text-center" style="font-size: 12px;">{{ $errors->first('password') }}</p>
+                    @endif
+                </div>
+                <div class="form-group" >
+                    <div style="display: flex;">
+                        <label style="width: 105px;">Mật khẩu confirm<span style="color: red;">*</span></label>
+                        <input type="password" class="form-control" id="confirm_password" placeholder="Nhập mật khẩu confirm">
+                    </div>
+                    <p id="confirm_password_value" class="text-danger text-center" style="font-size: 12px;"></p>
                 </div>
                 <div class="row">
                     <div class="col-6">
@@ -37,5 +51,14 @@
 <!-- /.login-box -->
 
 @include('admin.users.layouts.footer')
+<script>
+    $('#myForm').submit(function(){
+        if($('[name=password]').val() != $('#confirm_password').val()){
+            $('p#confirm_password_value').text('Mật khẩu xác nhận không chính xác!');
+            return false;
+        }
+        return true;
+    })
+</script>
 </body>
 </html>

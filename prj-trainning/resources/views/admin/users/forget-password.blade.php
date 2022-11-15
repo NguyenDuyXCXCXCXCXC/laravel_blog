@@ -12,16 +12,20 @@
         </div>
         <div class="card-body">
             <p class="login-box-msg">Vui lòng kiểm tra email của bạn để nhận mật khẩu mới.</p>
+            @if (Session::has('message'))
+                <div class="alert alert-success" role="alert">
+                    {{ Session::get('message') }}
+                </div>
+            @endif
             <form action="{{ route('admin.forget-password.post') }}" method="post">
                 @csrf
                 <div class="form-group" >
                     <div style="display: flex;">
                         <label style="padding-top: 6px; padding-right: 5px">Địa chỉ mail<span style="color: red;">*</span></label>
-                        <input type="email" class="form-control" placeholder="Nhập địa chỉ mail">
+                        <input type="email" name="email" class="form-control" placeholder="Nhập địa chỉ mail">
                     </div>
-
                     @if ($errors->has('email'))
-                        <span class="text-danger">{{ $errors->first('email') }}</span>
+                            <span class="text-danger text-center">{{ $errors->first('email') }}</span>
                     @endif
                 </div>
                 <div class="row">

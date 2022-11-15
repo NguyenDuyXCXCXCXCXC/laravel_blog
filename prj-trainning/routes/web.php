@@ -37,14 +37,15 @@ Route::prefix('admin')->group(function () {
     // forget password
     Route::get('forgetPassword', [\App\Http\Controllers\Admin\User\ResetPasswordController::class, 'index'])->name('admin.forget-password');
     Route::post('forgetPassword', [\App\Http\Controllers\Admin\User\ResetPasswordController::class, 'submitForgetPasswordForm'])->name('admin.forget-password.post');
-    Route::get('forgetPasswordLink', [\App\Http\Controllers\Admin\User\ResetPasswordController::class, 'showResetPasswordForm'])->name('admin.forget-password-link');
+    Route::get('forgetPasswordLink/{token}/{email}', [\App\Http\Controllers\Admin\User\ResetPasswordController::class, 'showResetPasswordForm'])->name('admin.forget-password-link.get');
+    Route::post('reset-password', [\App\Http\Controllers\Admin\User\ResetPasswordController::class, 'submitResetPasswordForm'])->name('admin.reset.password.post');
     Route::get('changePasswordSuccess', [\App\Http\Controllers\Admin\User\ResetPasswordController::class, 'showChangePasswordSuccess'])->name('admin.showChangePasswordSuccess');
 
+    //  dashboard
     Route::get('main', [\App\Http\Controllers\Admin\MainController::class, 'index'])->name('admin');
 
 
 });
-
 
 
 
