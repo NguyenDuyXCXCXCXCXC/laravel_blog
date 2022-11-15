@@ -24,6 +24,7 @@ class LoginRequest extends FormRequest
      */
     public function rules()
     {
+
         return [
             'email' => 'required|max:100|min:10|email:filter',
             'password' => ['required', 'max:50', Password::min(10)->letters()->mixedCase()->numbers()->symbols()->uncompromised()],
@@ -33,11 +34,16 @@ class LoginRequest extends FormRequest
     public function messages()
     {
         return [
-            'email.required' => 'A email is required',
-            'email.max' => 'A email max:100',
-            'email.min' => 'A email min:10',
-            'password.required' => 'A password is required',
-            'password.max' => 'A email max:50',
+            'email.required' => 'Email không được để trống!',
+            'email.max' => 'Địa chỉ mail không vượt quá 100 ký tự!',
+            'email.min' => 'Địa chỉ mail không được ít hơn 10 ký tự!',
+            'password.required' => 'Mật khẩu không được để trống!',
+            'password.max' => 'Mật khẩu không vượt quá 50 ký tự!',
+            'password.min' => 'Mật khẩu không được ít hơn 10 ký tự!',
+            'password.letters' => 'Mật khẩu yêu cầu ít nhất một chữ cái!',
+            'password.mixedCase' => 'Mật khẩu yêu cầu ít nhất một chữ hoa và một chữ thường!',
+            'password.numbers' => 'Mật khẩu yêu cầu ít nhất một số!',
+            'password.symbols' => 'Mật khẩu yêu cầu ít nhất một biểu tượng!',
         ];
     }
 }

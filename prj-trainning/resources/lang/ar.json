@@ -1,0 +1,6 @@
+{
+    "The :attribute must contain at least one letter.": ":attribute يجب أن يحتوي على الأقل حرف واحد.",
+    "The :attribute must contain at least one uppercase and one lowercase letter.": ":attribute يجب أن يحتوي على الأقل حرف كبير واحد وحرف صغير واحد.",
+    "The :attribute must contain at least one number.": ":attribute يجب أن يحتوي على الأقل رقم واحد.",
+    "The :attribute must contain at least one symbol.": ":attribute يجب أن يحتوي على الأقل رمز واحد."
+}

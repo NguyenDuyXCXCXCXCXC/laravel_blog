@@ -27,7 +27,7 @@ class LoginController extends Controller
         {
             return redirect()->route('admin');
         }else{
-            Session::flash('error', 'Email hoac Password khong dung');
+            Session::flash('myError', 'Thông tin đăng nhập không chính xác !');
             return redirect()->back()->withInput($request->input());
         }
     }

@@ -23,7 +23,7 @@ class CreateUsersTable extends Migration
             $table->string('avatar', 200)->nullable();
             $table->date('birthday')->nullable();
             $table->tinyInteger('sex')->default(2);
-            $table->text('address');
+            $table->text('address')->nullable();
             $table->tinyInteger('role')->default(2);
             $table->tinyInteger('status')->default(1);
             $table->string('token', 200)->nullable();

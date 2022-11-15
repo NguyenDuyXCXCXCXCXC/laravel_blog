@@ -30,15 +30,20 @@ Route::prefix('admin')->group(function () {
     // register
     Route::get('register', [\App\Http\Controllers\Admin\User\RegisterController::class, 'index'])->name('admin.register');
     Route::post('register/store', [\App\Http\Controllers\Admin\User\RegisterController::class, 'store']);
+    Route::get('account/verify/{token}', [\App\Http\Controllers\Admin\User\RegisterController::class, 'verifyAccount'])->name('admin.user.verify');
+    Route::get('register-success', [\App\Http\Controllers\Admin\User\RegisterController::class, 'registerSuccess'])->name('admin.register-succes');
+
 
     // forgrt password
-    Route::get('forgot-password', [\App\Http\Controllers\Admin\User\ResetPasswordController::class, 'index'])->name('admin.forgot-password');
+    Route::get('forgetPassword', [\App\Http\Controllers\Admin\User\ResetPasswordController::class, 'index'])->name('admin.forget-password');
+    Route::get('forgetPasswordLink', [\App\Http\Controllers\Admin\User\ResetPasswordController::class, 'showResetPasswordForm'])->name('admin.forget-password-link');
+    Route::get('changePasswordSuccess', [\App\Http\Controllers\Admin\User\ResetPasswordController::class, 'showChangePasswordSuccess'])->name('admin.showChangePasswordSuccess');
 
     Route::get('main', [\App\Http\Controllers\Admin\MainController::class, 'index'])->name('admin');
+
+
 });
 
 
-//Route::get('admin/login', [\App\Http\Controllers\Admin\User\LoginController::class, 'index']);
-//Route::post('admin/login/store', [\App\Http\Controllers\Admin\User\LoginController::class, 'store']);
-//
-//Route::get('admin/main', [\App\Http\Controllers\Admin\MainController::class, 'index'])->name('admin');
+
+
