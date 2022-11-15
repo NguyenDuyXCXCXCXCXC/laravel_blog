@@ -12,10 +12,17 @@
         </div>
         <div class="card-body">
             <p class="login-box-msg">Vui lòng kiểm tra email của bạn để nhận mật khẩu mới.</p>
-            <form action="recover-password.html" method="post">
-                <div class="input-group mb-3">
-                    <label style="padding-top: 6px; padding-right: 5px">Địa chỉ mail<span style="color: red;">*</span></label>
-                    <input type="email" class="form-control" placeholder="Nhập địa chỉ mail">
+            <form action="{{ route('admin.forget-password.post') }}" method="post">
+                @csrf
+                <div class="form-group" >
+                    <div style="display: flex;">
+                        <label style="padding-top: 6px; padding-right: 5px">Địa chỉ mail<span style="color: red;">*</span></label>
+                        <input type="email" class="form-control" placeholder="Nhập địa chỉ mail">
+                    </div>
+
+                    @if ($errors->has('email'))
+                        <span class="text-danger">{{ $errors->first('email') }}</span>
+                    @endif
                 </div>
                 <div class="row">
                     <div class="col-6">

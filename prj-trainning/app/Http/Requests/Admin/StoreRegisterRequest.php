@@ -27,7 +27,7 @@ class StoreRegisterRequest extends FormRequest
     {
         return [
             'email' => 'required|unique:users|max:100|min:10|email:filter',
-            'password' => ['required', 'max:50', Password::min(10)->letters()->mixedCase()->numbers()->symbols()->uncompromised()],
+            'password' => ['required', 'max:50', Password::min(12)->letters()->mixedCase()->numbers()->symbols()->uncompromised()],
             'first_name' => 'required|max:50',
             'last_name'=> 'required|max:50'
         ];
@@ -39,6 +39,7 @@ class StoreRegisterRequest extends FormRequest
             'email.required' => 'Email không được để trống!',
             'email.max' => 'Địa chỉ mail không vượt quá 100 ký tự!',
             'email.min' => 'Địa chỉ mail không được ít hơn 10 ký tự!',
+            'email.unique' => 'Địa chỉ mail đã tồn tại!',
             'password.required' => 'Mật khẩu không được để trống!',
             'password.max' => 'Mật khẩu không vượt quá 50 ký tự!',
             'password.min' => 'Mật khẩu không được ít hơn 10 ký tự!',
