@@ -13,6 +13,9 @@ class LoginController extends Controller
 {
     public function index()
     {
+        if(Auth::check()){
+            return redirect()->route('admin.dashboard');
+        }
         return view('admin.users.login', [
             'title' => 'Dang nhap he thong'
         ]);
@@ -22,15 +25,23 @@ class LoginController extends Controller
         if (Auth::attempt(
             [
                 'email' => $request->input('email'),
-                'password' => $request->input('password')
+                'password' => $request->input('password'),
+                'role' => [1,3]
             ], $request->input('remember')))
         {
-            return redirect()->route('admin');
+            Session::flash('mySuccess', 'Đăng nhập thành công!');
+            return redirect()->route('admin.dashboard');
         }else{
             Session::flash('myError', 'Thông tin đăng nhập không chính xác !');
             return redirect()->back()->withInput($request->input());
         }
     }
 
+    public function logout()
+    {
+        Session::flush();
+        Auth::logout();
+        return Redirect('/admin/login');
+    }
 
 }

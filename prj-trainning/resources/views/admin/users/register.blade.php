@@ -19,6 +19,7 @@
         <div class="card-body register-card-body">
             @include('admin.users.alert')
             <form action="/admin/register/store" method="post" id="myForm">
+                <input type="hidden" class="form-control" name="role" value="1" >
                 <div class="form-group" >
                     <div style="display: flex;">
                         <label style="width: 102px;padding-top: 6px;"">Email<span style="color: red;">*</span></label>

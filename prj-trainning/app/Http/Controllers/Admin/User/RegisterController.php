@@ -16,6 +16,9 @@ class RegisterController extends Controller
 {
     public function index()
     {
+        if(Auth::check()){
+            return redirect()->route('admin.dashboard');
+        }
         return view('admin.users.register', [
             'title' => 'Dang ky tai khoan'
         ]);
@@ -23,7 +26,6 @@ class RegisterController extends Controller
 
     public function store(StoreRegisterRequest $request)
     {
-
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);
 

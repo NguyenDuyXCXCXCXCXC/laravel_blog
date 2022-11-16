@@ -27,7 +27,7 @@ class StoreRegisterRequest extends FormRequest
     {
         return [
             'email' => 'required|unique:users|max:100|min:12|email:filter',
-            'password' => ['required', 'max:50', Password::min(10)->letters()->mixedCase()->numbers()->symbols()->uncompromised()],
+            'password' => 'required|min:10|max:50|regex:/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{6,}$/',
             'first_name' => 'required|max:50',
             'last_name'=> 'required|max:50'
         ];
@@ -43,10 +43,7 @@ class StoreRegisterRequest extends FormRequest
             'password.required' => 'Mật khẩu không được để trống!',
             'password.max' => 'Mật khẩu không vượt quá 50 ký tự!',
             'password.min' => 'Mật khẩu không được ít hơn 10 ký tự!',
-            'password.letters' => 'Mật khẩu yêu cầu ít nhất một chữ cái!',
-            'password.mixedCase' => 'Mật khẩu yêu cầu ít nhất một chữ hoa và một chữ thường!',
-            'password.numbers' => 'Mật khẩu yêu cầu ít nhất một số!',
-            'password.symbols' => 'Mật khẩu yêu cầu ít nhất một biểu tượng!',
+            'password.regex' => 'Mật khẩu có ít nhất 1 chữ cái viết hoa, 1 chữ cái thường, 1 số, 1 ký tự đặc biệt!',
             'first_name.required' => 'Trường họ không được để trống!',
             'first_name.max' => 'Trường họ không vượt quá 50 ký tự!',
             'last_name.required' => 'Trường tên không được để trống!',
