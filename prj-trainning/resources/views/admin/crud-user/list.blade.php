@@ -143,7 +143,7 @@
                                         @endif
                                     </td>
                                     <td>
-                                        <button type="button" class="btn btn-primary">Sửa</button>
+                                        <a href="{{ route('admin.user.edit',$u->id) }}"><button type="button" class="btn btn-primary">Sửa</button></a>
                                         <meta name="csrf-token" content="{{ csrf_token() }}">
 {{--                                        <button type="button" class="btn btn-danger deleteRecord" onclick="delUser({{$u->id}})">Xóa</button>--}}
                                         <button type="button" class="btn btn-danger deleteRecord" data-id="{{ $u->id }}">Xóa</button>

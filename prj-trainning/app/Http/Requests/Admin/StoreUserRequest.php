@@ -30,7 +30,7 @@ class StoreUserRequest extends FormRequest
             'last_name'=> 'required|max:50',
             'sex'=> 'required',
             'role'=> 'required',
-            'avatar'=> 'required|image|mimes:jpeg,png,jpg,gif,svg|max:10240',
+            'avatar'=> 'image|mimes:jpeg,png,jpg,gif,svg|max:10240',
 
         ];
     }

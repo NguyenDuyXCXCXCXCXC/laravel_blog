@@ -22,7 +22,7 @@
                 <input type="hidden" class="form-control" name="role" value="1" >
                 <div class="form-group" >
                     <div style="display: flex;">
-                        <label style="width: 102px;padding-top: 6px;"">Email<span style="color: red;">*</span></label>
+                        <label style="width: 102px;padding-top: 6px;">Email<span style="color: red;">*</span></label>
                         <input type="email" class="form-control" name="email" value="{{ old('email') }}" placeholder="Nhập địa chỉ mail">
                     </div>
                     @if ($errors->has('email'))

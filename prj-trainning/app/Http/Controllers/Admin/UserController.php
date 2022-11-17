@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use Illuminate\Support\Facades\Session;
+use function GuzzleHttp\Promise\all;
 
 class UserController extends Controller
 {
@@ -69,19 +70,13 @@ class UserController extends Controller
         ]);
     }
 
+
     public function store(StoreUserRequest $request)
     {
         $emailUserCreater = Auth::user()->email;
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);
         $emailUser =  $input['email'];
-
-//        if ($image = $request->file('avatar')) {
-//            $destinationPath = 'public/image/';
-//            $profileImage = $emailUser . time() . "." . $image->getClientOriginalExtension();
-//            $image->move($destinationPath, $profileImage);
-//            $input['avatar'] = "$profileImage";
-//        }
 
         if ($image = $request->file('avatar')) {
             $destinationPath = 'image/';
@@ -95,6 +90,68 @@ class UserController extends Controller
     }
 
 
+    public function edit($id)
+    {
+        $userEdit = User::where('id', $id)->first();
+        if($userEdit==null){
+            return redirect()->route('admin.user.list');
+        }
+        $user = Auth::user();
+        return view('admin.crud-user.edit', [
+            'title' => 'Sửa user '.$userEdit->first_name.' '.$userEdit->last_name,
+            'user' => $user,
+            'userEdit' =>$userEdit
+        ]);
+    }
+
+    public function update(Request $request)
+    {
+        $user = User::where('email', $request->input('email'))->first();
+        $request->validate([
+            'email' => 'required|max:100|min:12|email:filter',
+            'password' => 'required|confirmed|min:10|max:50|regex:/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{6,}$/',
+            'first_name' => 'required|max:50',
+            'last_name'=> 'required|max:50',
+            'avatar'=> 'image|mimes:jpeg,png,jpg,gif,svg|max:10240',
+        ], [
+            'email.required' => 'Email không được để trống!',
+            'email.max' => 'Địa chỉ mail không vượt quá 100 ký tự!',
+            'email.min' => 'Địa chỉ mail không được ít hơn 12 ký tự!',
+            'password.required' => 'Mật khẩu không được để trống!',
+            'password.confirmed' => 'Mật khẩu comfirm chưa khớp với mật khẩu!!',
+            'password.max' => 'Mật khẩu không vượt quá 50 ký tự!',
+            'password.min' => 'Mật khẩu không được ít hơn 10 ký tự!',
+            'password.regex' => 'Mật khẩu có ít nhất 1 chữ cái viết hoa, 1 chữ cái thường, 1 số, 1 ký tự đặc biệt!',
+            'first_name.required' => 'Trường họ không được để trống!',
+            'first_name.max' => 'Trường họ không vượt quá 50 ký tự!',
+            'last_name.required' => 'Trường tên không được để trống!',
+            'last_name.max' => 'Trường tên không vượt quá 50 ký tự!',
+            'sex.required' => 'Trường giới tính không được để trống!',
+            'role.required' => 'Trường vai trò không được để trống!',
+            'avatar.required' => 'Trường avatar không được để trống!',
+            'avatar.image' => 'Yêu cầu file định dạng phải là ảnh!',
+            'avatar.max' => 'Yêu cầu kích thước <= 10MB!',
+        ]);
+
+        $emailUserCreater = Auth::user()->email;
+        $input = $request->all();
+        $input['password'] = bcrypt($input['password']);
+        $emailUser =  $input['email'];
+
+        if ($image = $request->file('avatar')) {
+            $destinationPath = 'image/';
+            $profileImage = $emailUserCreater . time() . "." . $image->getClientOriginalExtension();
+            $image->move($destinationPath, $profileImage);
+            $input['avatar'] = "$profileImage";
+        }else{
+            unset($input['avatar']);
+        }
+
+
+        $user->update($input);
+        Session::flash('mySuccess', 'Tài khoản ' . $emailUser .' đã được chỉnh sửa' );
+        return redirect()->route('admin.user.list');
+    }
 
     public function destroy($id)
     {
