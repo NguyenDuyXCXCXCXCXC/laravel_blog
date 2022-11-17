@@ -19,5 +19,10 @@
         height: 50px;
         border-radius: 50%;
     }
-
+    @media (max-width: 575.98px) {
+        .page-link {
+            padding: 0.5rem 0;
+            width: 1.85rem;
+        }
+    }
 </style>

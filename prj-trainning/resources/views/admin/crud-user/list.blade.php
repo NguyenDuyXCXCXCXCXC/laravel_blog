@@ -3,24 +3,24 @@
 @section('content')
     @include('admin.alert')
     <div class="container-fluid">
-        <label class="pl-5">Home / Users</label>
+        <label class="pl-5"><a href="{{route('admin.dashboard')}}">Home</a>  / Users</label>
     </div>
     <div class="container-fluid">
+
         <div class="container card p-4 mt-3">
-            <form action="" method="post" >
+            <form action="{{ route('admin.user.list') }}" method="GET" >
                 <div class="form-group" >
                     <div style="display: flex;">
-                        <label style="width: 102px;padding-top: 6px;"">Email</label>
+                        <label style="width: 102px;padding-top: 6px;">Email</label>
                         <input type="text" class="form-control" name="search"  placeholder="Nhập địa chỉ mail hoặc họ và tên">
                     </div>
                 </div
-
                 <div class="form-group" >
                     <div class="input-group  mb-3">
                         <label style="margin-right: 35px;">Giới tính</label>
                         <div class="form-group" style="display: flex;">
                             <div class="form-check" style="padding-right: 8px;">
-                                <input class="form-check-input" type="radio" value="0" name="sex" checked="">
+                                <input class="form-check-input" type="radio" value="0" name="sex">
                                 <label class="form-check-label">Nam</label>
                             </div>
                             <div class="form-check" style="padding-right: 8px;">
@@ -54,6 +54,11 @@
     <div class="row pt-5">
         <div class="col-12">
             <div class="card">
+                <div class="col-3 pt-2">
+                    <a href="{{route('admin.user.add')}}">
+                        <button class="btn btn-primary">Thêm mới user</button>
+                    </a>
+                </div>
                 <div class="row">
                     <div class="col-2">
                     </div>
@@ -86,60 +91,62 @@
                         </tr>
                         </thead>
                         <tbody>
-                            @foreach($users as $user)
+                            @foreach($users as $u)
                                 <tr>
                                     <td>{{++$i}}</td>
-                                    <td>{{$user->email}}</td>
-                                    <td>{{$user->first_name}} {{$user->last_name}} {{$user->id}}</td>
+                                    <td>{{$u->email}}</td>
+                                    <td>{{$u->first_name}} {{$u->last_name}}</td>
                                     <td>
-                                        @if($user->avatar == null || $user->avatar == '')
+                                        @if($u->avatar == null || $u->avatar == '')
                                             ...
                                         @else
-                                            <img src="{{$user->avatar}}" alt="Avatar" class="avatar">
+                                            <img src="/image/{{$u->avatar}}" alt="Avatar" class="avatar">
                                         @endif
                                     </td>
                                     <td>
-                                        @if($user->birthday == null || $user->birthday == '')
+                                        @if($u->birthday == null || $u->birthday == '')
                                             ...
                                         @else
-                                            {{$user->birthday}}
+                                            {{$u->birthday}}
                                         @endif
                                     </td>
                                     <td>
-                                        @if (($user->sex) === 0)
+                                        @if (($u->sex) === 0)
                                             Nam
-                                        @elseif (($user->sex) === 1)
+                                        @elseif (($u->sex) === 1)
                                             Nữ
                                         @else
                                             Khác
                                         @endif
                                     </td>
                                     <td>
-                                        @if($user->address == null || $user->address == '')
+                                        @if($u->address == null || $u->address == '')
                                             ...
                                         @else
-                                            {{$user->address}}
+                                            {{$u->address}}
                                         @endif
                                     </td>
                                     <td>
-                                        @if (($user->role) === 1)
+                                        @if (($u->role) === 1)
                                             Admin
-                                        @elseif (($user->role) === 2)
+                                        @elseif (($u->role) === 2)
                                             user
                                         @else
                                             manager
                                         @endif
                                     </td>
                                     <td>
-                                        @if (($user->status) === 0)
+                                        @if (($u->status) === 0)
                                             inactive
-                                        @elseif (($user->status) === 1)
+                                        @elseif (($u->status) === 1)
                                             active
                                         @endif
                                     </td>
                                     <td>
                                         <button type="button" class="btn btn-primary">Sửa</button>
-                                        <button type="button" class="btn btn-danger">Xóa</button>
+                                        <meta name="csrf-token" content="{{ csrf_token() }}">
+{{--                                        <button type="button" class="btn btn-danger deleteRecord" onclick="delUser({{$u->id}})">Xóa</button>--}}
+                                        <button type="button" class="btn btn-danger deleteRecord" data-id="{{ $u->id }}">Xóa</button>
                                     </td>
                                 </tr>
                             @endforeach
@@ -158,10 +165,54 @@
         <div class="col-7">
         </div>
         <div class="col-5">
-            {{ $users->onEachSide(5)->links() }}
+            {{ $users->withQueryString()->onEachSide(0)->links() }}
+
         </div>
     </div>
 </div>
 
+    <script>
+        $(".deleteRecord").click(function(){
+            var id = $(this).data("id");
+            var token = $("meta[name='csrf-token']").attr("content");
+            var isConfirm = confirm("Bạn chắc chắn muốn xóa user này?");
+            if (!isConfirm) {
+                return;
+            }
+            $.ajax(
+                {
+                    url: "/admin/user/del/"+id,
+                    type: 'DELETE',
+                    data: {
+                        "id": id,
+                        "_token": token,
+                    },
+                    success: function (){
+                        setTimeout(() =>{
+                            location.reload();
+                        }, 5000);
+
+                    }
+                });
+
+        });
+        // function delUser(id)
+        // {
+        //     var isConfirm = confirm("Bạn chắc chắn muốn xóa user này?");
+        //     if (!isConfirm) {
+        //         return;
+        //     }
+        //
+        //     var token = $("meta[name='csrf-token']").attr("content");
+        //     $.post("/admin/user/del",
+        //         {
+        //             "id": id,
+        //             "_token": token,
+        //         },
+        //         function( status){
+        //             console.log('status: '  + status);
+        //         });
+        // }
+    </script>
 
 @endsection

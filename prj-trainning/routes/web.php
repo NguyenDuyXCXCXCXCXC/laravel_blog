@@ -54,6 +54,11 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth']], function(){
     // admin/user
     Route::prefix('user')->group(function () {
         Route::get('/list', [\App\Http\Controllers\Admin\UserController::class, 'index'])->name('admin.user.list');
+        Route::get('/add', [\App\Http\Controllers\Admin\UserController::class, 'add'])->name('admin.user.add');
+        Route::post('/add', [\App\Http\Controllers\Admin\UserController::class, 'store'])->name('admin.user.store');
+
+
+        Route::delete('del/{id}', [\App\Http\Controllers\Admin\UserController::class, 'destroy'])->name('admin.user.destroy');
     });
 
 });
