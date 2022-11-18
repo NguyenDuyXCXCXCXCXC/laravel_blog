@@ -19,8 +19,17 @@
                 <div class="form-group" >
                     <div style="display: flex;">
                         <label style="width: 124px;padding-top: 6px;">Tên danh mục</label>
-                        <input type="text" class="form-control" name="search"  placeholder="Nhập tên danh mục">
+                        <input type="text" class="form-control" name="search" value="{{ request()->input('search') }}"  placeholder="Nhập tên danh mục">
                     </div>
+                </div>
+                <div class="row">
+                    <!-- /.col -->
+                    <div class="col-8">
+                    </div>
+                    <div class="col-2">
+                        <button type="submit" class="btn btn-success ">Tìm kiếm</button>
+                    </div>
+                    <!-- /.col -->
                 </div>
 
                 @csrf
@@ -88,8 +97,8 @@
             <div class="col-7">
             </div>
             <div class="col-5">
-{{--                {{ $users->withQueryString()->onEachSide(0)->links() }}--}}
-
+                {{ $categories->withQueryString()->onEachSide(0)->links() }}
+{{--                {{ $categories->links() }}--}}
             </div>
         </div>
     </div>

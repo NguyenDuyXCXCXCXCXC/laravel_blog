@@ -49,8 +49,6 @@
                             <button type="submit" class="btn btn-success ">Tìm kiếm</button>
                         </div>
                         <!-- /.col -->
-
-
                     </div>
                 @csrf
             </form>

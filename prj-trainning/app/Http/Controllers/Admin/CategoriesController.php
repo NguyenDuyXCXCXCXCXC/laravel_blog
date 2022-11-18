@@ -3,26 +3,49 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\services\categories\CategoriesServices;
 use App\Models\Categories;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class CategoriesController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    protected $categoriesServices;
+
+    public function __construct(CategoriesServices $categoriesServices)
+    {
+        $this->categoriesServices = $categoriesServices;
+    }
+
     public function index(Request $request)
     {
-        $categories = Categories::all();
+//        $search = '';
+//        if($request->input('search') != null)
+//        {
+//            $search = $request->input('search');
+//        }
+//        $categories = $this->categoriesServices->getAll($request);
+//        if ($request->input('search')) {
+//            $search = $request->input('search');
+//        }
+//        $products = Categories::where('name', 'like', "%{$keyword}%")
+
+        $search = $request->input('search');
+        if($search != null)
+        {
+            $categories = Categories::where('name', 'LIKE', "%{$search}%")
+                ->orderByDesc('id')->paginate(7);
+        }else{
+            $categories = Categories::orderByDesc('id')->paginate(7);
+        }
+
         $user = Auth::user();
 
         return view('admin.categories.index', [
             'title' => 'Trang quản trị danh sách user',
             'user' => $user,
-            'categories' => $categories
+            'categories' => $categories,
+            'search' => $search
         ]) ->with('i', (request()->input('page', 1) - 1) * 5);
     }
 

@@ -93,7 +93,7 @@ class UserController extends Controller
                         ->orwhere('first_name', 'LIKE', "%{$search}%")
                         ->orwhere('email', 'LIKE', "%{$search}%");
                 })->orderByDesc('id')->paginate(7);
-            $users->appends(['search' => $search, 'sex' => $searchSex]);
+//            $users->appends(['search' => $search, 'sex' => $searchSex]);
 
             // search email, name
         }elseif ($request->input('search') != null){
