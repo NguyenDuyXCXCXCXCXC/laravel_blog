@@ -1,7 +1,16 @@
 @extends('admin.main')
 @section('content')
     <div class="container-fluid">
-        <label class="pl-5"><a href="{{route('admin.dashboard')}}">Home</a>  / <a href="{{route('admin.user.list')}}">Users</a> / Edit</label>
+        <label class="pl-5">
+            <a href="{{route('admin.dashboard')}}">Home</a>
+            @if($userEdit->role == 2)
+                / <a href="{{route('admin.user.listForUser')}}">Users</a>
+            @else
+                / <a href="{{route('admin.user.list')}}">Users</a>
+            @endif
+
+            / Edit
+        </label>
     </div>
     @include('admin.users.alert')
     <div class="container">
@@ -92,8 +101,8 @@
 
                 <div>
                     @if (($user->role) === 1)
-                        <div class="form-check">
-                            <input class="form-check-input" type="text" value="2" name="role">
+                        <div class="">
+                            <input class="form-check-input" type="hidden" value="2" name="role" >
                         </div>
                     @elseif (($user->role) === 3)
                         <div class="input-group  mb-3">
@@ -122,7 +131,7 @@
                 <div class="form-group" >
                     <div style="display: flex;">
                         <label style="width: 91px;padding-top: 6px;">Avatar</label>
-                        <input type="file" name="avatar" class="form-control" placeholder="image">
+                        <input type="file" name="avatar" id="avatar" class="form-control" placeholder="image">
                     </div>
                     @if ($errors->has('avatar'))
                         <p class="text-danger text-center" style="font-size: 12px;">{{ $errors->first('avatar') }}</p>
@@ -130,8 +139,8 @@
                 </div>
 
                 <div class="input-group  mb-3" id="upload_file">
-                    @if($userEdit->avata != null)
-                        <img src="{{$userEdit->avata}}" alt="Ava" class="avatar">
+                    @if($userEdit->avatar != null)
+                        <img id="preview-image-before-upload" src="/image/{{$userEdit->avatar}}" alt="Ava" class="avatar">
                     @else
                         <p class="text-center">Chưa có ảnh</p>
                     @endif
@@ -148,11 +157,30 @@
                     <!-- /.col -->
                     <div class="col-8"></div>
                     <div class="col-2">
-                        <a href="{{route('admin.user.list')}}" ><button type="button" class="btn btn-primary btn-block">Danh sách Users</button></a>
+                        @if (($user->role) === 1)
+                            <a href="{{route('admin.user.listForUser')}}" ><button type="button" class="btn btn-primary btn-block">Danh sách Users</button></a>
+                        @elseif (($user->role) === 3)
+                            <a href="{{route('admin.user.list')}}" ><button type="button" class="btn btn-primary btn-block">Danh sách Users</button></a>
+                        @endif
                     </div>
                 </div>
             @csrf
     </form>
 
     </div>
+    <script>
+        $('#avatar').change(function(){
+
+            $('#upload_file').empty();
+            $('#upload_file').prepend('<img id="preview-avatar-before-upload" src=""  alt="image-preview" width="50" height="60"/>');
+            let reader = new FileReader();
+
+            reader.onload = (e) => {
+
+                $('#preview-avatar-before-upload').attr('src', e.target.result);
+            }
+
+            reader.readAsDataURL(this.files[0]);
+        });
+    </script>
 @endsection

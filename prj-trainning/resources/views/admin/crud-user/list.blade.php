@@ -1,17 +1,24 @@
 @extends('admin.main')
 
 @section('content')
-    @include('admin.alert')
+
+    <div class="row pt-2">
+        <div class="col-8"></div>
+        <div class="alert-delete col-3">
+            @include('admin.alert')
+        </div>
+    </div>
+
     <div class="container-fluid">
         <label class="pl-5"><a href="{{route('admin.dashboard')}}">Home</a>  / Users</label>
     </div>
     <div class="container-fluid">
 
         <div class="container card p-4 mt-3">
-            <form action="{{ route('admin.user.list') }}" method="GET" >
+            <form action="" method="GET" >
                 <div class="form-group" >
                     <div style="display: flex;">
-                        <label style="width: 102px;padding-top: 6px;">Email</label>
+                        <label style="width: 102px;padding-top: 6px;">Nhập email hoặc họ tên </label>
                         <input type="text" class="form-control" name="search"  placeholder="Nhập địa chỉ mail hoặc họ và tên">
                     </div>
                 </div
@@ -145,8 +152,12 @@
                                     <td>
                                         <a href="{{ route('admin.user.edit',$u->id) }}"><button type="button" class="btn btn-primary">Sửa</button></a>
                                         <meta name="csrf-token" content="{{ csrf_token() }}">
+                                        @if ($user->id == $u->id)
+                                        @else
+                                            <button type="button" class="btn btn-danger deleteRecord" data-email = "{{$u->email}}" data-id="{{ $u->id }}">Xóa</button>
+                                        @endif
 {{--                                        <button type="button" class="btn btn-danger deleteRecord" onclick="delUser({{$u->id}})">Xóa</button>--}}
-                                        <button type="button" class="btn btn-danger deleteRecord" data-id="{{ $u->id }}">Xóa</button>
+{{--                                        <button type="button" class="btn btn-danger deleteRecord" data-email = "{{$u->email}}" data-id="{{ $u->id }}">Xóa</button>--}}
                                     </td>
                                 </tr>
                             @endforeach
@@ -172,13 +183,21 @@
 </div>
 
     <script>
+        if( $(".alert").text() != ''){
+            setTimeout(() =>{
+                $(".alert").removeClass('alert alert-danger alert-success').text('')
+            }, 5000);
+        }
+        // console.log('Duy: ' + $(".alert").text());
         $(".deleteRecord").click(function(){
             var id = $(this).data("id");
+            var emailRemove = $(this).data("email");
             var token = $("meta[name='csrf-token']").attr("content");
             var isConfirm = confirm("Bạn chắc chắn muốn xóa user này?");
-            if (!isConfirm) {
-                return;
-            }
+            console.log(isConfirm);
+                if (!isConfirm) {
+                    return;
+                }
             $.ajax(
                 {
                     url: "/admin/user/del/"+id,
@@ -187,32 +206,17 @@
                         "id": id,
                         "_token": token,
                     },
-                    success: function (){
+                    success: function (result){
+                        $('.alert-delete').addClass("alert-success alert").text('Tài khoản '+ emailRemove +' đã được xóa!');
+                        // alert(result.message);
                         setTimeout(() =>{
                             location.reload();
-                        }, 5000);
+                        }, 3000);
 
                     }
                 });
 
         });
-        // function delUser(id)
-        // {
-        //     var isConfirm = confirm("Bạn chắc chắn muốn xóa user này?");
-        //     if (!isConfirm) {
-        //         return;
-        //     }
-        //
-        //     var token = $("meta[name='csrf-token']").attr("content");
-        //     $.post("/admin/user/del",
-        //         {
-        //             "id": id,
-        //             "_token": token,
-        //         },
-        //         function( status){
-        //             console.log('status: '  + status);
-        //         });
-        // }
     </script>
 
 @endsection

@@ -50,18 +50,35 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth']], function(){
     // admin/main
     Route::get('dashboard', [\App\Http\Controllers\Admin\MainController::class, 'index'])->name('admin.dashboard');
     Route::get('/', [\App\Http\Controllers\Admin\MainController::class, 'index'])->name('admin.dashboard');
+    Route::get('/profile', [\App\Http\Controllers\Admin\MainController::class, 'profile'])->name('admin.profile');
+    Route::get('/profile/edit', [\App\Http\Controllers\Admin\MainController::class, 'profileEdit'])->name('admin.profile.edit');
+    Route::post('/profile/edit', [\App\Http\Controllers\Admin\MainController::class, 'profileUpdate'])->name('admin.profile.update');
 
     // admin/user
     Route::prefix('user')->group(function () {
+        // manage, admin list
         Route::get('/list', [\App\Http\Controllers\Admin\UserController::class, 'index'])->name('admin.user.list');
+        // user list
+        Route::get('/listUser', [\App\Http\Controllers\Admin\UserController::class, 'indexForUser'])->name('admin.user.listForUser');
+
         Route::get('/add', [\App\Http\Controllers\Admin\UserController::class, 'add'])->name('admin.user.add');
         Route::post('/add', [\App\Http\Controllers\Admin\UserController::class, 'store'])->name('admin.user.store');
         Route::get('/edit/{id}', [\App\Http\Controllers\Admin\UserController::class, 'edit'])->name('admin.user.edit');
         Route::post('/update', [\App\Http\Controllers\Admin\UserController::class, 'update'])->name('admin.user.update');
-
-
         Route::delete('del/{id}', [\App\Http\Controllers\Admin\UserController::class, 'destroy'])->name('admin.user.destroy');
     });
+
+    // admin/categories
+    Route::prefix('categories')->group(function () {
+        Route::get('/list', [\App\Http\Controllers\Admin\CategoriesController::class, 'index'])->name('admin.categories.list');
+//        Route::get('/add', [\App\Http\Controllers\Admin\CategoriesController::class, 'add'])->name('admin.user.add');
+//        Route::post('/add', [\App\Http\Controllers\Admin\CategoriesController::class, 'store'])->name('admin.user.store');
+//        Route::get('/edit/{id}', [\App\Http\Controllers\Admin\CategoriesController::class, 'edit'])->name('admin.user.edit');
+//        Route::post('/update', [\App\Http\Controllers\Admin\CategoriesController::class, 'update'])->name('admin.user.update');
+//        Route::delete('del/{id}', [\App\Http\Controllers\Admin\CategoriesController::class, 'destroy'])->name('admin.user.destroy');
+    });
+
+
 
 });
 

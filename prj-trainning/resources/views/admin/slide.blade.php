@@ -26,7 +26,7 @@
                 <!-- Add icons to the links using the .nav-icon class
                      with font-awesome or any other icon font library -->
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="{{route('admin.profile')}}" class="nav-link">
                         <p>
                             Profile
                         </p>
@@ -34,17 +34,18 @@
 
                 </li>
 
-                <li class="nav-item">
-                    <a href="{{ route('admin.user.list') }}" class="nav-link">
-                        <p>
-                            Admin
-                        </p>
-                    </a>
+                @if($user->role == 3)
+                    <li class="nav-item">
+                        <a href="{{ route('admin.user.list') }}" class="nav-link">
+                            <p>
+                                Admin
+                            </p>
+                        </a>
 
-                </li>
-
+                    </li>
+                @endif
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="{{route('admin.user.listForUser')}}" class="nav-link">
                         <p>
                             Users
                         </p>
@@ -53,7 +54,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="{{route('admin.categories.list')}}" class="nav-link">
                         <p>
                             Categories
                         </p>

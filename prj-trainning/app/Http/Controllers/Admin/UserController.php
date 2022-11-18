@@ -12,42 +12,57 @@ use function GuzzleHttp\Promise\all;
 
 class UserController extends Controller
 {
+    //get: admin/user/list -> list admin & manage
     public function index(Request $request)
     {
         $search = '';
         $searchSex = '';
-        // search name && sex
+        // search email, name && sex
         if ($request->input('search') != null && $request->input('sex') != null){
 
             $search = $request->input('search');
             $searchSex = $request->input('sex');
 
-            $users = User::where('sex', '=', "{$searchSex}")
+            $users = User::Where(function($query)  {
+                $query->orwhere('role', '=', 1)
+                    ->orwhere('role', '=', 3);
+            })->where('sex', '=', "{$searchSex}")
                 ->Where(function($query) use ($search) {
-                    $query->where('last_name', 'LIKE', "%{$search}%")
-                        ->where('last_name', 'LIKE', "%{$search}%");
+                    $query->orwhere('last_name', 'LIKE', "%{$search}%")
+                        ->orwhere('first_name', 'LIKE', "%{$search}%")
+                        ->orwhere('email', 'LIKE', "%{$search}%");
                 })->orderByDesc('id')->paginate(7);
             $users->appends(['search' => $search, 'sex' => $searchSex]);
 
-        // search name
+        // search email, name
         }elseif ($request->input('search') != null){
 
             $search = $request->input('search');
 
-            $users = User::Where(function($query) use ($search) {
-                    $query->where('last_name', 'LIKE', "%{$search}%")
-                        ->where('last_name', 'LIKE', "%{$search}%");
+            $users = User::Where(function($query)  {
+                $query->orwhere('role', '=', 1)
+                    ->orwhere('role', '=', 3);
+            })->Where(function($query) use ($search) {
+                    $query->orwhere('first_name', 'LIKE', "%{$search}%")
+                        ->orwhere('last_name', 'LIKE', "%{$search}%")
+                        ->orwhere('email', 'LIKE', "%{$search}%");
                 })->orderByDesc('id')->paginate(7);
             $users->appends(['search' => $search]);
         // search sex
         }elseif ($request->input('sex') != null){
             $searchSex = $request->input('sex');
 
-            $users = User::where('sex', '=', "{$searchSex}")
+            $users = User::Where(function($query)  {
+                $query->orwhere('role', '=', 1)
+                    ->orwhere('role', '=', 3);
+            })->where('sex', '=', "{$searchSex}")
                 ->orderByDesc('id')->paginate(7);
             $users->appends([ 'sex' => $searchSex]);
         }else{
-            $users = User::orderByDesc('id')->paginate(7);
+            $users = User::Where(function($query)  {
+                $query->orwhere('role', '=', 1)
+                    ->orwhere('role', '=', 3);
+            })->orderByDesc('id')->paginate(7);
 //            $users = User::orderByDesc('id')->simplePaginate(4);
         }
 
@@ -61,6 +76,62 @@ class UserController extends Controller
         ]) ->with('i', (request()->input('page', 1) - 1) * 5);
     }
 
+    public function indexForUser(Request $request)
+    {
+        $search = '';
+        $searchSex = '';
+        // search email, name && sex
+        if ($request->input('search') != null && $request->input('sex') != null){
+
+            $search = $request->input('search');
+            $searchSex = $request->input('sex');
+
+            $users = User::where('role', '=', 2)
+                ->where('sex', '=', "{$searchSex}")
+                ->Where(function($query) use ($search) {
+                    $query->orwhere('last_name', 'LIKE', "%{$search}%")
+                        ->orwhere('first_name', 'LIKE', "%{$search}%")
+                        ->orwhere('email', 'LIKE', "%{$search}%");
+                })->orderByDesc('id')->paginate(7);
+            $users->appends(['search' => $search, 'sex' => $searchSex]);
+
+            // search email, name
+        }elseif ($request->input('search') != null){
+
+            $search = $request->input('search');
+
+            $users = User::where('role', '=', 2)
+                ->Where(function($query) use ($search) {
+                $query->orwhere('first_name', 'LIKE', "%{$search}%")
+                    ->orwhere('last_name', 'LIKE', "%{$search}%")
+                    ->orwhere('email', 'LIKE', "%{$search}%");
+            })->orderByDesc('id')->paginate(7);
+            $users->appends(['search' => $search]);
+            // search sex
+        }elseif ($request->input('sex') != null){
+            $searchSex = $request->input('sex');
+
+            $users = User::where('role', '=', 2)
+                ->where('sex', '=', "{$searchSex}")
+                ->orderByDesc('id')->paginate(7);
+            $users->appends([ 'sex' => $searchSex]);
+        }else{
+            $users = User::where('role', '=', "2")
+                ->orderByDesc('id')->paginate(7);
+//            $users = User::orderByDesc('id')->simplePaginate(4);
+        }
+
+
+        $user = Auth::user();
+
+        return view('admin.crud-user.list', [
+            'title' => 'Trang quản trị danh sách user',
+            'user' => $user,
+            'users' => $users
+        ]) ->with('i', (request()->input('page', 1) - 1) * 5);
+    }
+
+
     public function add()
     {
         $user = Auth::user();
@@ -73,14 +144,14 @@ class UserController extends Controller
 
     public function store(StoreUserRequest $request)
     {
-        $emailUserCreater = Auth::user()->email;
+        $idUserCreater = Auth::user()->id;
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);
         $emailUser =  $input['email'];
 
         if ($image = $request->file('avatar')) {
             $destinationPath = 'image/';
-            $profileImage = $emailUserCreater . time() . "." . $image->getClientOriginalExtension();
+            $profileImage = $idUserCreater . time() . "." . $image->getClientOriginalExtension();
             $image->move($destinationPath, $profileImage);
             $input['avatar'] = "$profileImage";
         }
@@ -98,7 +169,7 @@ class UserController extends Controller
         }
         $user = Auth::user();
         return view('admin.crud-user.edit', [
-            'title' => 'Sửa user '.$userEdit->first_name.' '.$userEdit->last_name,
+            'title' => 'Sửa user: '.$userEdit->first_name.' '.$userEdit->last_name,
             'user' => $user,
             'userEdit' =>$userEdit
         ]);
@@ -106,7 +177,7 @@ class UserController extends Controller
 
     public function update(Request $request)
     {
-        $user = User::where('email', $request->input('email'))->first();
+
         $request->validate([
             'email' => 'required|max:100|min:12|email:filter',
             'password' => 'required|confirmed|min:10|max:50|regex:/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{6,}$/',
@@ -133,14 +204,16 @@ class UserController extends Controller
             'avatar.max' => 'Yêu cầu kích thước <= 10MB!',
         ]);
 
-        $emailUserCreater = Auth::user()->email;
+        $user = User::where('email', $request->input('email'))->first();
+
+        $idUserCreater = Auth::user()->id;
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);
         $emailUser =  $input['email'];
 
         if ($image = $request->file('avatar')) {
             $destinationPath = 'image/';
-            $profileImage = $emailUserCreater . time() . "." . $image->getClientOriginalExtension();
+            $profileImage = $idUserCreater . time() . "." . $image->getClientOriginalExtension();
             $image->move($destinationPath, $profileImage);
             $input['avatar'] = "$profileImage";
         }else{
@@ -156,9 +229,9 @@ class UserController extends Controller
     public function destroy($id)
     {
         User::find($id)->delete($id);
-        Session::flash('mySuccess', 'Xóa thành công!' );
+//        Session::flash('mySuccess', 'Xóa thành công!' );
         return response()->json([
-            'success' => 'Record deleted successfully!'
+            'message' => 'Record deleted successfully!'
         ]);
 
     }
