@@ -19,23 +19,23 @@
                 <div class="form-group" >
                     <div style="display: flex;">
                         <label style="width: 102px;padding-top: 6px;">Nhập email hoặc họ tên </label>
-                        <input type="text" class="form-control" name="search"  placeholder="Nhập địa chỉ mail hoặc họ và tên">
+                        <input type="text" class="form-control" name="search" value="{{request('search')}}" placeholder="Nhập địa chỉ mail hoặc họ và tên">
                     </div>
-                </div
+                </div>
                 <div class="form-group" >
                     <div class="input-group  mb-3">
                         <label style="margin-right: 35px;">Giới tính</label>
                         <div class="form-group" style="display: flex;">
                             <div class="form-check" style="padding-right: 8px;">
-                                <input class="form-check-input" type="radio" value="0" name="sex">
+                                <input class="form-check-input" type="radio" value="0" name="sex" {{ request('sex') == 0 ? 'checked' : ''}}>
                                 <label class="form-check-label">Nam</label>
                             </div>
                             <div class="form-check" style="padding-right: 8px;">
-                                <input class="form-check-input" type="radio" value="1" name="sex">
+                                <input class="form-check-input" type="radio" value="1" name="sex" {{ request('sex') == 1 ? 'checked' : ''}}>
                                 <label class="form-check-label">Nữ</label>
                             </div>
                             <div class="form-check" style="padding-right: 8px;">
-                                <input class="form-check-input" type="radio" value="2" name="sex">
+                                <input class="form-check-input" type="radio" value="2" name="sex" {{ request('sex') == 2 ? 'checked' : ''}}>
                                 <label class="form-check-label">Khác</label>
                             </div>
                         </div>
@@ -50,7 +50,6 @@
                         </div>
                         <!-- /.col -->
                     </div>
-                @csrf
             </form>
         </div>
 
@@ -152,7 +151,7 @@
                                         <meta name="csrf-token" content="{{ csrf_token() }}">
                                         @if ($user->id == $u->id)
                                         @else
-                                            <button type="button" class="btn btn-danger deleteRecord" data-email = "{{$u->email}}" data-id="{{ $u->id }}">Xóa</button>
+                                            <button type="button" class="btn btn-danger deleteRecord " data-email = "{{$u->email}}" data-id="{{ $u->id }}">Xóa</button>
                                         @endif
 {{--                                        <button type="button" class="btn btn-danger deleteRecord" onclick="delUser({{$u->id}})">Xóa</button>--}}
 {{--                                        <button type="button" class="btn btn-danger deleteRecord" data-email = "{{$u->email}}" data-id="{{ $u->id }}">Xóa</button>--}}
@@ -180,6 +179,7 @@
     </div>
 </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
     <script>
         if( $(".alert").text() != ''){
             setTimeout(() =>{
@@ -191,28 +191,38 @@
             var id = $(this).data("id");
             var emailRemove = $(this).data("email");
             var token = $("meta[name='csrf-token']").attr("content");
-            var isConfirm = confirm("Bạn chắc chắn muốn xóa user này?");
-            console.log(isConfirm);
-                if (!isConfirm) {
-                    return;
-                }
-            $.ajax(
-                {
-                    url: "/admin/user/del/"+id,
-                    type: 'DELETE',
-                    data: {
-                        "id": id,
-                        "_token": token,
-                    },
-                    success: function (result){
-                        $('.alert-delete').addClass("alert-success alert").text('Tài khoản '+ emailRemove +' đã được xóa!');
-                        // alert(result.message);
-                        setTimeout(() =>{
-                            location.reload();
-                        }, 3000);
 
-                    }
-                });
+            // for alert
+            swal({
+                title: `Bạn có chắc chắn muốn xóa bản ghi này?`,
+                text: "Nếu bạn đồng ý xóa, nó sẽ biến mất mãi mãi.",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+            .then((willDelete) => {
+                if (willDelete) {
+                    $.ajax(
+                        {
+                            url: "/admin/user/del/"+id,
+                            type: 'DELETE',
+                            data: {
+                                "id": id,
+                                "_token": token,
+                            },
+                            success: function (result){
+                                $('.alert-delete').addClass("alert-success alert").text('Tài khoản '+ emailRemove +' đã được xóa!');
+                                // alert(result.message);
+                                setTimeout(() =>{
+                                    location.reload();
+                                }, 3000);
+
+                            }
+                        });
+                }
+            });
+
+
 
         });
     </script>

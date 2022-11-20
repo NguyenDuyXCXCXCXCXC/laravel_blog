@@ -157,6 +157,9 @@ class UserController extends Controller
         }
         $user = User::create($input);
         Session::flash('mySuccess', 'Tài khoản ' . $emailUser .' đã được thêm mới' );
+        if (Auth::user()->role == 1){
+            return redirect()->route('admin.user.listForUser');
+        }
         return redirect()->route('admin.user.list');
     }
 
@@ -223,6 +226,9 @@ class UserController extends Controller
 
         $user->update($input);
         Session::flash('mySuccess', 'Tài khoản ' . $emailUser .' đã được chỉnh sửa' );
+        if (Auth::user()->role == 1){
+            return redirect()->route('admin.user.listForUser');
+        }
         return redirect()->route('admin.user.list');
     }
 
@@ -233,7 +239,6 @@ class UserController extends Controller
         return response()->json([
             'message' => 'Record deleted successfully!'
         ]);
-
     }
 }
 

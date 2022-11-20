@@ -19,7 +19,7 @@
                 <div class="form-group" >
                     <div style="display: flex;">
                         <label style="width: 124px;padding-top: 6px;">Tên danh mục</label>
-                        <input type="text" class="form-control" name="search" value="{{ request()->input('search') }}"  placeholder="Nhập tên danh mục">
+                        <input type="text" class="form-control" name="search" value="{{ request()->input('search')  }}"  placeholder="Nhập tên danh mục">
                     </div>
                 </div>
                 <div class="row">
@@ -32,7 +32,6 @@
                     <!-- /.col -->
                 </div>
 
-                @csrf
             </form>
         </div>
 
@@ -42,7 +41,7 @@
             <div class="col-12">
                 <div class="card">
                     <div class="col-3 pt-2">
-                        <a href="">
+                        <a href="{{route('admin.categories.add')}}">
                             <button class="btn btn-primary">Thêm mới danh mục</button>
                         </a>
                     </div>
@@ -76,9 +75,9 @@
                                             <td>{{++$i}}</td>
                                             <td>{{$cate->name}}</td>
                                             <td>
-                                                <a href="{{ route('admin.user.edit',$cate->id) }}"><button type="button" class="btn btn-primary">Sửa</button></a>
+                                                <a href="{{ route('admin.categories.edit',$cate->id) }}"><button type="button" class="btn btn-primary">Sửa</button></a>
                                                 <meta name="csrf-token" content="{{ csrf_token() }}">
-                                                    <button type="button" class="btn btn-danger deleteRecord" data-email = "{{$cate->email}}" data-id="{{ $cate->id }}">Xóa</button>
+                                                    <button type="button" class="btn btn-danger deleteRecord" data-name = "{{$cate->name}}" data-id="{{ $cate->id }}">Xóa</button>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -103,6 +102,7 @@
         </div>
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
     <script>
         if( $(".alert").text() != ''){
             setTimeout(() =>{
@@ -112,30 +112,40 @@
         // console.log('Duy: ' + $(".alert").text());
         $(".deleteRecord").click(function(){
             var id = $(this).data("id");
-            var emailRemove = $(this).data("email");
+            var categoriesRemove = $(this).data("name");
             var token = $("meta[name='csrf-token']").attr("content");
-            var isConfirm = confirm("Bạn chắc chắn muốn xóa user này?");
-            console.log(isConfirm);
-            if (!isConfirm) {
-                return;
-            }
-            $.ajax(
-                {
-                    url: "/admin/user/del/"+id,
-                    type: 'DELETE',
-                    data: {
-                        "id": id,
-                        "_token": token,
-                    },
-                    success: function (result){
-                        $('.alert-delete').addClass("alert-success alert").text('Tài khoản '+ emailRemove +' đã được xóa!');
-                        // alert(result.message);
-                        setTimeout(() =>{
-                            location.reload();
-                        }, 3000);
 
+            // for alert
+            swal({
+                title: `Bạn có chắc chắn muốn xóa bản ghi này?`,
+                text: "Nếu bạn đồng ý xóa, nó sẽ biến mất mãi mãi.",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        $.ajax(
+                            {
+                                url: "/admin/categories/del/"+id,
+                                type: 'DELETE',
+                                data: {
+                                    "id": id,
+                                    "_token": token,
+                                },
+                                success: function (result){
+                                    $('.alert-delete').addClass("alert-success alert").text('Danh mục '+ categoriesRemove +' đã được xóa!');
+                                    // alert(result.message);
+                                    setTimeout(() =>{
+                                        location.reload();
+                                    }, 3000);
+
+                                }
+                            });
                     }
                 });
+
+
 
         });
     </script>

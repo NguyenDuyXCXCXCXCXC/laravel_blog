@@ -71,11 +71,11 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth']], function(){
     // admin/categories
     Route::prefix('categories')->group(function () {
         Route::get('/list', [\App\Http\Controllers\Admin\CategoriesController::class, 'index'])->name('admin.categories.list');
-//        Route::get('/add', [\App\Http\Controllers\Admin\CategoriesController::class, 'add'])->name('admin.user.add');
-//        Route::post('/add', [\App\Http\Controllers\Admin\CategoriesController::class, 'store'])->name('admin.user.store');
-//        Route::get('/edit/{id}', [\App\Http\Controllers\Admin\CategoriesController::class, 'edit'])->name('admin.user.edit');
-//        Route::post('/update', [\App\Http\Controllers\Admin\CategoriesController::class, 'update'])->name('admin.user.update');
-//        Route::delete('del/{id}', [\App\Http\Controllers\Admin\CategoriesController::class, 'destroy'])->name('admin.user.destroy');
+        Route::get('/add', [\App\Http\Controllers\Admin\CategoriesController::class, 'add'])->name('admin.categories.add');
+        Route::post('/add', [\App\Http\Controllers\Admin\CategoriesController::class, 'store'])->name('admin.categories.store');
+        Route::get('/edit/{categories}', [\App\Http\Controllers\Admin\CategoriesController::class, 'edit'])->name('admin.categories.edit');
+        Route::post('/update/{categories}', [\App\Http\Controllers\Admin\CategoriesController::class, 'update'])->name('admin.categories.update');
+        Route::delete('del/{id}', [\App\Http\Controllers\Admin\CategoriesController::class, 'destroy'])->name('admin.categories.destroy');
     });
 
 

@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\StoreCategoriesRequest;
 use App\Http\services\categories\CategoriesServices;
 use App\Models\Categories;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class CategoriesController extends Controller
 {
@@ -19,33 +21,14 @@ class CategoriesController extends Controller
 
     public function index(Request $request)
     {
-//        $search = '';
-//        if($request->input('search') != null)
-//        {
-//            $search = $request->input('search');
-//        }
-//        $categories = $this->categoriesServices->getAll($request);
-//        if ($request->input('search')) {
-//            $search = $request->input('search');
-//        }
-//        $products = Categories::where('name', 'like', "%{$keyword}%")
 
-        $search = $request->input('search');
-        if($search != null)
-        {
-            $categories = Categories::where('name', 'LIKE', "%{$search}%")
-                ->orderByDesc('id')->paginate(7);
-        }else{
-            $categories = Categories::orderByDesc('id')->paginate(7);
-        }
-
+        $categories = $this->categoriesServices->getAll($request);
         $user = Auth::user();
 
         return view('admin.categories.index', [
             'title' => 'Trang quản trị danh sách user',
             'user' => $user,
             'categories' => $categories,
-            'search' => $search
         ]) ->with('i', (request()->input('page', 1) - 1) * 5);
     }
 
@@ -54,9 +37,13 @@ class CategoriesController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function add()
     {
-        //
+        $user = Auth::user();
+        return view('admin.categories.add', [
+            'title' => 'Thêm mới categories',
+            'user' => $user,
+        ]);
     }
 
     /**
@@ -65,9 +52,11 @@ class CategoriesController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StoreCategoriesRequest $request)
     {
-        //
+        $categories = $this->categoriesServices->create($request);
+        return redirect()->route('admin.categories.list');
+
     }
 
     /**
@@ -87,9 +76,14 @@ class CategoriesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Categories $categories)
     {
-        //
+        $user = Auth::user();
+        return view('admin.categories.edit', [
+            'title' => 'Sửa danh mục: '.$categories->name,
+            'user' => $user,
+            'categories' => $categories
+        ]);
     }
 
     /**
@@ -99,9 +93,13 @@ class CategoriesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(StoreCategoriesRequest $request, Categories $categories)
     {
-        //
+        $result = $this->categoriesServices->update($request, $categories);
+        if ($result){
+            Session::flash('mySuccess', 'Danh mục ' . $request->categories .' đã được chỉnh sửa' );
+        }
+        return redirect()->route('admin.categories.list');
     }
 
     /**
@@ -112,6 +110,12 @@ class CategoriesController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $result = $this->categoriesServices->destroy($id);
+        if ($result)
+        {
+            return response()->json([
+                'message' => 'Record deleted successfully!'
+            ]);
+        }
     }
 }
