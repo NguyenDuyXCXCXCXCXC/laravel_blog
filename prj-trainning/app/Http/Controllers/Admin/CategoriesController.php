@@ -21,7 +21,6 @@ class CategoriesController extends Controller
 
     public function index(Request $request)
     {
-
         $categories = $this->categoriesServices->getAll($request);
         $user = Auth::user();
         $search = '';
@@ -35,7 +34,7 @@ class CategoriesController extends Controller
             'user' => $user,
             'categories' => $categories,
             'search' => $search
-        ]) ->with('i', (request()->input('page', 1) - 1) * 5);
+        ]) ->with('i', (request()->input('page', 1) - 1) * 7);
     }
 
     /**

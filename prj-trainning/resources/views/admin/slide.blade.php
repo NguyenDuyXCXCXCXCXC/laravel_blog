@@ -61,7 +61,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="{{route('admin.post.list')}}" class="nav-link">
                         <p>
                             Posts
                         </p>

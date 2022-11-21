@@ -79,6 +79,17 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth']], function(){
     });
 
 
+    // admin/post
+    Route::prefix('post')->group(function () {
+        Route::get('/list', [\App\Http\Controllers\Admin\PostController::class, 'index'])->name('admin.post.list');
+//        Route::get('/add', [\App\Http\Controllers\Admin\CategoriesController::class, 'add'])->name('admin.categories.add');
+//        Route::post('/add', [\App\Http\Controllers\Admin\CategoriesController::class, 'store'])->name('admin.categories.store');
+//        Route::get('/edit/{categories}', [\App\Http\Controllers\Admin\CategoriesController::class, 'edit'])->name('admin.categories.edit');
+//        Route::post('/update/{categories}', [\App\Http\Controllers\Admin\CategoriesController::class, 'update'])->name('admin.categories.update');
+//        Route::delete('del/{id}', [\App\Http\Controllers\Admin\CategoriesController::class, 'destroy'])->name('admin.categories.destroy');
+    });
+
+
 
 });
 
