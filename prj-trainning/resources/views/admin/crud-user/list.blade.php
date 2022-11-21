@@ -151,7 +151,11 @@
                                         <meta name="csrf-token" content="{{ csrf_token() }}">
                                         @if ($user->id == $u->id)
                                         @else
-                                            <button type="button" class="btn btn-danger deleteRecord " data-email = "{{$u->email}}" data-id="{{ $u->id }}">Xóa</button>
+                                            <form action="{{ route('admin.user.destroy',$u->id) }}" method="POST" style="display: inline;">
+                                                <button type="button" class="btn btn-danger deleteRecord " data-email = "{{$u->email}}" data-id="{{ $u->id }}">Xóa</button>
+                                                @csrf
+                                                @method('DELETE')
+                                            </form>
                                         @endif
 {{--                                        <button type="button" class="btn btn-danger deleteRecord" onclick="delUser({{$u->id}})">Xóa</button>--}}
 {{--                                        <button type="button" class="btn btn-danger deleteRecord" data-email = "{{$u->email}}" data-id="{{ $u->id }}">Xóa</button>--}}
@@ -189,6 +193,7 @@
         // console.log('Duy: ' + $(".alert").text());
         $(".deleteRecord").click(function(){
             var id = $(this).data("id");
+            var form =  $(this).closest("form");
             var emailRemove = $(this).data("email");
             var token = $("meta[name='csrf-token']").attr("content");
 
@@ -202,23 +207,28 @@
             })
             .then((willDelete) => {
                 if (willDelete) {
-                    $.ajax(
-                        {
-                            url: "/admin/user/del/"+id,
-                            type: 'DELETE',
-                            data: {
-                                "id": id,
-                                "_token": token,
-                            },
-                            success: function (result){
-                                $('.alert-delete').addClass("alert-success alert").text('Tài khoản '+ emailRemove +' đã được xóa!');
-                                // alert(result.message);
-                                setTimeout(() =>{
-                                    location.reload();
-                                }, 3000);
-
-                            }
-                        });
+                    form.submit();
+                    // $.ajax(
+                    //     {
+                    //         url: "/admin/user/del/"+id,
+                    //         type: 'DELETE',
+                    //         data: {
+                    //             "id": id,
+                    //             "_token": token,
+                    //         },
+                    //         success: function (result){
+                    //             location.reload();
+                    //             setTimeout(() =>{
+                    //                 $('.alert-delete').addClass("alert-success alert").text('Tài khoản '+ emailRemove +' đã được xóa!');
+                    //             }, 2000);
+                    //             // $('.alert-delete').addClass("alert-success alert").text('Tài khoản '+ emailRemove +' đã được xóa!');
+                    //             // alert(result.message);
+                    //             setTimeout(() =>{
+                    //                 location.reload();
+                    //             }, 3000);
+                    //
+                    //         }
+                    //     });
                 }
             });
 

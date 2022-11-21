@@ -76,8 +76,12 @@
                                             <td>{{$cate->name}}</td>
                                             <td>
                                                 <a href="{{ route('admin.categories.edit',$cate->id) }}"><button type="button" class="btn btn-primary">Sửa</button></a>
-                                                <meta name="csrf-token" content="{{ csrf_token() }}">
+{{--                                                <meta name="csrf-token" content="{{ csrf_token() }}">--}}
+                                                <form action="{{ route('admin.categories.destroy',$cate->id) }}" method="POST" style="display: inline;">
                                                     <button type="button" class="btn btn-danger deleteRecord" data-name = "{{$cate->name}}" data-id="{{ $cate->id }}">Xóa</button>
+                                                    @csrf
+                                                    @method('DELETE')
+                                                </form>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -112,6 +116,7 @@
         // console.log('Duy: ' + $(".alert").text());
         $(".deleteRecord").click(function(){
             var id = $(this).data("id");
+            var form =  $(this).closest("form");
             var categoriesRemove = $(this).data("name");
             var token = $("meta[name='csrf-token']").attr("content");
 
@@ -125,23 +130,24 @@
             })
                 .then((willDelete) => {
                     if (willDelete) {
-                        $.ajax(
-                            {
-                                url: "/admin/categories/del/"+id,
-                                type: 'DELETE',
-                                data: {
-                                    "id": id,
-                                    "_token": token,
-                                },
-                                success: function (result){
-                                    $('.alert-delete').addClass("alert-success alert").text('Danh mục '+ categoriesRemove +' đã được xóa!');
-                                    // alert(result.message);
-                                    setTimeout(() =>{
-                                        location.reload();
-                                    }, 3000);
-
-                                }
-                            });
+                        form.submit();
+                        // $.ajax(
+                        //     {
+                        //         url: "/admin/categories/del/"+id,
+                        //         type: 'DELETE',
+                        //         data: {
+                        //             "id": id,
+                        //             "_token": token,
+                        //         },
+                        //         success: function (result){
+                        //             $('.alert-delete').addClass("alert-success alert").text('Danh mục '+ categoriesRemove +' đã được xóa!');
+                        //             // alert(result.message);
+                        //             setTimeout(() =>{
+                        //                 location.reload();
+                        //             }, 3000);
+                        //
+                        //         }
+                        //     });
                     }
                 });
 

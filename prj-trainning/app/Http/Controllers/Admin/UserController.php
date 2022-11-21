@@ -15,6 +15,10 @@ class UserController extends Controller
     //get: admin/user/list -> list admin & manage
     public function index(Request $request)
     {
+        if(Auth::user()->role != 3)
+        {
+            return redirect()->route('admin.user.listForUser');
+        }
         $search = '';
         $searchSex = '';
         // search email, name && sex
@@ -256,11 +260,10 @@ class UserController extends Controller
 
     public function destroy($id)
     {
+        $user = User::where('id', $id)->first();
         User::find($id)->delete($id);
-//        Session::flash('mySuccess', 'Xóa thành công!' );
-        return response()->json([
-            'message' => 'Record deleted successfully!'
-        ]);
+        Session::flash('mySuccess', 'Tài khoản ' . $user->email .' đã được xóa' );
+        return redirect()->back();
     }
 }
 

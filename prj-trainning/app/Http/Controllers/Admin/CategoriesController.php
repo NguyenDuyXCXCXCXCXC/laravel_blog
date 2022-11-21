@@ -116,12 +116,12 @@ class CategoriesController extends Controller
      */
     public function destroy($id)
     {
+        $categories = Categories::where('id', $id)->first();
         $result = $this->categoriesServices->destroy($id);
         if ($result)
         {
-            return response()->json([
-                'message' => 'Record deleted successfully!'
-            ]);
+            Session::flash('mySuccess', 'Tài khoản ' . $categories->name .' đã được xóa' );
+            return redirect()->back();
         }
     }
 }
