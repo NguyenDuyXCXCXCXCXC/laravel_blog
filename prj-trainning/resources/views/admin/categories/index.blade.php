@@ -19,7 +19,7 @@
                 <div class="form-group" >
                     <div style="display: flex;">
                         <label style="width: 124px;padding-top: 6px;">Tên danh mục</label>
-                        <input type="text" class="form-control" name="search" value="{{ request()->input('search')  }}"  placeholder="Nhập tên danh mục">
+                        <input type="text" class="form-control" name="search" value="{{ $search  }}"  placeholder="Nhập tên danh mục">
                     </div>
                 </div>
                 <div class="row">

@@ -24,11 +24,17 @@ class CategoriesController extends Controller
 
         $categories = $this->categoriesServices->getAll($request);
         $user = Auth::user();
+        $search = '';
+        if(request('search') != null)
+        {
+            $search = request('search');
+        }
 
         return view('admin.categories.index', [
             'title' => 'Trang quản trị danh sách user',
             'user' => $user,
             'categories' => $categories,
+            'search' => $search
         ]) ->with('i', (request()->input('page', 1) - 1) * 5);
     }
 

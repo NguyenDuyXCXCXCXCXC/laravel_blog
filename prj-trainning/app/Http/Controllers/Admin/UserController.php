@@ -66,13 +66,24 @@ class UserController extends Controller
 //            $users = User::orderByDesc('id')->simplePaginate(4);
         }
 
+        $search = $sex = '';
+        if(request('search') != null)
+        {
+            $search = request('search');
+        }
+        if(request('sex') != null)
+        {
+            $sex = request('sex');
+        }
 
         $user = Auth::user();
 
         return view('admin.crud-user.list', [
             'title' => 'Trang quản trị danh sách user',
             'user' => $user,
-            'users' => $users
+            'users' => $users,
+            'search' => request('search'),
+            'sex' => request('sex'),
         ]) ->with('i', (request()->input('page', 1) - 1) * 5);
     }
 
@@ -121,13 +132,24 @@ class UserController extends Controller
 //            $users = User::orderByDesc('id')->simplePaginate(4);
         }
 
+        $search = $sex = '';
+        if(request('search') != null)
+        {
+            $search = request('search');
+        }
+        if(request('sex') != null)
+        {
+            $sex = request('sex');
+        }
 
         $user = Auth::user();
 
         return view('admin.crud-user.list', [
             'title' => 'Trang quản trị danh sách user',
             'user' => $user,
-            'users' => $users
+            'users' => $users,
+            'search' => request('search'),
+            'sex' => request('sex'),
         ]) ->with('i', (request()->input('page', 1) - 1) * 5);
     }
 

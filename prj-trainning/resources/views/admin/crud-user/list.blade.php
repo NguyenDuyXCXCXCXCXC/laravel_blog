@@ -19,7 +19,7 @@
                 <div class="form-group" >
                     <div style="display: flex;">
                         <label style="width: 102px;padding-top: 6px;">Nhập email hoặc họ tên </label>
-                        <input type="text" class="form-control" name="search" value="{{request('search')}}" placeholder="Nhập địa chỉ mail hoặc họ và tên">
+                        <input type="text" class="form-control" name="search" value="{{ $search }}" placeholder="Nhập địa chỉ mail hoặc họ và tên">
                     </div>
                 </div>
                 <div class="form-group" >
@@ -27,15 +27,15 @@
                         <label style="margin-right: 35px;">Giới tính</label>
                         <div class="form-group" style="display: flex;">
                             <div class="form-check" style="padding-right: 8px;">
-                                <input class="form-check-input" type="radio" value="0" name="sex" {{ request('sex') == 0 ? 'checked' : ''}}>
+                                <input class="form-check-input" type="radio" value="0" name="sex" {{ $sex === "0" ? 'checked' : ''}}>
                                 <label class="form-check-label">Nam</label>
                             </div>
                             <div class="form-check" style="padding-right: 8px;">
-                                <input class="form-check-input" type="radio" value="1" name="sex" {{ request('sex') == 1 ? 'checked' : ''}}>
+                                <input class="form-check-input" type="radio" value="1" name="sex" {{ $sex === "1" ? 'checked' : ''}}>
                                 <label class="form-check-label">Nữ</label>
                             </div>
                             <div class="form-check" style="padding-right: 8px;">
-                                <input class="form-check-input" type="radio" value="2" name="sex" {{ request('sex') == 2 ? 'checked' : ''}}>
+                                <input class="form-check-input" type="radio" value="2" name="sex" {{ $sex === "2" ? 'checked' : ''}}>
                                 <label class="form-check-label">Khác</label>
                             </div>
                         </div>
