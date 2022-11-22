@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\StorePostRequest;
 use App\Http\services\post\PostServices;
+use App\Models\Categories;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -22,17 +24,46 @@ class PostController extends Controller
         $this->postServices = $postServices;
     }
 
+    public function  upload(Request $request)
+    {
+        if($request->hasFile('upload')) {
+            $userId = Auth::user()->id;
+            $originName = $request->file('upload')->getClientOriginalName();
+            $fileName = pathinfo($originName, PATHINFO_FILENAME);
+            $extension = $request->file('upload')->getClientOriginalExtension();
+            $fileName = $fileName.'_'.$userId.'_'.time().'.'.$extension;
+
+            $request->file('upload')->move(public_path('image'), $fileName);
+
+            $CKEditorFuncNum = $request->input('CKEditorFuncNum');
+            $url = asset('image/'.$fileName);
+            $msg = 'Image uploaded successfully';
+            $response = "<script>window.parent.CKEDITOR.tools.callFunction($CKEditorFuncNum, '$url', '$msg')</script>";
+
+            @header('Content-type: text/html; charset=utf-8');
+            echo $response;
+        }
+    }
+
     public function index(Request $request)
     {
-        $posts = $this->postServices->getAll($request);
+        $categories = Categories::all();
+        $result = $this->postServices->getAllWithSearch($request);
+        $posts = $result[0];
+        $search_categories_id = $result[1];
+        $search_hot_flag = $result[2];
+        $search_title = $result[3];
+        $search_user = $result[4];
         $user = Auth::user();
-
         return view('admin.post.list', [
             'title' => 'Trang quản trị danh sách post',
             'user' => $user,
             'posts' => $posts,
-            'search' => '',
-            'sex' => '',
+            'categories' => $categories,
+            'search_categories_id' => $search_categories_id,
+            'search_hot_flag' => $search_hot_flag,
+            'search_title' => $search_title,
+            'search_user' => $search_user,
         ]) ->with('i', (request()->input('page', 1) - 1) * 7);
     }
 
@@ -41,9 +72,15 @@ class PostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function add()
     {
-        //
+        $user = Auth::user();
+        $categories = Categories::all();
+        return view('admin.post.add', [
+            'title' => 'Thêm mới bài posts',
+            'user' => $user,
+            'categories' => $categories
+        ]);
     }
 
     /**
@@ -52,9 +89,13 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StorePostRequest $request)
     {
-        //
+        $result =  $this->postServices->create($request);
+        if($result)
+        {
+            return redirect()->route('admin.post.list');
+        }
     }
 
     /**
@@ -63,9 +104,14 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Post $post)
     {
-        //
+        $user = Auth::user();
+        return view('admin.post.show', [
+            'title' => 'chi tiết bài viết: '. \Illuminate\Support\Str::limit($post->title, 40),
+            'user' => $user,
+            'post' => $post,
+        ]);
     }
 
     /**

@@ -21,9 +21,12 @@
                         <div class="form-group" >
                             <div style="display: flex;">
                                 <label style="width: 102px;padding-top: 6px;">Danh mục </label>
-                                <select class="form-control form-select" name="TÉT" aria-label="Default select example">
-                                    <option selected>Lựa chọn danh sách danh mục</option>
-                                    <option value="1">One</option>
+{{--                                {{dd($search_categories_id);}}--}}
+                                <select class="form-control form-select" name="search_categories_id" aria-label="Default select example">
+                                    <option value="">Lựa chọn danh sách danh mục</option>
+                                    @foreach($categories as $ca)
+                                        <option value="{{$ca->id}}" {{$ca->id == $search_categories_id ? 'selected' : '' }}>{{$ca->name}} </option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
@@ -32,11 +35,11 @@
                                 <label style="margin-right: 35px;">Nổi bật</label>
                                 <div class="form-group" style="display: flex;">
                                     <div class="form-check" style="padding-right: 8px;">
-                                        <input class="form-check-input" type="radio" value="0" name="sex" >
+                                        <input class="form-check-input" type="radio" value="0" name="search_hot_flag" {{ $search_hot_flag == "0" ? 'checked' : '' }}>
                                         <label class="form-check-label">inactive</label>
                                     </div>
                                     <div class="form-check" style="padding-right: 8px;">
-                                        <input class="form-check-input" type="radio" value="1" name="sex" >
+                                        <input class="form-check-input" type="radio" value="1" name="search_hot_flag" {{ $search_hot_flag == "1" ? 'checked' : '' }} >
                                         <label class="form-check-label">active</label>
                                     </div>
                                 </div>
@@ -47,13 +50,13 @@
                         <div class="form-group" >
                             <div style="display: flex;">
                                 <label style="width: 102px;padding-top: 6px;">Tiêu đề</label>
-                                <input type="text" class="form-control" name="search" value="" placeholder="Nhập tiêu đề">
+                                <input type="text" class="form-control" name="search_title" value="{{$search_title}}" placeholder="Nhập tiêu đề">
                             </div>
                         </div>
                         <div class="form-group" >
                             <div style="display: flex;">
                                 <label style="width: 102px;padding-top: 6px;">Tác giả</label>
-                                <input type="text" class="form-control" name="search" value="" placeholder="Nhập tên tác giả">
+                                <input type="text" class="form-control" name="search_user" value="{{$search_user}}" placeholder="Nhập tên tác giả">
                             </div>
                         </div>
                     </div>
@@ -78,7 +81,7 @@
             <div class="col-12">
                 <div class="card">
                     <div class="col-3 pt-2">
-                        <a href="{{route('admin.user.add')}}">
+                        <a href="{{route('admin.post.add')}}">
                             <button class="btn btn-primary">Thêm mới bài post</button>
                         </a>
                     </div>
@@ -102,85 +105,50 @@
                         <thead>
                         <tr>
                             <th>Số thứ tự</th>
-                            <th>Email </th>
-                            <th>Họ và tên</th>
-                            <th>avatar</th>
-                            <th>Ngày sinh</th>
-                            <th>Giới tính</th>
-                            <th>Địa chỉ</th>
-                            <th>Vai trò</th>
-                            <th>Trạng thái</th>
+                            <th>Tiêu đề</th>
+                            <th>Danh mục</th>
+                            <th>Tác giả</th>
+                            <th>Lượt xem</th>
+                            <th>Trạng thái nổi bật</th>
+                            <th>Nội dung</th>
+                            <th>Thời gian viết</th>
                             <th>Tác vụ</th>
                         </tr>
                         </thead>
                         <tbody>
-{{--                        @foreach($users as $u)--}}
-{{--                            <tr>--}}
-{{--                                <td>{{++$i}}</td>--}}
-{{--                                <td>{{$u->email}}</td>--}}
-{{--                                <td>{{$u->first_name}} {{$u->last_name}}</td>--}}
-{{--                                <td>--}}
-{{--                                    @if($u->avatar == null || $u->avatar == '')--}}
-{{--                                        ...--}}
-{{--                                    @else--}}
-{{--                                        <img src="/image/{{$u->avatar}}" alt="Avatar" class="avatar">--}}
-{{--                                    @endif--}}
-{{--                                </td>--}}
-{{--                                <td>--}}
-{{--                                    @if($u->birthday == null || $u->birthday == '')--}}
-{{--                                        ...--}}
-{{--                                    @else--}}
-{{--                                        {{$u->birthday}}--}}
-{{--                                    @endif--}}
-{{--                                </td>--}}
-{{--                                <td>--}}
-{{--                                    @if (($u->sex) === 0)--}}
-{{--                                        Nam--}}
-{{--                                    @elseif (($u->sex) === 1)--}}
-{{--                                        Nữ--}}
-{{--                                    @else--}}
-{{--                                        Khác--}}
-{{--                                    @endif--}}
-{{--                                </td>--}}
-{{--                                <td>--}}
-{{--                                    @if($u->address == null || $u->address == '')--}}
-{{--                                        ...--}}
-{{--                                    @else--}}
-{{--                                        {{$u->address}}--}}
-{{--                                    @endif--}}
-{{--                                </td>--}}
-{{--                                <td>--}}
-{{--                                    @if (($u->role) === 1)--}}
-{{--                                        Admin--}}
-{{--                                    @elseif (($u->role) === 2)--}}
-{{--                                        user--}}
-{{--                                    @else--}}
-{{--                                        manager--}}
-{{--                                    @endif--}}
-{{--                                </td>--}}
-{{--                                <td>--}}
-{{--                                    @if (($u->status) === 0)--}}
-{{--                                        inactive--}}
-{{--                                    @elseif (($u->status) === 1)--}}
-{{--                                        active--}}
-{{--                                    @endif--}}
-{{--                                </td>--}}
-{{--                                <td>--}}
-{{--                                    <a href="{{ route('admin.user.edit',$u->id) }}"><button type="button" class="btn btn-primary">Sửa</button></a>--}}
-{{--                                    <meta name="csrf-token" content="{{ csrf_token() }}">--}}
-{{--                                    @if ($user->id == $u->id)--}}
-{{--                                    @else--}}
-{{--                                        <form action="{{ route('admin.user.destroy',$u->id) }}" method="POST" style="display: inline;">--}}
-{{--                                            <button type="button" class="btn btn-danger deleteRecord " data-email = "{{$u->email}}" data-id="{{ $u->id }}">Xóa</button>--}}
-{{--                                            @csrf--}}
-{{--                                            @method('DELETE')--}}
-{{--                                        </form>--}}
-{{--                                    @endif--}}
-{{--                                    --}}{{--                                        <button type="button" class="btn btn-danger deleteRecord" onclick="delUser({{$u->id}})">Xóa</button>--}}
-{{--                                    --}}{{--                                        <button type="button" class="btn btn-danger deleteRecord" data-email = "{{$u->email}}" data-id="{{ $u->id }}">Xóa</button>--}}
-{{--                                </td>--}}
-{{--                            </tr>--}}
-{{--                        @endforeach--}}
+                        @foreach($posts as $post)
+                            <tr>
+                                <td>{{++$i}}</td>
+                                <td>{{\Illuminate\Support\Str::limit($post->title, 30)}}</td>
+                                <td>{{$post->categories_name}}</td>
+                                <td>{{$post->first_name}} {{$post->last_name}}</td>
+                                <td class="text-center">
+                                    @if ($post->views != null && $post->views > 0)
+                                        {{$post->views}}
+                                    @else
+                                        0
+                                    @endif
+                                </td>
+                                <td class="text-center">
+                                    @if ($post->hot_flag == 0)
+                                        <p class="text-danger">inactive</p>
+                                    @elseif ($post->hot_flag == 1)
+                                        <p class="text-success">active</p>
+                                    @endif
+                                </td>
+                                <td>{!! \Illuminate\Support\Str::limit($post->content, 40) !!}<a href="{{route('admin.post.show', $post->id)}}" class="text-danger">xem thêm</a></td>
+                                <td>{{$post->post_time}}</td>
+                                <td>
+                                    <a href="{{ route('admin.user.edit',$post->id) }}"><button type="button" class="btn btn-primary">Sửa</button></a>
+                                    <meta name="csrf-token" content="{{ csrf_token() }}">
+                                    <form action="{{ route('admin.user.destroy',$post->id) }}" method="POST" style="display: inline;">
+                                        <button type="button" class="btn btn-danger deleteRecord "  data-id="{{ $post->id }}">Xóa</button>
+                                        @csrf
+                                        @method('DELETE')
+                                    </form>
+                                </td>
+                            </tr>
+                        @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -196,7 +164,7 @@
         <div class="col-7">
         </div>
         <div class="col-5">
-{{--            {{ $users->withQueryString()->onEachSide(0)->links() }}--}}
+            {{ $posts->withQueryString()->onEachSide(0)->links() }}
 
         </div>
     </div>

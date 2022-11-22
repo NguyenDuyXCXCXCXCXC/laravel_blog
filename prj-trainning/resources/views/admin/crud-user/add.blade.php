@@ -17,7 +17,7 @@
                 @if ($errors->has('email'))
                     <p class="text-danger text-center" style="font-size: 12px;">{{ $errors->first('email') }}</p>
                 @endif
-            </div
+            </div>
 
             <div class="form-group" >
                 <div class="row" style="display: flex;">

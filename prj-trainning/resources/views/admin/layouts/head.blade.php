@@ -12,6 +12,9 @@
 <link rel="stylesheet" href="/template/admin/dist/css/adminlte.min.css">
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+{{--ckeditor--}}
+<script src="https://cdn.ckeditor.com/4.12.1/standard/ckeditor.js"></script>
 <style>
     .avatar {
         vertical-align: middle;

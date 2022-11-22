@@ -81,12 +81,14 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth']], function(){
 
     // admin/post
     Route::prefix('post')->group(function () {
+        Route::post('ckeditor/upload',  [\App\Http\Controllers\Admin\PostController::class, 'upload'])->name('ckeditor.upload');
         Route::get('/list', [\App\Http\Controllers\Admin\PostController::class, 'index'])->name('admin.post.list');
-//        Route::get('/add', [\App\Http\Controllers\Admin\CategoriesController::class, 'add'])->name('admin.categories.add');
-//        Route::post('/add', [\App\Http\Controllers\Admin\CategoriesController::class, 'store'])->name('admin.categories.store');
-//        Route::get('/edit/{categories}', [\App\Http\Controllers\Admin\CategoriesController::class, 'edit'])->name('admin.categories.edit');
-//        Route::post('/update/{categories}', [\App\Http\Controllers\Admin\CategoriesController::class, 'update'])->name('admin.categories.update');
-//        Route::delete('del/{id}', [\App\Http\Controllers\Admin\CategoriesController::class, 'destroy'])->name('admin.categories.destroy');
+        Route::get('/add', [\App\Http\Controllers\Admin\PostController::class, 'add'])->name('admin.post.add');
+        Route::post('/add', [\App\Http\Controllers\Admin\PostController::class, 'store'])->name('admin.post.store');
+        Route::get('/show/{post}', [\App\Http\Controllers\Admin\PostController::class, 'show'])->name('admin.post.show');
+//        Route::get('/edit/{categories}', [\App\Http\Controllers\Admin\PostController::class, 'edit'])->name('admin.post.edit');
+//        Route::post('/update/{categories}', [\App\Http\Controllers\Admin\PostController::class, 'update'])->name('admin.post.update');
+//        Route::delete('del/{id}', [\App\Http\Controllers\Admin\PostController::class, 'destroy'])->name('admin.post.destroy');
     });
 
 
