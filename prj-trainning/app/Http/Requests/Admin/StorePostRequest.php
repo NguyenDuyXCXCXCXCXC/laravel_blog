@@ -28,6 +28,7 @@ class StorePostRequest extends FormRequest
             'categories_id' =>'required',
             'hot_flag' =>'required',
             'content' =>'required',
+            'photo'=> 'required|image|mimes:jpeg,png,jpg,gif,svg|max:10240',
         ];
     }
 
@@ -39,6 +40,9 @@ class StorePostRequest extends FormRequest
             'categories_id.required' => 'Danh mục không được để trống!',
             'hot_flag.required' => 'Trạng thái nổi bật không được để trống!',
             'content.required' => 'Nội dung bài viết không được để trống!',
+            'photo.required' => 'Ảnh bài viết không được để trống!',
+            'photo.image' => 'Yêu cầu file định dạng phải là ảnh!',
+            'photo.max' => 'Yêu cầu kích thước <= 10MB!',
         ];
     }
 }

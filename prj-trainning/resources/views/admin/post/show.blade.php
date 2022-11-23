@@ -5,10 +5,13 @@
     <div class="container-fluid">
 
         <div class="container mt-3 border">
-            <h2 class=" mr-3 pl-4 mt-3 bg-info rounded">
-                {{$post->title}}
-            </h2>
-            <p class="ml-3"> {{$post->post_time}} </p>
+            <div>
+                <h2 class=" mr-3 pl-4 mt-3 bg-info rounded">
+                    {{$post->title}}
+                </h2>
+                <p class="ml-3"> {{$post->post_time}} </p>
+
+            </div>
             {!! $post->content !!}
         </div>
         <div class="row">

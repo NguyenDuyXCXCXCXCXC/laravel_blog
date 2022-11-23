@@ -5,6 +5,7 @@ use App\Models\Categories;
 use App\Models\User;
 use Carbon\Carbon;
 use http\Env\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Models\Post;
 use Illuminate\Support\Facades\Session;
@@ -245,6 +246,13 @@ class PostServices
     public function create($request)
     {
         $input = $request->all();
+        $idUserCreater = Auth::user()->id;
+        if ($image = $request->file('photo')) {
+            $destinationPath = 'image/';
+            $profileImage = $idUserCreater . '_' . time() . "." . $image->getClientOriginalExtension();
+            $image->move($destinationPath, $profileImage);
+            $input['photo'] = "$profileImage";
+        }
         try {
             $inputTitle = $input['title'];
             Post::create([
@@ -253,6 +261,7 @@ class PostServices
                 'category_id' => $input['categories_id'],
                 'hot_flag' => $input['hot_flag'],
                 'content' => $input['content'],
+                'photo' => $input['photo'],
                 'post_time' => \Illuminate\Support\Carbon::now()->toDateTime()
             ]);
             Session::flash('mySuccess', 'Bài Posts: ' . $inputTitle .' đã được thêm mới' );
@@ -265,13 +274,34 @@ class PostServices
 
     public function update($request, $post)
     {
+        $request->validate([
+            'title'  =>'required|max:200',
+            'categories_id' =>'required',
+            'hot_flag' =>'required',
+            'content' =>'required',
+            'photo'=> 'image|mimes:jpeg,png,jpg,gif,svg|max:10240',
+        ], [
+            'title.required' => 'Tiêu đề không được để trống!',
+            'title.max' => 'Tiêu đề không vượt quá 200 ký tự!',
+            'categories_id.required' => 'Danh mục không được để trống!',
+            'hot_flag.required' => 'Trạng thái nổi bật không được để trống!',
+            'content.required' => 'Nội dung bài viết không được để trống!',
+            'photo.image' => 'Yêu cầu file định dạng phải là ảnh!',
+            'photo.max' => 'Yêu cầu kích thước <= 10MB!',
+        ]);
+        $input = $request->all();
         $postTitle = $post->title;
+        $idUserCreater = Auth::user()->id;
+        if ($image = $request->file('photo')) {
+            $destinationPath = 'image/';
+            $profileImage = $idUserCreater . '_' . time() . "." . $image->getClientOriginalExtension();
+            $image->move($destinationPath, $profileImage);
+            $input['photo'] = "$profileImage";
+        }else{
+            unset($input['photo']);
+        }
         try {
-            $post->title = $request->title;
-            $post->category_id = $request->categories_id;
-            $post->hot_flag = $request->hot_flag;
-            $post->content = $request->content;
-            $post->save();
+            $post->update($input);
             Session::flash('mySuccess', 'Bài Posts: ' . $postTitle .' đã được sửa thành công!' );
         }catch (\Exception $err){
             Session::flash('myError', $err->getMessage() );

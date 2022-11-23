@@ -5,3 +5,4 @@ tk: admin@gmail.com - Admin@@123456
 fix table: datatabel
 bai viet phan: Categories
 phan profile: password chua hop ly
+phan post: khi add/upload phai them anh bai viet

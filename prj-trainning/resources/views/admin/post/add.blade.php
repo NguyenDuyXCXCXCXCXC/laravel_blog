@@ -39,6 +39,20 @@
                 @endif
             </div>
 
+            <div class="form-group" >
+                <div style="display: flex;">
+                    <label style="width: 200px;padding-top: 6px;">Hình ảnh bài viết<span style="color: red;">*</span></label>
+                    <input type="file" name="photo" class="form-control" id="photo" placeholder="image">
+                </div>
+                @if ($errors->has('photo'))
+                    <p class="text-danger text-center" style="font-size: 12px;">{{ $errors->first('photo') }}</p>
+                @endif
+            </div>
+            <div class="input-group  mb-3" id="upload_file">
+                {{--                    <img id="preview-image-before-upload" src="https://www.w3schools.com/tags/img_girl.jpg" alt="" width="50" height="60">--}}
+            </div>
+
+
             <div>
                 <div class="input-group  mb-3">
                     <label style="width: 145px;margin-right: 8px;">Trạng thái nổi bật<span style="color: red;">*</span></label>
@@ -90,6 +104,20 @@
         CKEDITOR.replace('content', {
             filebrowserUploadUrl: "{{route('ckeditor.upload', ['_token' => csrf_token() ])}}",
             filebrowserUploadMethod: 'form'
+        });
+
+        $('#photo').change(function(){
+
+            $('#upload_file').empty();
+            $('#upload_file').prepend('<img id="preview-photo-before-upload" src="" class="ml-4"  alt="image-preview" width="50" height="60"/>');
+            let reader = new FileReader();
+
+            reader.onload = (e) => {
+
+                $('#preview-photo-before-upload').attr('src', e.target.result);
+            }
+
+            reader.readAsDataURL(this.files[0]);
         });
     </script>
 @endsection

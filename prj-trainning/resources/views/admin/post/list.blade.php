@@ -88,7 +88,7 @@
                     <div class="row">
                         <div class="col-2">
                         </div>
-                        <div class="col-3 text-end" style="padding-left: 169px;padding-top: 7px;"">
+                        <div class="col-3 text-end" style="padding-left: 169px;padding-top: 7px;">
                         Lựa chọn số lượng record hiển thị :
                     </div>
                     <div class="col-5 text-start pt-1" >
@@ -106,6 +106,7 @@
                         <tr>
                             <th>Số thứ tự</th>
                             <th>Tiêu đề</th>
+                            <th>Ảnh bài viết</th>
                             <th>Danh mục</th>
                             <th>Tác giả</th>
                             <th>Lượt xem</th>
@@ -120,6 +121,13 @@
                             <tr>
                                 <td>{{++$i}}</td>
                                 <td>{{\Illuminate\Support\Str::limit($post->title, 30)}}</td>
+                                <td>
+                                    @if($post->photo == null || $post->photo == '')
+                                        <img src="/image/images.png" alt="Avatar" class="avatar rounded mx-auto d-block">
+                                    @else
+                                        <img src="/image/{{$post->photo}}" alt="Avatar" class="avatar rounded mx-auto d-block">
+                                    @endif
+                                </td>
                                 <td>{{$post->categories_name}}</td>
                                 <td>{{$post->first_name}} {{$post->last_name}}</td>
                                 <td class="text-center">

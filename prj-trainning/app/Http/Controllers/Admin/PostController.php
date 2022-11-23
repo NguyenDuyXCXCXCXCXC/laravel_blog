@@ -141,8 +141,9 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(StorePostRequest $request, Post $post)
+    public function update(Request $request, Post $post)
     {
+//        dd($request->all(), $post);
         $result = $this->postServices->update($request, $post);
         if($result)
         {
