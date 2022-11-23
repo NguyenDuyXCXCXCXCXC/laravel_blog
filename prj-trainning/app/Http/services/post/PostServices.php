@@ -255,11 +255,34 @@ class PostServices
                 'content' => $input['content'],
                 'post_time' => \Illuminate\Support\Carbon::now()->toDateTime()
             ]);
-            Session::flash('mySuccess', 'Bài Posts ' . $inputTitle .' đã được thêm mới' );
+            Session::flash('mySuccess', 'Bài Posts: ' . $inputTitle .' đã được thêm mới' );
         }catch (\Exception $err){
             Session::flash('myError', $err->getMessage() );
             return false;
         }
+        return true;
+    }
+
+    public function update($request, $post)
+    {
+        $postTitle = $post->title;
+        try {
+            $post->title = $request->title;
+            $post->category_id = $request->categories_id;
+            $post->hot_flag = $request->hot_flag;
+            $post->content = $request->content;
+            $post->save();
+            Session::flash('mySuccess', 'Bài Posts: ' . $postTitle .' đã được sửa thành công!' );
+        }catch (\Exception $err){
+            Session::flash('myError', $err->getMessage() );
+            return false;
+        }
+        return true;
+    }
+
+    public function destroy($id)
+    {
+        Post::find($id)->delete();
         return true;
     }
 }

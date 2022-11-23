@@ -19,7 +19,7 @@
         </div>
         <div class="row mb-3 mt-4">
             <div class="col-2"></div>
-            <div class="col-6"><button type="button" class="btn btn-primary">Chỉnh sửa</button></div>
+            <div class="col-6"> <a href="{{route('admin.post.edit', $post->id)}}"><button type="button" class="btn btn-primary">Chỉnh sửa</button></a> </div>
             <div class="col-3"> <a href="{{route('admin.post.list')}}"> <button type="button" class="btn btn-info">Danh sách Bài viết</button></a></div>
         </div>
     </div>

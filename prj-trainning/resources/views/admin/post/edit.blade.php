@@ -1,23 +1,17 @@
 @extends('admin.main')
 @section('content')
     <div class="container-fluid">
-        <label class="pl-5"><a href="{{route('admin.dashboard')}}">Home</a>  / <a href="{{route('admin.post.list')}}">Posts</a> / Add</label>
+        <label class="pl-5"><a href="{{route('admin.dashboard')}}">Home</a>  / <a href="{{route('admin.post.list')}}">Posts</a> / Edit</label>
     </div>
     @include('admin.users.alert')
     <div class="container">
         @include('admin.alert')
-        <p class="bg-info" style="width: 108px;height: 25px;">Thêm bài viết</p>
-        <form action="{{route('admin.post.store')}}" method="post" id="myForm" enctype="multipart/form-data">
-
-            <div class="form-group" >
-                <div style="display: flex;">
-                    <input type="hidden" class="form-control" name="user_id" value="{{ $user->id }}" placeholder="Nhập tiêu đề bài viết">
-                </div>
-            </div>
+        <p class="bg-info" style="width: 108px;height: 25px;">Sửa bài viết</p>
+        <form action="{{route('admin.post.update', $post->id)}}" method="post" id="myForm" enctype="multipart/form-data">
             <div class="form-group" >
                 <div style="display: flex;">
                     <label style="width: 200px;padding-top: 6px;">Tiêu đề<span style="color: red;">*</span></label>
-                    <input type="text" class="form-control" name="title" value="{{ old('title') }}" placeholder="Nhập tiêu đề bài viết">
+                    <input type="text" class="form-control" name="title" value="{{ $post->title }}" placeholder="Nhập tiêu đề bài viết">
                 </div>
                 @if ($errors->has('title'))
                     <p class="text-danger text-center" style="font-size: 12px;">{{ $errors->first('title') }}</p>
@@ -30,7 +24,7 @@
                     <select class="form-control form-select" name="categories_id" aria-label="Default select example">
                         <option value="">Lựa chọn danh sách danh mục</option>
                         @foreach($categories as $ca)
-                            <option value="{{$ca->id}}" {{ old('categories_id') ==  $ca->id ? 'selected' : ''}}>{{$ca->name}}  </option>
+                            <option value="{{$ca->id}}" {{ $post->category_id ==  $ca->id ? 'selected' : ''}}>{{$ca->name}}  </option>
                         @endforeach
                     </select>
                 </div>
@@ -44,11 +38,11 @@
                     <label style="width: 145px;margin-right: 8px;">Trạng thái nổi bật<span style="color: red;">*</span></label>
                     <div class="form-group" style="margin-left: 18px;display: flex;">
                         <div class="form-check" style=" margin-right: 5px;">
-                            <input class="form-check-input" type="radio" value="1" {{ old('hot_flag') === "1" ? 'checked' : '' }} name="hot_flag" >
+                            <input class="form-check-input" type="radio" value="1" {{ $post->hot_flag == "1" ? 'checked' : '' }} name="hot_flag" >
                             <label class="form-check-label">active</label>
                         </div>
                         <div class="form-check" style=" margin-right: 5px;">
-                            <input class="form-check-input" type="radio" value="0" {{ old('hot_flag') === "0" ? 'checked' : '' }} name="hot_flag">
+                            <input class="form-check-input" type="radio" value="0" {{ $post->hot_flag == "0" ? 'checked' : '' }} name="hot_flag">
                             <label class="form-check-label">inactive</label>
                         </div>
                     </div>
@@ -62,7 +56,7 @@
             <div class="form-group" >
                 <div >
                     <label style="width: 200px;padding-top: 6px;">Nội dung bài viết<span style="color: red;">*</span></label>
-                    <textarea name="content">{{old('content')}}</textarea>
+                    <textarea name="content">{{$post->content}}</textarea>
                 </div>
                 @if ($errors->has('content'))
                     <p class="text-danger text-center" style="font-size: 12px;">{{ $errors->first('content') }}</p>

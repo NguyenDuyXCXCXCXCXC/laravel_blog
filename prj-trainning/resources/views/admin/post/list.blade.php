@@ -136,12 +136,12 @@
                                         <p class="text-success">active</p>
                                     @endif
                                 </td>
-                                <td>{!! \Illuminate\Support\Str::limit($post->content, 40) !!}<a href="{{route('admin.post.show', $post->id)}}" class="text-danger">xem thêm</a></td>
+                                <td>{!! \Illuminate\Support\Str::limit($post->content, 40) !!}<a href="{{route('admin.post.show', $post->id)}}" class="text-danger"><strong>xem thêm</strong> </a></td>
                                 <td>{{$post->post_time}}</td>
                                 <td>
-                                    <a href="{{ route('admin.user.edit',$post->id) }}"><button type="button" class="btn btn-primary">Sửa</button></a>
+                                    <a href="{{ route('admin.post.edit',$post->id) }}"><button type="button" class="btn btn-primary">Sửa</button></a>
                                     <meta name="csrf-token" content="{{ csrf_token() }}">
-                                    <form action="{{ route('admin.user.destroy',$post->id) }}" method="POST" style="display: inline;">
+                                    <form action="{{ route('admin.post.destroy',$post->id) }}" method="POST" style="display: inline;">
                                         <button type="button" class="btn btn-danger deleteRecord "  data-id="{{ $post->id }}">Xóa</button>
                                         @csrf
                                         @method('DELETE')
@@ -179,10 +179,10 @@
         }
         // console.log('Duy: ' + $(".alert").text());
         $(".deleteRecord").click(function(){
-            var id = $(this).data("id");
+            // var id = $(this).data("id");
             var form =  $(this).closest("form");
-            var emailRemove = $(this).data("email");
-            var token = $("meta[name='csrf-token']").attr("content");
+            // var emailRemove = $(this).data("email");
+            // var token = $("meta[name='csrf-token']").attr("content");
 
             // for alert
             swal({

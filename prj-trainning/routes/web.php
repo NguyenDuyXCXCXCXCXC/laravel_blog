@@ -86,9 +86,9 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth']], function(){
         Route::get('/add', [\App\Http\Controllers\Admin\PostController::class, 'add'])->name('admin.post.add');
         Route::post('/add', [\App\Http\Controllers\Admin\PostController::class, 'store'])->name('admin.post.store');
         Route::get('/show/{post}', [\App\Http\Controllers\Admin\PostController::class, 'show'])->name('admin.post.show');
-//        Route::get('/edit/{categories}', [\App\Http\Controllers\Admin\PostController::class, 'edit'])->name('admin.post.edit');
-//        Route::post('/update/{categories}', [\App\Http\Controllers\Admin\PostController::class, 'update'])->name('admin.post.update');
-//        Route::delete('del/{id}', [\App\Http\Controllers\Admin\PostController::class, 'destroy'])->name('admin.post.destroy');
+        Route::get('/edit/{post}', [\App\Http\Controllers\Admin\PostController::class, 'edit'])->name('admin.post.edit');
+        Route::post('/update/{post}', [\App\Http\Controllers\Admin\PostController::class, 'update'])->name('admin.post.update');
+        Route::delete('/del/{id}', [\App\Http\Controllers\Admin\PostController::class, 'destroy'])->name('admin.post.destroy');
     });
 
 

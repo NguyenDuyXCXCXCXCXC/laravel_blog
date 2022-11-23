@@ -9,6 +9,7 @@ use App\Models\Categories;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 
 class PostController extends Controller
 {
@@ -120,9 +121,17 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Post $post)
     {
-        //
+//        dd($post);
+        $categories = Categories::all();
+        $user = Auth::user();
+        return view('admin.post.edit', [
+            'title' => 'Sửa bài viết: '. \Illuminate\Support\Str::limit($post->title, 40),
+            'user' => $user,
+            'post' => $post,
+            'categories' => $categories
+        ]);
     }
 
     /**
@@ -132,9 +141,14 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(StorePostRequest $request, Post $post)
     {
-        //
+        $result = $this->postServices->update($request, $post);
+        if($result)
+        {
+            return redirect()->route('admin.post.list');
+        }
+
     }
 
     /**
@@ -145,6 +159,12 @@ class PostController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $post = Post::where('id', $id)->first();
+        $result = $this->postServices->destroy($id);
+        if($result)
+        {
+            Session::flash('mySuccess', 'Bài Posts: ' . $post->title .' đã được xóa thành công!' );
+            return redirect()->back();
+        }
     }
 }
