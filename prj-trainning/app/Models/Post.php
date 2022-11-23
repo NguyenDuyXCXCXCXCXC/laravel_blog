@@ -20,15 +20,19 @@ class Post extends Model
         'views',
     ];
 
+    // be longs to
     public function user()
     {
         return $this->belongsTo(User::class);
     }
-
     public function category()
     {
         return $this->belongsTo(Categories::class);
     }
 
+    // has many
+    public function comments() {
+        return $this->hasMany(Comment::class);
+    }
 
 }

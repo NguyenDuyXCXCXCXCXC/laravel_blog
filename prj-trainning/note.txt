@@ -6,3 +6,4 @@ fix table: datatabel
 bai viet phan: Categories
 phan profile: password chua hop ly
 phan post: khi add/upload phai them anh bai viet
+phan comment: link ?

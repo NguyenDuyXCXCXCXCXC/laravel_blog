@@ -144,7 +144,7 @@
                                         <p class="text-success">active</p>
                                     @endif
                                 </td>
-                                <td>{!! \Illuminate\Support\Str::limit($post->content, 40) !!}<a href="{{route('admin.post.show', $post->id)}}" class="text-danger"><strong>xem thêm</strong> </a></td>
+                                <td>{!! \Illuminate\Support\Str::limit($post->content, 40) !!}<a  style="font-size: 11px;" href="{{route('admin.post.show', $post->id)}}" class="text-danger"><strong>xem thêm</strong> </a></td>
                                 <td>{{$post->post_time}}</td>
                                 <td>
                                     <a href="{{ route('admin.post.edit',$post->id) }}"><button type="button" class="btn btn-primary">Sửa</button></a>

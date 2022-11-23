@@ -91,6 +91,17 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth']], function(){
         Route::delete('/del/{id}', [\App\Http\Controllers\Admin\PostController::class, 'destroy'])->name('admin.post.destroy');
     });
 
+    // admin/comment
+    Route::prefix('comment')->group(function () {
+        Route::get('/list', [\App\Http\Controllers\Admin\CommentController::class, 'index'])->name('admin.comment.list');
+        Route::get('/active/{comment}', [\App\Http\Controllers\Admin\CommentController::class, 'active'])->name('admin.comment.active');
+//        Route::get('/add', [\App\Http\Controllers\Admin\CommentController::class, 'add'])->name('admin.comment.add');
+//        Route::post('/add', [\App\Http\Controllers\Admin\CommentController::class, 'store'])->name('admin.comment.store');
+//        Route::get('/show/{post}', [\App\Http\Controllers\Admin\CommentController::class, 'show'])->name('admin.comment.show');
+//        Route::get('/edit/{post}', [\App\Http\Controllers\Admin\CommentController::class, 'edit'])->name('admin.comment.edit');
+//        Route::post('/update/{post}', [\App\Http\Controllers\Admin\CommentController::class, 'update'])->name('admin.comment.update');
+//        Route::delete('/del/{id}', [\App\Http\Controllers\Admin\CommentController::class, 'destroy'])->name('admin.comment.destroy');
+    });
 
 
 });
