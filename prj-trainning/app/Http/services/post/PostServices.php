@@ -20,6 +20,13 @@ class PostServices
         $search_title = '';
         $search_user = '';
 
+        // su dung cho phan select so luong ban ghi
+        if ($request->input('selected_option') != null && $request->input('selected_option') != ''){
+            $selected_option = (int)($request->input('selected_option'));
+        }else{
+            $selected_option = 7;
+        }
+
         // search(4) categories, hot_flag, title, user
         if(($request->input('search_categories_id') != null) && ($request->input('search_hot_flag') != null) && ($request->input('search_title') != null) && ($request->input('search_user') != null)) {
             $search_categories_id = $request->input('search_categories_id');
@@ -37,7 +44,7 @@ class PostServices
                     $query->orwhere('users.last_name', 'LIKE', "%{$search_user}%")
                         ->orwhere('users.first_name', 'LIKE', "%{$search_user}%");
                 })
-                ->orderByDesc('id')->paginate(7);
+                ->orderByDesc('id')->paginate($selected_option);
         }
         // search(3)   hot_flag, title, user
         elseif (($request->input('search_hot_flag') != null) && ($request->input('search_title') != null) && ($request->input('search_user') != null)){
@@ -54,7 +61,7 @@ class PostServices
                     $query->orwhere('users.last_name', 'LIKE', "%{$search_user}%")
                         ->orwhere('users.first_name', 'LIKE', "%{$search_user}%");
                 })
-                ->orderByDesc('id')->paginate(7);
+                ->orderByDesc('id')->paginate($selected_option);
         }
         // search(3) categories, title, user
         elseif(($request->input('search_categories_id') != null) && ($request->input('search_title') != null) && ($request->input('search_user') != null)) {
@@ -71,7 +78,7 @@ class PostServices
                     $query->orwhere('users.last_name', 'LIKE', "%{$search_user}%")
                         ->orwhere('users.first_name', 'LIKE', "%{$search_user}%");
                 })
-                ->orderByDesc('id')->paginate(7);
+                ->orderByDesc('id')->paginate($selected_option);
         }
         // search(3) categories, hot_flag, user
         elseif(($request->input('search_categories_id') != null) && ($request->input('search_hot_flag') != null) && ($request->input('search_user') != null)) {
@@ -88,7 +95,7 @@ class PostServices
                     $query->orwhere('users.last_name', 'LIKE', "%{$search_user}%")
                         ->orwhere('users.first_name', 'LIKE', "%{$search_user}%");
                 })
-                ->orderByDesc('id')->paginate(7);
+                ->orderByDesc('id')->paginate($selected_option);
         }
         // search(3) categories, hot_flag, title
         elseif(($request->input('search_categories_id') != null) && ($request->input('search_hot_flag') != null) && ($request->input('search_title') != null)) {
@@ -102,7 +109,7 @@ class PostServices
                 ->where('categories.id', '=', "{$search_categories_id}")
                 ->where('posts.hot_flag', '=', "{$search_hot_flag}")
                 ->where('posts.title', 'LIKE', "%{$search_title}%")
-                ->orderByDesc('id')->paginate(7);
+                ->orderByDesc('id')->paginate($selected_option);
         }
 
         // search(2) categories, hot_flag
@@ -115,7 +122,7 @@ class PostServices
                 ->select('posts.*', 'categories.name as categories_name', 'categories.id as categories_id', 'users.first_name', 'users.last_name')
                 ->where('categories.id', '=', "{$search_categories_id}")
                 ->where('posts.hot_flag', '=', "{$search_hot_flag}")
-                ->orderByDesc('id')->paginate(7);
+                ->orderByDesc('id')->paginate($selected_option);
         }
         // search(2) categories,  title
         elseif(($request->input('search_categories_id') != null) && ($request->input('search_title') != null)) {
@@ -127,7 +134,7 @@ class PostServices
                 ->select('posts.*', 'categories.name as categories_name', 'categories.id as categories_id', 'users.first_name', 'users.last_name')
                 ->where('categories.id', '=', "{$search_categories_id}")
                 ->where('posts.title', 'LIKE', "%{$search_title}%")
-                ->orderByDesc('id')->paginate(7);
+                ->orderByDesc('id')->paginate($selected_option);
         }
         // search(2) categories, user
         elseif(($request->input('search_categories_id') != null) && ($request->input('search_user') != null)) {
@@ -142,7 +149,7 @@ class PostServices
                     $query->orwhere('users.last_name', 'LIKE', "%{$search_user}%")
                         ->orwhere('users.first_name', 'LIKE', "%{$search_user}%");
                 })
-                ->orderByDesc('id')->paginate(7);
+                ->orderByDesc('id')->paginate($selected_option);
         }
         // search(2) hot_flag, title
         elseif( ($request->input('search_hot_flag') != null) && ($request->input('search_title') != null) ) {
@@ -154,7 +161,7 @@ class PostServices
                 ->select('posts.*', 'categories.name as categories_name', 'categories.id as categories_id', 'users.first_name', 'users.last_name')
                 ->where('posts.hot_flag', '=', "{$search_hot_flag}")
                 ->where('posts.title', 'LIKE', "%{$search_title}%")
-                ->orderByDesc('id')->paginate(7);
+                ->orderByDesc('id')->paginate($selected_option);
         }
         // search(2) hot_flag,  user
         elseif(($request->input('search_hot_flag') != null) && ($request->input('search_user') != null)) {
@@ -169,7 +176,7 @@ class PostServices
                     $query->orwhere('users.last_name', 'LIKE', "%{$search_user}%")
                         ->orwhere('users.first_name', 'LIKE', "%{$search_user}%");
                 })
-                ->orderByDesc('id')->paginate(7);
+                ->orderByDesc('id')->paginate($selected_option);
         }
         // search(2) title, user
         elseif( ($request->input('search_title') != null) && ($request->input('search_user') != null)) {
@@ -184,7 +191,7 @@ class PostServices
                     $query->orwhere('users.last_name', 'LIKE', "%{$search_user}%")
                         ->orwhere('users.first_name', 'LIKE', "%{$search_user}%");
                 })
-                ->orderByDesc('id')->paginate(7);
+                ->orderByDesc('id')->paginate($selected_option);
         }
         //search (1) categories
         elseif(($request->input('search_categories_id') != null)) {
@@ -194,7 +201,7 @@ class PostServices
                 ->join('users', 'posts.user_id', '=', 'users.id')
                 ->select('posts.*', 'categories.name as categories_name', 'categories.id as categories_id', 'users.first_name', 'users.last_name')
                 ->where('categories.id', '=', "{$search_categories_id}")
-                ->orderByDesc('id')->paginate(7);
+                ->orderByDesc('id')->paginate($selected_option);
         }
         //search (1) hot_flag
         elseif( ($request->input('search_hot_flag') != null)) {
@@ -204,7 +211,7 @@ class PostServices
                 ->join('users', 'posts.user_id', '=', 'users.id')
                 ->select('posts.*', 'categories.name as categories_name', 'categories.id as categories_id', 'users.first_name', 'users.last_name')
                 ->where('posts.hot_flag', '=', "{$search_hot_flag}")
-                ->orderByDesc('id')->paginate(7);
+                ->orderByDesc('id')->paginate($selected_option);
         }
         //search (1) title
         elseif(($request->input('search_title') != null)) {
@@ -214,7 +221,7 @@ class PostServices
                 ->join('users', 'posts.user_id', '=', 'users.id')
                 ->select('posts.*', 'categories.name as categories_name', 'categories.id as categories_id', 'users.first_name', 'users.last_name')
                 ->where('posts.title', 'LIKE', "%{$search_title}%")
-                ->orderByDesc('id')->paginate(7);
+                ->orderByDesc('id')->paginate($selected_option);
         }
         //search (1) user
         elseif(($request->input('search_user') != null)) {
@@ -227,20 +234,18 @@ class PostServices
                     $query->orwhere('users.last_name', 'LIKE', "%{$search_user}%")
                         ->orwhere('users.first_name', 'LIKE', "%{$search_user}%");
                 })
-                ->orderByDesc('id')->paginate(7);
+                ->orderByDesc('id')->paginate($selected_option);
         }
-
-
         // no search
         else{
             $posts = DB::table('posts')
                 ->join('categories', 'posts.category_id', '=', 'categories.id')
                 ->join('users', 'posts.user_id', '=', 'users.id')
                 ->select('posts.*', 'categories.name as categories_name', 'categories.id as categories_id' , 'users.first_name', 'users.last_name')
-                ->orderByDesc('id')->paginate(7);
+                ->orderByDesc('id')->paginate($selected_option);
         }
 
-        return [$posts, $search_categories_id, $search_hot_flag, $search_title, $search_user];
+        return [$posts, $search_categories_id, $search_hot_flag, $search_title, $search_user, $selected_option];
     }
 
     public function create($request)
@@ -300,6 +305,12 @@ class PostServices
         }else{
             unset($input['photo']);
         }
+
+        // bien request ko dat giong database
+        $input['category_id'] = $input['categories_id'];
+        unset($input['categories_id']);
+//        dd($input['categories_id']);
+//        dd($input, $post);
         try {
             $post->update($input);
             Session::flash('mySuccess', 'Bài Posts: ' . $postTitle .' đã được sửa thành công!' );

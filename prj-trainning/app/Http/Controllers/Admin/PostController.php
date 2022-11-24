@@ -38,7 +38,7 @@ class PostController extends Controller
 
             $CKEditorFuncNum = $request->input('CKEditorFuncNum');
             $url = asset('image/'.$fileName);
-            $msg = 'Image uploaded successfully';
+            $msg = 'Hình ảnh được tải lên thành công!';
             $response = "<script>window.parent.CKEDITOR.tools.callFunction($CKEditorFuncNum, '$url', '$msg')</script>";
 
             @header('Content-type: text/html; charset=utf-8');
@@ -48,6 +48,8 @@ class PostController extends Controller
 
     public function index(Request $request)
     {
+
+
         $categories = Categories::all();
         $result = $this->postServices->getAllWithSearch($request);
         $posts = $result[0];
@@ -55,6 +57,7 @@ class PostController extends Controller
         $search_hot_flag = $result[2];
         $search_title = $result[3];
         $search_user = $result[4];
+        $selected_option = $result[5];
         $user = Auth::user();
         return view('admin.post.list', [
             'title' => 'Trang quản trị danh sách post',
@@ -65,7 +68,7 @@ class PostController extends Controller
             'search_hot_flag' => $search_hot_flag,
             'search_title' => $search_title,
             'search_user' => $search_user,
-        ]) ->with('i', (request()->input('page', 1) - 1) * 7);
+        ]) ->with('i', (request()->input('page', 1) - 1) * $selected_option);
     }
 
     /**
@@ -143,7 +146,6 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-//        dd($request->all(), $post);
         $result = $this->postServices->update($request, $post);
         if($result)
         {

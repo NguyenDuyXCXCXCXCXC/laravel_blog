@@ -19,6 +19,14 @@ class UserController extends Controller
         {
             return redirect()->route('admin.user.listForUser');
         }
+
+        // su dung cho phan select so luong ban ghi
+        if ($request->input('selected_option') != null && $request->input('selected_option') != ''){
+            $selected_option = (int)($request->input('selected_option'));
+        }else{
+            $selected_option = 7;
+        }
+
         $search = '';
         $searchSex = '';
         // search email, name && sex
@@ -35,7 +43,7 @@ class UserController extends Controller
                     $query->orwhere('last_name', 'LIKE', "%{$search}%")
                         ->orwhere('first_name', 'LIKE', "%{$search}%")
                         ->orwhere('email', 'LIKE', "%{$search}%");
-                })->orderByDesc('id')->paginate(7);
+                })->orderByDesc('id')->paginate($selected_option);
             $users->appends(['search' => $search, 'sex' => $searchSex]);
 
         // search email, name
@@ -50,7 +58,7 @@ class UserController extends Controller
                     $query->orwhere('first_name', 'LIKE', "%{$search}%")
                         ->orwhere('last_name', 'LIKE', "%{$search}%")
                         ->orwhere('email', 'LIKE', "%{$search}%");
-                })->orderByDesc('id')->paginate(7);
+                })->orderByDesc('id')->paginate($selected_option);
             $users->appends(['search' => $search]);
         // search sex
         }elseif ($request->input('sex') != null){
@@ -60,13 +68,13 @@ class UserController extends Controller
                 $query->orwhere('role', '=', 1)
                     ->orwhere('role', '=', 3);
             })->where('sex', '=', "{$searchSex}")
-                ->orderByDesc('id')->paginate(7);
+                ->orderByDesc('id')->paginate($selected_option);
             $users->appends([ 'sex' => $searchSex]);
         }else{
             $users = User::Where(function($query)  {
                 $query->orwhere('role', '=', 1)
                     ->orwhere('role', '=', 3);
-            })->orderByDesc('id')->paginate(7);
+            })->orderByDesc('id')->paginate($selected_option);
 //            $users = User::orderByDesc('id')->simplePaginate(4);
         }
 
@@ -83,16 +91,22 @@ class UserController extends Controller
         $user = Auth::user();
 
         return view('admin.crud-user.list', [
-            'title' => 'Trang quản trị danh sách user',
+            'title' => 'Trang quản trị danh sách admin',
             'user' => $user,
             'users' => $users,
             'search' => request('search'),
             'sex' => request('sex'),
-        ]) ->with('i', (request()->input('page', 1) - 1) * 5);
+        ]) ->with('i', (request()->input('page', 1) - 1) * $selected_option);
     }
 
     public function indexForUser(Request $request)
     {
+        // su dung cho phan select so luong ban ghi
+        if ($request->input('selected_option') != null && $request->input('selected_option') != ''){
+            $selected_option = (int)($request->input('selected_option'));
+        }else{
+            $selected_option = 7;
+        }
         $search = '';
         $searchSex = '';
         // search email, name && sex
@@ -107,7 +121,7 @@ class UserController extends Controller
                     $query->orwhere('last_name', 'LIKE', "%{$search}%")
                         ->orwhere('first_name', 'LIKE', "%{$search}%")
                         ->orwhere('email', 'LIKE', "%{$search}%");
-                })->orderByDesc('id')->paginate(7);
+                })->orderByDesc('id')->paginate($selected_option);
 //            $users->appends(['search' => $search, 'sex' => $searchSex]);
 
             // search email, name
@@ -120,7 +134,7 @@ class UserController extends Controller
                 $query->orwhere('first_name', 'LIKE', "%{$search}%")
                     ->orwhere('last_name', 'LIKE', "%{$search}%")
                     ->orwhere('email', 'LIKE', "%{$search}%");
-            })->orderByDesc('id')->paginate(7);
+            })->orderByDesc('id')->paginate($selected_option);
             $users->appends(['search' => $search]);
             // search sex
         }elseif ($request->input('sex') != null){
@@ -128,11 +142,11 @@ class UserController extends Controller
 
             $users = User::where('role', '=', 2)
                 ->where('sex', '=', "{$searchSex}")
-                ->orderByDesc('id')->paginate(7);
+                ->orderByDesc('id')->paginate($selected_option);
             $users->appends([ 'sex' => $searchSex]);
         }else{
             $users = User::where('role', '=', "2")
-                ->orderByDesc('id')->paginate(7);
+                ->orderByDesc('id')->paginate($selected_option);
 //            $users = User::orderByDesc('id')->simplePaginate(4);
         }
 
@@ -154,7 +168,7 @@ class UserController extends Controller
             'users' => $users,
             'search' => request('search'),
             'sex' => request('sex'),
-        ]) ->with('i', (request()->input('page', 1) - 1) * 5);
+        ]) ->with('i', (request()->input('page', 1) - 1) * $selected_option);
     }
 
 

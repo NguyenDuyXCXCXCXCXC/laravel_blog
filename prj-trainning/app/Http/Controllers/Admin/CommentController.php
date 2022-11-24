@@ -30,6 +30,7 @@ class CommentController extends Controller
         $search_user = $result[1];
         $search_post = $result[2];
         $search_status = $result[3];
+        $selected_option = $result[4];
         $user = Auth::user();
         return view('admin.comment.list', [
             'title' => 'Trang quản trị danh sách comment',
@@ -38,7 +39,7 @@ class CommentController extends Controller
             'search_user' => $search_user,
             'search_post' => $search_post,
             'search_status' => $search_status,
-        ]) ->with('i', (request()->input('page', 1) - 1) * 7);
+        ]) ->with('i', (request()->input('page', 1) - 1) * $selected_option);
     }
 
     /**

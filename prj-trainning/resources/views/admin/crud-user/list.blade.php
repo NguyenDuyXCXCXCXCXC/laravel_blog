@@ -15,12 +15,13 @@
     <div class="container-fluid">
 
         <div class="container card p-4 mt-3">
-            <form action="" method="GET" >
+            <form id="myForm" action="" method="GET" >
                 <div class="form-group" >
                     <div style="display: flex;">
                         <label style="width: 102px;padding-top: 6px;">Nhập email hoặc họ tên </label>
                         <input type="text" class="form-control" name="search" value="{{ $search }}" placeholder="Nhập địa chỉ mail hoặc họ và tên">
                     </div>
+                    <div id="selected"> </div>
                 </div>
                 <div class="form-group" >
                     <div class="input-group  mb-3">
@@ -64,13 +65,9 @@
                     </a>
                 </div>
                 <div class="row">
-                    <div class="col-2">
-                    </div>
-                    <div class="col-3 text-end" style="padding-left: 169px;padding-top: 7px;"">
-                        Lựa chọn số lượng record hiển thị :
-                    </div>
-                    <div class="col-5 text-start pt-1" >
-                        <select class="form-control" name="select-num" style="width: 86px;">
+                    <div class="col-5 text-start mt-3 ml-2 mb-2" >
+                        <select class="form-control" name="select-num" style="width: 290px;" id="mySelectRecord">
+                            <option value="">Lựa chọn số lượng record hiển thị :</option>
                             <option value="10">10</option>
                             <option value="20">20</option>
                             <option value="50">50</option>
@@ -185,12 +182,26 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
     <script>
+        // cho phan selectd de chon so luong ban ghi
+        $('#mySelectRecord').on('change', '', function (e) {
+            var optionValue = $( "#mySelectRecord option:selected" ).val();
+            var form =  $(this).closest("form");
+            if(optionValue == '')
+            {
+                return;
+            }
+            $('#selected').empty();
+            $('#selected').append('<input type="hidden" name="selected_option" value= '+optionValue+' />');
+            $('#myForm').submit();
+        });
+        // sau 5s thong bao bien mat
         if( $(".alert").text() != ''){
             setTimeout(() =>{
                 $(".alert").removeClass('alert alert-danger alert-success').text('')
             }, 5000);
         }
-        // console.log('Duy: ' + $(".alert").text());
+
+        // xoa ban ghi hien thong bao  SweetAlert
         $(".deleteRecord").click(function(){
             var id = $(this).data("id");
             var form =  $(this).closest("form");

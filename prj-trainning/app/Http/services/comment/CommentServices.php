@@ -11,6 +11,12 @@ class CommentServices
         $search_user = '';
         $search_post = '';
         $search_status = '';
+        // su dung cho phan select so luong ban ghi
+        if ($request->input('selected_option') != null && $request->input('selected_option') != ''){
+            $selected_option = (int)($request->input('selected_option'));
+        }else{
+            $selected_option = 7;
+        }
         // search(3) user, status, post
         if(($request->input('search_user') != null) && $request->input('search_status') != null && $request->input('search_post_title') != null)
         {
@@ -27,7 +33,7 @@ class CommentServices
                 })
                 ->where('comments.status', '=', "{$search_status}")
                 ->where('posts.title', 'LIKE', "%{$search_post}%")
-                ->orderByDesc('id')->paginate(7);
+                ->orderByDesc('id')->paginate($selected_option);
         }
         // search(2) status, post
         elseif( $request->input('search_status') != null && $request->input('search_post_title') != null)
@@ -40,7 +46,7 @@ class CommentServices
                 ->select('comments.*', 'posts.title as posts_title' , 'posts.id as posts_id' , 'users.first_name', 'users.last_name')
                 ->where('comments.status', '=', "{$search_status}")
                 ->where('posts.title', 'LIKE', "%{$search_post}%")
-                ->orderByDesc('id')->paginate(7);
+                ->orderByDesc('id')->paginate($selected_option);
         }
         // search(2) user, post
         elseif(($request->input('search_user') != null) && $request->input('search_post_title') != null)
@@ -56,7 +62,7 @@ class CommentServices
                         ->orwhere('users.first_name', 'LIKE', "%{$search_user}%");
                 })
                 ->where('posts.title', 'LIKE', "%{$search_post}%")
-                ->orderByDesc('id')->paginate(7);
+                ->orderByDesc('id')->paginate($selected_option);
         }
         // search(2) user, status
         elseif(($request->input('search_user') != null) && $request->input('search_status') != null )
@@ -72,7 +78,7 @@ class CommentServices
                         ->orwhere('users.first_name', 'LIKE', "%{$search_user}%");
                 })
                 ->where('comments.status', '=', "{$search_status}")
-                ->orderByDesc('id')->paginate(7);
+                ->orderByDesc('id')->paginate($selected_option);
         }
         // search(1) user
         elseif(($request->input('search_user') != null) )
@@ -86,7 +92,7 @@ class CommentServices
                     $query->orwhere('users.last_name', 'LIKE', "%{$search_user}%")
                         ->orwhere('users.first_name', 'LIKE', "%{$search_user}%");
                 })
-                ->orderByDesc('id')->paginate(7);
+                ->orderByDesc('id')->paginate($selected_option);
         }
         // search(1)  status
         elseif($request->input('search_status') != null )
@@ -97,7 +103,7 @@ class CommentServices
                 ->join('users', 'comments.user_id', '=', 'users.id')
                 ->select('comments.*', 'posts.title as posts_title' , 'posts.id as posts_id' , 'users.first_name', 'users.last_name')
                 ->where('comments.status', '=', "{$search_status}")
-                ->orderByDesc('id')->paginate(7);
+                ->orderByDesc('id')->paginate($selected_option);
         }
         // search(1) post
         elseif($request->input('search_post_title') != null)
@@ -108,7 +114,7 @@ class CommentServices
                 ->join('users', 'comments.user_id', '=', 'users.id')
                 ->select('comments.*', 'posts.title as posts_title' , 'posts.id as posts_id' , 'users.first_name', 'users.last_name')
                 ->where('posts.title', 'LIKE', "%{$search_post}%")
-                ->orderByDesc('id')->paginate(7);
+                ->orderByDesc('id')->paginate($selected_option);
         }
         // search(0)
         else{
@@ -116,11 +122,11 @@ class CommentServices
                 ->join('posts', 'comments.post_id', '=', 'posts.id')
                 ->join('users', 'comments.user_id', '=', 'users.id')
                 ->select('comments.*', 'posts.title as posts_title' , 'posts.id as posts_id' , 'users.first_name', 'users.last_name')
-                ->orderByDesc('id')->paginate(7);
+                ->orderByDesc('id')->paginate($selected_option);
         }
 
 //        dd($comments);
-        return [$comments, $search_user, $search_post, $search_status];
+        return [$comments, $search_user, $search_post, $search_status, $selected_option];
     }
 
 }

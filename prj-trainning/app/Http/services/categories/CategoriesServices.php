@@ -9,15 +9,22 @@ class CategoriesServices
 {
     public function getAll($request)
     {
+        // su dung cho phan select so luong ban ghi
+        if ($request->input('selected_option') != null && $request->input('selected_option') != ''){
+            $selected_option = (int)($request->input('selected_option'));
+        }else{
+            $selected_option = 7;
+        }
+//        dd($selected_option);
         $search = $request->input('search');
         if($search != null)
         {
             $categories = Categories::where('name', 'LIKE', "%{$search}%")
-            ->orderByDesc('id')->paginate(7);
+            ->orderByDesc('id')->paginate($selected_option);
         }else{
-            $categories = Categories::orderByDesc('id')->paginate(7);
+            $categories = Categories::orderByDesc('id')->paginate($selected_option);
         }
-        return $categories;
+        return [$categories, $selected_option];
     }
 
     public function  create($request)
