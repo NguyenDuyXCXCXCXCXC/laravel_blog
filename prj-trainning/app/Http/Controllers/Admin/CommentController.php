@@ -32,7 +32,7 @@ class CommentController extends Controller
         $search_status = $result[3];
         $user = Auth::user();
         return view('admin.comment.list', [
-            'title' => 'Trang quản trị danh sách post',
+            'title' => 'Trang quản trị danh sách comment',
             'user' => $user,
             'comments' => $comments,
             'search_user' => $search_user,
@@ -53,9 +53,20 @@ class CommentController extends Controller
         $comment->update(['status' => 1]);
         return redirect()->back();
     }
-    public function create()
+
+    public function activeAll($dataIdActive)
     {
-        //
+        $dataIdActive = explode(",", $dataIdActive);
+        foreach ($dataIdActive as $id)
+        {
+            $comment = Comment::where('id', $id)->first();
+            $comment->update(['status' => 1]);
+        }
+    }
+    public function inactive(Comment $comment)
+    {
+        $comment->update(['status' => 0]);
+        return redirect()->back();
     }
 
     /**
@@ -75,9 +86,15 @@ class CommentController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Comment $comment)
     {
-        //
+//        dd($comment->user->first_name, $comment->user->last_name, $comment->post->title);
+        $user = Auth::user();
+        return view('admin.comment.show', [
+            'title' => 'Chi tiết comment',
+            'user' => $user,
+            'comment' => $comment,
+        ]);
     }
 
     /**
@@ -111,6 +128,7 @@ class CommentController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Comment::find($id)->delete();
+        return redirect()->route('admin.comment.list');
     }
 }

@@ -7,3 +7,7 @@ bai viet phan: Categories
 phan profile: password chua hop ly
 phan post: khi add/upload phai them anh bai viet
 phan comment: link ?
+sua: button tim kiem cac trang sat phia ngoai
+     Categories: table rong hon
+     cac table can co phan phan chia
+

@@ -10,7 +10,7 @@
     </div>
 
     <div class="container-fluid">
-        <label class="pl-5"><a href="{{route('admin.dashboard')}}">Home</a>  / Categories</label>
+        <label class="pl-5"><a href="{{route('admin.dashboard')}}">Home</a>  / Comments</label>
     </div>
     <div class="container-fluid">
 
@@ -69,11 +69,6 @@
         <div class="row pt-5">
             <div class="col-12">
                 <div class="card">
-                    <div class="col-3 pt-2">
-                        <a href="{{route('admin.post.add')}}">
-                            <button class="btn btn-primary">Thêm mới bài post</button>
-                        </a>
-                    </div>
                     <div class="row">
                         <div class="col-2">
                         </div>
@@ -90,7 +85,7 @@
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body table-responsive p-0">
-                        <table class="table table-hover text-nowrap">
+                        <table class="table table-hover table-bordered text-nowrap">
                             <thead>
                             <tr>
                                 <th>Số thứ tự</th>
@@ -109,7 +104,7 @@
                                     <td>{{++$i}}</td>
                                     <td>{{ $comment->first_name }} {{ $comment->last_name }}</td>
                                     <td>{{ $comment->posts_title }}</td>
-                                    <td>{{ \Illuminate\Support\Str::limit($comment->comment, 100) }}<a href=""  style="font-size: 11px;" class="text-danger"> <strong>xem thêm</strong> </a></td>
+                                    <td>{{ \Illuminate\Support\Str::limit($comment->comment, 100) }}<a href="{{route('admin.comment.show', $comment->id)}}"  style="font-size: 11px;" class="text-danger"> <strong>xem thêm</strong> </a></td>
                                     <td>{{$comment->comment_time}}</td>
                                     <td class="text-center">
                                         @if ($comment->status == 0)
@@ -123,7 +118,7 @@
                                             <a href="{{route('admin.comment.active', $comment->id)}}"><button type="button" id="target" data-selected="true" value = "{{$comment->id}}" class="btn btn-success btl-active">Active</button></a>
                                         @endif
                                     </td>
-                                    <td><a href="">link</a> </td>
+                                    <td><a href="{{route('admin.post.show', $comment->posts_id)}}">link</a> </td>
                                 </tr>
                             @endforeach
                             </tbody>
@@ -156,30 +151,18 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
     <script>
 {{--        active all--}}
-//     console.log(($( ".btl-active" )).length)
-//         for (let i = 0; i < $( ".btl-active" ).length; i++) {
-//             text += cars[i] + "<br>";
-//         }
-//     console.log((($( ".btl-active" )[0])))
-        dataIdActive = [];
         $( "#btn-active-all" ).click(function() {
-            // console.log($( ".btl-active" ).val());
-            // $(".btl-active").each(function(){
-            //
-            // }
-            // $( ".btl-active" ).click();
-            $( ".btl-active" ).each(function( i ) {
-                // console.log($(this).val())
-                dataIdActive.push($(this).val());
-                // if ( this.style.color !== "blue" ) {
-                //     this.style.color = "blue";
-                // } else {
-                //     this.style.color = "";
-                // }
-            });
-            console.log( (dataIdActive))
-        });
 
+            dataIdActive = [];
+
+            $( ".btl-active" ).each(function(  ) {
+                dataIdActive.push($(this).val());
+            });
+
+            $.get("/admin/comment/active-all/" + dataIdActive, function(){
+                location.reload();
+            });
+        });
         //end active all
 
 

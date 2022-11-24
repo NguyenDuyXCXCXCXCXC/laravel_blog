@@ -109,7 +109,7 @@ class PostController extends Controller
     {
         $user = Auth::user();
         return view('admin.post.show', [
-            'title' => 'chi tiết bài viết: '. \Illuminate\Support\Str::limit($post->title, 40),
+            'title' => 'Chi tiết bài viết: '. \Illuminate\Support\Str::limit($post->title, 40),
             'user' => $user,
             'post' => $post,
         ]);

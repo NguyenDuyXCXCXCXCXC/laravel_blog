@@ -16,8 +16,8 @@
         </div>
         <div class="row">
             <div class="col-8"></div>
-            <div class="col-4">
-                <i>{{$post->user->first_name}} {{$post->user->last_name}}</i>
+            <div class="col-4 font-weight-bold">
+                 <i>{{$post->user->first_name}} {{$post->user->last_name}}</i>
             </div>
         </div>
         <div class="row mb-3 mt-4">
