@@ -51,6 +51,35 @@ class ResetPasswordController extends Controller
 
     public function showResetPasswordForm($token, $email)
     {
+        // check xem da doi pass chua: neu doi roi -> 404
+        $updatePassword = DB::table('password_resets')
+            ->where([
+                'email' => $email,
+                'token' => $token
+            ])
+            ->first();
+        if(!$updatePassword ){
+            return abort(404);;
+        }
+        // end check xem da doi pass chua
+
+
+        // check time forgot: neu qua 10p se ko doi dc
+        $time_forgot = $updatePassword->created_at;
+        $time_forgot = strtotime($time_forgot);
+
+        $now = date('Y-m-d H:i:s');
+        $now = strtotime($now);
+
+        $checkTimeForgot = $now-$time_forgot;
+        if($checkTimeForgot > 600 ){
+            return abort(404);
+        }
+
+        // end check time forgot
+
+
+
         return view('admin.users.forget-password-link', [
             'title' => 'Giao diện màn hình Nhập mật khẩu mới',
             'token' => $token,
@@ -69,28 +98,39 @@ class ResetPasswordController extends Controller
             'password.min' => 'Mật khẩu không được ít hơn 10 ký tự!',
             'password.regex' => 'Mật khẩu có ít nhất 1 chữ cái viết hoa, 1 chữ cái thường, 1 số, 1 ký tự đặc biệt!',
         ]);
-//
-//        $updatePassword = DB::table('password_resets')
-//            ->where([
-//                'email' => $request->email,
-//                'token' => $request->token
-//            ])
-//            ->first();
-//
-//        if(!$updatePassword){
-//            return back()->withInput()->with('error', 'Invalid token!');
-//        }
+
+//        dd($request->all());
+
+        $updatePassword = DB::table('password_resets')
+            ->where([
+                'email' => $request->email,
+                'token' => $request->token
+            ])
+            ->first();
+
+
+        if(!$updatePassword){
+            return back()->withInput()->with('myError', 'Invalid token!');
+        }
 
         $password = bcrypt($request->password);
         $user = User::where('email', $request->email)
             ->update(['password' => $password]);
         DB::table('password_resets')->where(['email'=> $request->email])->delete();
 
+        session(['changeSuccess' => 'success']);
         return redirect('/admin/changePasswordSuccess');
     }
 
     public function showChangePasswordSuccess()
     {
+        $value = \Illuminate\Support\Facades\Session::get('changeSuccess');
+        if ($value == null || $value == '')
+        {
+            return abort(404);
+        }
+        \Illuminate\Support\Facades\Session::forget('changeSuccess');
+
         return view('admin.users.change-password-success', [
             'title' => 'Thay đổi mật khẩu thành công'
         ]);

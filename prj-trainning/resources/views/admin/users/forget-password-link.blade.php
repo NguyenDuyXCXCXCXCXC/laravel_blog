@@ -10,11 +10,17 @@
             <h1><b>Quản trị viên</b></h1>
             <p>Thay đổi mật khẩu</p>
         </div>
+        @if (\Illuminate\Support\Facades\Session::has('myError'))
+            <div class="alert alert-danger">
+                {{ \Illuminate\Support\Facades\Session::get('myError') }}
+            </div>
+        @endif
         <div class="card-body">
             <form action="{{route('admin.reset.password.post')}}" method="post" id="myForm">
                 @csrf
                 <div class="input-group mb-3">
                     <input type="hidden" name="email"  value="{{ $email }}">
+                    <input type="hidden" name="token" value="{{ $token }}">
                 </div>
                 <div class="form-group" >
                     <div style="display: flex;">
