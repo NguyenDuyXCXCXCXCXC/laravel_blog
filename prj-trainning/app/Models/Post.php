@@ -30,9 +30,14 @@ class Post extends Model
         return $this->belongsTo(Categories::class);
     }
 
-    // has many
+    // has many for admin
     public function comments() {
         return $this->hasMany(Comment::class)->whereNull('parent_id');
+    }
+
+    // has many for user
+    public function commentsForUser() {
+        return $this->hasMany(Comment::class)->whereNull('parent_id')->where('status', '=', '1');
     }
 
 }

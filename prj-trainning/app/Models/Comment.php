@@ -22,9 +22,16 @@ class Comment extends Model
         return $this->belongsTo(Post::class);
     }
 
+    // has many for admin
     public function replies()
     {
         return $this->hasMany(Comment::class, 'parent_id');
+    }
+
+    // has many for admin
+    public function repliesForUser()
+    {
+        return $this->hasMany(Comment::class, 'parent_id')->where('status', '=', '1');
     }
 
 }
