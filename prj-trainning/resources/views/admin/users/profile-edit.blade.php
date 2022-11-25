@@ -42,25 +42,7 @@
                     </div>
                 </div>
 
-                <div class="form-group" >
-                    <div style="display: flex;">
-                        <label style="width: 103px;padding-top: 0px;">Mật khẩu<span style="color: red;">*</span></label>
-                        <input type="password" class="form-control" name="password" placeholder="Nhập mật khẩu">
-                    </div>
-                    @if ($errors->has('password'))
-                        <p class="text-danger text-center" style="font-size: 12px;">{{ $errors->first('password') }}</p>
-                    @endif
-                </div>
 
-                <div class="form-group" >
-                    <div style="display: flex;">
-                        <label style="width: 101px;">Mật khẩu confirm<span style="color: red;">*</span></label>
-                        <input type="password" class="form-control" name="password_confirmation" placeholder="Nhập mật khẩu confirm ">
-                    </div>
-                    @if ($errors->has('password_confirmation'))
-                        <p class="text-danger text-center" style="font-size: 12px;">{{ $errors->first('password_confirmation') }}</p>
-                    @endif
-                </div>
 
                 <div class="input-group  mb-3">
                     <label style="margin-right: 8px;">Giới tính<span style="color: red;">*</span></label>
@@ -119,7 +101,10 @@
                         <button type="submit" class="btn btn-success btn-block">Hoàn thành</button>
                     </div>
                     <!-- /.col -->
-                    <div class="col-8"></div>
+                    <div class="col-2">
+                        <a href="{{route('admin.profile.editPassword', $user->id)}}"> <button type="button" class="btn btn-info ">Thay đổi mật khẩu</button></a>
+                    </div>
+                    <div class="col-6"></div>
                     <div class="col-2">
                         <a href="{{route('admin.profile')}}" ><button type="button" class="btn btn-primary btn-block">Quay lại</button></a>
                     </div>

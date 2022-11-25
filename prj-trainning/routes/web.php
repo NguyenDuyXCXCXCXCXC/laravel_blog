@@ -54,6 +54,11 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth']], function(){
     Route::get('/profile/edit', [\App\Http\Controllers\Admin\MainController::class, 'profileEdit'])->name('admin.profile.edit');
     Route::post('/profile/edit', [\App\Http\Controllers\Admin\MainController::class, 'profileUpdate'])->name('admin.profile.update');
 
+    Route::get('/profile/edit-password/{id}', [\App\Http\Controllers\Admin\MainController::class, 'editPassword'])->name('admin.profile.editPassword');
+    Route::post('/profile/edit-password', [\App\Http\Controllers\Admin\MainController::class, 'profileUpdatePassword'])->name('admin.profile.updatePassword');
+
+
+
     // admin/user
     Route::prefix('user')->group(function () {
         // manage, admin list

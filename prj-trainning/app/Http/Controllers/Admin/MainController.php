@@ -45,7 +45,7 @@ class MainController extends Controller
 
         $request->validate([
             'email' => 'required|max:100|min:12|email:filter',
-            'password' => 'required|confirmed|min:10|max:50|regex:/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{6,}$/',
+//            'password' => 'required|confirmed|min:10|max:50|regex:/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{6,}$/',
             'first_name' => 'required|max:50',
             'last_name'=> 'required|max:50',
             'avatar'=> 'image|mimes:jpeg,png,jpg,gif,svg|max:10240',
@@ -53,11 +53,11 @@ class MainController extends Controller
             'email.required' => 'Email không được để trống!',
             'email.max' => 'Địa chỉ mail không vượt quá 100 ký tự!',
             'email.min' => 'Địa chỉ mail không được ít hơn 12 ký tự!',
-            'password.required' => 'Mật khẩu không được để trống!',
-            'password.confirmed' => 'Mật khẩu comfirm chưa khớp với mật khẩu!!',
-            'password.max' => 'Mật khẩu không vượt quá 50 ký tự!',
-            'password.min' => 'Mật khẩu không được ít hơn 10 ký tự!',
-            'password.regex' => 'Mật khẩu có ít nhất 1 chữ cái viết hoa, 1 chữ cái thường, 1 số, 1 ký tự đặc biệt!',
+//            'password.required' => 'Mật khẩu không được để trống!',
+//            'password.confirmed' => 'Mật khẩu comfirm chưa khớp với mật khẩu!!',
+//            'password.max' => 'Mật khẩu không vượt quá 50 ký tự!',
+//            'password.min' => 'Mật khẩu không được ít hơn 10 ký tự!',
+//            'password.regex' => 'Mật khẩu có ít nhất 1 chữ cái viết hoa, 1 chữ cái thường, 1 số, 1 ký tự đặc biệt!',
             'first_name.required' => 'Trường họ không được để trống!',
             'first_name.max' => 'Trường họ không vượt quá 50 ký tự!',
             'last_name.required' => 'Trường tên không được để trống!',
@@ -73,7 +73,6 @@ class MainController extends Controller
 
         $idUserCreater = Auth::user()->id;
         $input = $request->all();
-        $input['password'] = bcrypt($input['password']);
         $emailUser =  $input['email'];
 
         if ($image = $request->file('avatar')) {
@@ -90,5 +89,39 @@ class MainController extends Controller
         Session::flash('mySuccess', 'Tài khoản ' . $emailUser .' đã được chỉnh sửa' );
         return redirect()->route('admin.profile');
     }
+
+
+    public function editPassword($id)
+    {
+        $user = Auth::user();
+        return view('admin.users.profile-edit-password', [
+            'title' => 'Trang chỉnh sửa Password Profile',
+            'user' => $user,
+            'id' => $id
+        ]);
+    }
+
+    public function profileUpdatePassword(Request $request)
+    {
+        $request->validate([
+            'password' => 'required|confirmed|min:10|max:50|regex:/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{6,}$/',
+        ], [
+            'password.required' => 'Mật khẩu không được để trống!',
+            'password.confirmed' => 'Mật khẩu comfirm chưa khớp với mật khẩu!!',
+            'password.max' => 'Mật khẩu không vượt quá 50 ký tự!',
+            'password.min' => 'Mật khẩu không được ít hơn 10 ký tự!',
+            'password.regex' => 'Mật khẩu có ít nhất 1 chữ cái viết hoa, 1 chữ cái thường, 1 số, 1 ký tự đặc biệt!',
+        ]);
+
+        $user = User::where('id', $request->input('id_user_changepass'))->first();
+//        dd($user->password);
+        $input = $request->all();
+//        $input['password_old'] = bcrypt($input['password']);
+//        $input['password'] = bcrypt($input['password']);
+//        dd($input['password_old'], $user->password);
+        dd($input['password'], bcrypt($input['password']));
+
+    }
+
 
 }
