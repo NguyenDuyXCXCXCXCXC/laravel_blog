@@ -4,8 +4,6 @@
     @include('admin.alert')
     <h2 class="text-center">Hồ Sơ</h2>
     <div class="container pt-3">
-
-        @include('admin.alert')
         <form action="{{route('admin.profile.update')}}" method="post" id="myForm" enctype="multipart/form-data">
 
             <div class="form-group" >
@@ -115,6 +113,7 @@
     </div>
     <script>
 
+        // xem trc anh avatar
         $('#avatar').change(function(){
 
             $('#upload_file').empty();

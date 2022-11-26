@@ -114,13 +114,19 @@ class MainController extends Controller
         ]);
 
         $user = User::where('id', $request->input('id_user_changepass'))->first();
-//        dd($user->password);
         $input = $request->all();
-//        $input['password_old'] = bcrypt($input['password']);
-//        $input['password'] = bcrypt($input['password']);
-//        dd($input['password_old'], $user->password);
-        dd($input['password'], bcrypt($input['password']));
-
+        $input['password_old'] = bcrypt($input['password_old']);
+        if(Auth::attempt([
+            'email' => $user->email,
+            'password' => $request->input('password_old'),
+        ])){
+            $input['password'] = bcrypt($input['password']);
+            $user->update(['password' => $input['password']]);
+            Session::flash('mySuccess', 'Đổi mật khẩu thành công!');
+            return redirect()->route('admin.profile.edit');
+        }
+        Session::flash('myError', 'Mật khẩu cũ chưa chính xác!');
+        return redirect()->back();
     }
 
 
