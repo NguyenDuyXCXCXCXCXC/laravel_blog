@@ -1,0 +1,37 @@
+*{
+
+}
+body.container-fluid {
+    /*background-color: ghostwhite;*/
+}
+article.my-article {
+    display: flex;
+    width: 450px;
+    height: 120px;
+    background-color: white;
+}
+
+h4.my-title {
+    color: #333;
+    font-family: tahoma;
+}
+.article-left {
+    width: 120px;
+    height: 120px;
+}
+
+.article-left img {
+    width: 120px;
+    height: 120px;
+}
+
+.article-right {
+    margin-left: 13px;
+}
+
+p.load-more {
+    font-size: 15px;
+    font-weight: bold;
+    margin-left: 800px;
+    margin-top: 12px;
+}
