@@ -1,3 +1,12 @@
+<script>
+    // sau 5s thong bao bien mat
+    if( $(".alert").text() != ''){
+        setTimeout(() =>{
+            $(".alert").removeClass('alert alert-danger alert-success').text('')
+        }, 5000);
+    }
+</script>
+
 <!-- jQuery -->
 <script src="/template/admin/plugins/jquery/jquery.min.js"></script>
 <!-- Bootstrap 4 -->

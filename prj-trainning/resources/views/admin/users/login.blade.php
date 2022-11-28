@@ -30,7 +30,13 @@
                 <div class="form-group" >
                     <div style="display: flex;">
                         <label style="width: 100px;" padding-top: 6px;">Mật khẩu</label>
-                        <input type="password" class="form-control " name="password" placeholder="Nhập mật khẩu">
+                        <input type="password" class="form-control " name="password" id="password-field2" placeholder="Nhập mật khẩu">
+                        <span toggle="#password-field2" class="fa fa-fw fa-eye field-icon toggle-password2" style="
+                                                                                    float: right;
+                                                                                    margin-left: -25px;
+                                                                                    margin-top: 11px;
+                                                                                    position: relative;
+                                                                                    z-index: 2;"></span>
 
                     </div>
                     @if ($errors->has('password'))
@@ -66,5 +72,18 @@
 
 
 @include('admin.users.layouts.footer')
+<script>
+    // show hide password
+    $(".toggle-password2").click(function() {
+
+        $(this).toggleClass("fa-eye fa-eye-slash");
+        var input = $($(this).attr("toggle"));
+        if (input.attr("type") == "password") {
+            input.attr("type", "text");
+        } else {
+            input.attr("type", "password");
+        }
+    });
+</script>
 </body>
 </html>

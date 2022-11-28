@@ -53,6 +53,10 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth']], function(){
     Route::get('/profile', [\App\Http\Controllers\Admin\MainController::class, 'profile'])->name('admin.profile');
     Route::get('/profile/edit', [\App\Http\Controllers\Admin\MainController::class, 'profileEdit'])->name('admin.profile.edit');
     Route::post('/profile/edit', [\App\Http\Controllers\Admin\MainController::class, 'profileUpdate'])->name('admin.profile.update');
+    Route::get('/profile/edit-password/{id}', [\App\Http\Controllers\Admin\MainController::class, 'editPassword'])->name('admin.profile.editPassword');
+    Route::post('/profile/edit-password', [\App\Http\Controllers\Admin\MainController::class, 'profileUpdatePassword'])->name('admin.profile.updatePassword');
+
+
 
     // admin/user
     Route::prefix('user')->group(function () {
@@ -65,6 +69,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth']], function(){
         Route::post('/add', [\App\Http\Controllers\Admin\UserController::class, 'store'])->name('admin.user.store');
         Route::get('/edit/{id}', [\App\Http\Controllers\Admin\UserController::class, 'edit'])->name('admin.user.edit');
         Route::post('/update', [\App\Http\Controllers\Admin\UserController::class, 'update'])->name('admin.user.update');
+        Route::get('/edit-password/{id}', [\App\Http\Controllers\Admin\UserController::class, 'editPassword'])->name('admin.user.editPassword');
+        Route::post('/update-password/{id}', [\App\Http\Controllers\Admin\UserController::class, 'updatePassword'])->name('admin.user.updatePassword');
         Route::delete('del/{id}', [\App\Http\Controllers\Admin\UserController::class, 'destroy'])->name('admin.user.destroy');
     });
 

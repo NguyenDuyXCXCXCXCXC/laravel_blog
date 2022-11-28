@@ -3,4 +3,5 @@
 @section('content')
     @include('admin.alert')
     day la phan home
+
 @endsection
