@@ -3,6 +3,7 @@
 namespace App\Http\services\post;
 use App\Models\Categories;
 use App\Models\User;
+use App\Repositories\PostRepository;
 use Carbon\Carbon;
 use http\Env\Request;
 use Illuminate\Support\Facades\Auth;
@@ -12,6 +13,11 @@ use Illuminate\Support\Facades\Session;
 
 class PostServices
 {
+    protected $postRepository;
+    public function __construct(PostRepository $postRepository)
+    {
+        $this->postRepository = $postRepository;
+    }
 
     public function getAllWithSearch($request)
     {
@@ -326,4 +332,14 @@ class PostServices
         Post::find($id)->delete();
         return true;
     }
+
+
+
+
+    //    ==== for client ===
+    public function getPostDashboard($request, $active = null)
+    {
+        return $this->postRepository->getAllPost($request, $active);
+    }
+
 }

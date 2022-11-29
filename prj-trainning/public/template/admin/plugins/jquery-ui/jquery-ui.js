@@ -5,7 +5,7 @@
 
 ( function( factory ) {
 	"use strict";
-	
+
 	if ( typeof define === "function" && define.amd ) {
 
 		// AMD. Register as an anonymous module.
@@ -10125,7 +10125,8 @@ $.widget( "ui.draggable", $.ui.mouse, {
 
 		var o = this.options,
 			helperIsFunction = typeof o.helper === "function",
-			helper = helperIsFunction ?
+
+            helper = helperIsFunction ?
 				$( o.helper.apply( this.element[ 0 ], [ event ] ) ) :
 				( o.helper === "clone" ?
 					this.element.clone().removeAttr( "id" ) :

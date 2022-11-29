@@ -13,7 +13,10 @@ article.my-article {
 
 h4.my-title {
     color: #333;
-    font-family: tahoma;
+    font-family: initial;
+    border-left: 6px solid #00bbf3;
+    padding-left: 7px;
+    font-weight: bold;
 }
 .article-left {
     width: 120px;
@@ -29,7 +32,18 @@ h4.my-title {
     margin-left: 13px;
 }
 
-p.load-more {
+.article-content {
+    font-size: 12px;
+    font-weight: 400;
+}
+p.article-time {
+    font-size: 11px;
+}
+
+
+
+
+.load-more {
     font-size: 15px;
     font-weight: bold;
     margin-left: 800px;

@@ -13,13 +13,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('main');
-});
+//Route::get('/', function () {
+//    return view('main');
+//});
 
 
 
-// ===Admin ===
+// ==================================== Admin ==================================
 
 // admin login, register, forget password
 Route::prefix('admin')->group(function () {
@@ -109,8 +109,15 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth']], function(){
 //        Route::post('/update/{post}', [\App\Http\Controllers\Admin\CommentController::class, 'update'])->name('admin.comment.update');
     });
 
-
 });
 
+
+
+// ==================================== user ==================================
+// dashboard
+Route::get('/', [\App\Http\Controllers\MainController::class, 'index'])->name('dashboard');
+// login
+Route::get('login', [\App\Http\Controllers\AuthController::class, 'login'])->name('client.login');
+Route::post('login', [\App\Http\Controllers\AuthController::class, 'postLogin'])->name('client.login.store');
 
 

@@ -3,10 +3,17 @@
 namespace App\Http\services\categories;
 
 use App\Models\Categories;
+use App\Repositories\CategoriesRepository;
 use Illuminate\Support\Facades\Session;
 
 class CategoriesServices
 {
+    protected $categoriesRepository;
+    public function __construct(CategoriesRepository $categoriesRepository)
+    {
+        $this->categoriesRepository = $categoriesRepository;
+    }
+
     public function getAll($request)
     {
         // su dung cho phan select so luong ban ghi
@@ -55,5 +62,14 @@ class CategoriesServices
     public function destroy($id)
     {
         return Categories::find($id)->delete($id);
+    }
+
+
+
+//    ==== for client ===
+    public function getAllCategories()
+    {
+        return $this->categoriesRepository->getAllCategories();
+
     }
 }
