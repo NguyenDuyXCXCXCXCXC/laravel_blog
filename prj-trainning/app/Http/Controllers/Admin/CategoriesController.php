@@ -121,7 +121,7 @@ class CategoriesController extends Controller
         $result = $this->categoriesServices->destroy($id);
         if ($result)
         {
-            Session::flash('mySuccess', 'Tài khoản ' . $categories->name .' đã được xóa' );
+            Session::flash('mySuccess', 'Danh mục ' . $categories->name .' đã được xóa' );
             return redirect()->back();
         }
     }

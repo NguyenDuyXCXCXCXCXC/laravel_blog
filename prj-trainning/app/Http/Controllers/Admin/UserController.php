@@ -150,15 +150,15 @@ class UserController extends Controller
 //            $users = User::orderByDesc('id')->simplePaginate(4);
         }
 
-        $search = $sex = '';
-        if(request('search') != null)
-        {
-            $search = request('search');
-        }
-        if(request('sex') != null)
-        {
-            $sex = request('sex');
-        }
+//        $search = $sex = '';
+//        if(request('search') != null)
+//        {
+//            $search = request('search');
+//        }
+//        if(request('sex') != null)
+//        {
+//            $sex = request('sex');
+//        }
 
         $user = Auth::user();
 

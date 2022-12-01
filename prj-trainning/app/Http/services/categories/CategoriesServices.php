@@ -24,13 +24,18 @@ class CategoriesServices
         }
 //        dd($selected_option);
         $search = $request->input('search');
-        if($search != null)
-        {
-            $categories = Categories::where('name', 'LIKE', "%{$search}%")
-            ->orderByDesc('id')->paginate($selected_option);
-        }else{
-            $categories = Categories::orderByDesc('id')->paginate($selected_option);
+//        if($search != null)
+//        {
+//            $categories = Categories::where('name', 'LIKE', "%{$search}%")
+//            ->orderByDesc('id')->paginate($selected_option);
+//        }else{
+//            $categories = Categories::orderByDesc('id')->paginate($selected_option);
+//        }
+        $query = Categories::query();
+        if(!empty($search)){
+         $query = $query->where('name', 'LIKE', "%{$search}%");
         }
+        $categories = $query->orderByDesc('id')->paginate($selected_option);
         return [$categories, $selected_option];
     }
 
