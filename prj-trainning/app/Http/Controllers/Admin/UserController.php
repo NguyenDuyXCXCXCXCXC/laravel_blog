@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreUserRequest;
+use App\Http\Requests\Admin\StoreUserUpdatePassRequest;
+use App\Http\Requests\Admin\StoreUserUpdateRequest;
+use App\Http\services\User\UserServices;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
@@ -12,81 +15,25 @@ use function GuzzleHttp\Promise\all;
 
 class UserController extends Controller
 {
-    //get: admin/user/list -> list admin & manage
+    protected $userServices;
+    public function __construct(UserServices $userServices)
+    {
+        $this->userServices = $userServices;
+    }
+
+    //get: admin/user/list -> list admin & manager
     public function index(Request $request)
     {
+        // check role, chi manager ms vao dc list admin & manager
         if(Auth::user()->role != 3)
         {
             return redirect()->route('admin.user.listForUser');
         }
-
-        // su dung cho phan select so luong ban ghi
-        if ($request->input('selected_option') != null && $request->input('selected_option') != ''){
-            $selected_option = (int)($request->input('selected_option'));
-        }else{
-            $selected_option = 7;
-        }
-
-        $search = '';
-        $searchSex = '';
-        // search email, name && sex
-        if ($request->input('search') != null && $request->input('sex') != null){
-
-            $search = $request->input('search');
-            $searchSex = $request->input('sex');
-
-            $users = User::Where(function($query)  {
-                $query->orwhere('role', '=', 1)
-                    ->orwhere('role', '=', 3);
-            })->where('sex', '=', "{$searchSex}")
-                ->Where(function($query) use ($search) {
-                    $query->orwhere('last_name', 'LIKE', "%{$search}%")
-                        ->orwhere('first_name', 'LIKE', "%{$search}%")
-                        ->orwhere('email', 'LIKE', "%{$search}%");
-                })->orderByDesc('id')->paginate($selected_option);
-            $users->appends(['search' => $search, 'sex' => $searchSex]);
-
-        // search email, name
-        }elseif ($request->input('search') != null){
-
-            $search = $request->input('search');
-
-            $users = User::Where(function($query)  {
-                $query->orwhere('role', '=', 1)
-                    ->orwhere('role', '=', 3);
-            })->Where(function($query) use ($search) {
-                    $query->orwhere('first_name', 'LIKE', "%{$search}%")
-                        ->orwhere('last_name', 'LIKE', "%{$search}%")
-                        ->orwhere('email', 'LIKE', "%{$search}%");
-                })->orderByDesc('id')->paginate($selected_option);
-            $users->appends(['search' => $search]);
-        // search sex
-        }elseif ($request->input('sex') != null){
-            $searchSex = $request->input('sex');
-
-            $users = User::Where(function($query)  {
-                $query->orwhere('role', '=', 1)
-                    ->orwhere('role', '=', 3);
-            })->where('sex', '=', "{$searchSex}")
-                ->orderByDesc('id')->paginate($selected_option);
-            $users->appends([ 'sex' => $searchSex]);
-        }else{
-            $users = User::Where(function($query)  {
-                $query->orwhere('role', '=', 1)
-                    ->orwhere('role', '=', 3);
-            })->orderByDesc('id')->paginate($selected_option);
-//            $users = User::orderByDesc('id')->simplePaginate(4);
-        }
-
-        $search = $sex = '';
-        if(request('search') != null)
-        {
-            $search = request('search');
-        }
-        if(request('sex') != null)
-        {
-            $sex = request('sex');
-        }
+        $result = $this->userServices->getListAdminManagerByParams($request);
+        $users = $result[0];
+        $selected_option = $result[1];
+        $search = $result[2];
+        $sex = $result[3];
 
         $user = Auth::user();
 
@@ -94,71 +41,19 @@ class UserController extends Controller
             'title' => 'Trang quản trị danh sách admin',
             'user' => $user,
             'users' => $users,
-            'search' => request('search'),
-            'sex' => request('sex'),
+            'search' => $search,
+            'sex' => $sex,
         ]) ->with('i', (request()->input('page', 1) - 1) * $selected_option);
     }
 
+    //get: admin/user/listUser -> list user
     public function indexForUser(Request $request)
     {
-        // su dung cho phan select so luong ban ghi
-        if ($request->input('selected_option') != null && $request->input('selected_option') != ''){
-            $selected_option = (int)($request->input('selected_option'));
-        }else{
-            $selected_option = 7;
-        }
-        $search = '';
-        $searchSex = '';
-        // search email, name && sex
-        if ($request->input('search') != null && $request->input('sex') != null){
-
-            $search = $request->input('search');
-            $searchSex = $request->input('sex');
-
-            $users = User::where('role', '=', 2)
-                ->where('sex', '=', "{$searchSex}")
-                ->Where(function($query) use ($search) {
-                    $query->orwhere('last_name', 'LIKE', "%{$search}%")
-                        ->orwhere('first_name', 'LIKE', "%{$search}%")
-                        ->orwhere('email', 'LIKE', "%{$search}%");
-                })->orderByDesc('id')->paginate($selected_option);
-//            $users->appends(['search' => $search, 'sex' => $searchSex]);
-
-            // search email, name
-        }elseif ($request->input('search') != null){
-
-            $search = $request->input('search');
-
-            $users = User::where('role', '=', 2)
-                ->Where(function($query) use ($search) {
-                $query->orwhere('first_name', 'LIKE', "%{$search}%")
-                    ->orwhere('last_name', 'LIKE', "%{$search}%")
-                    ->orwhere('email', 'LIKE', "%{$search}%");
-            })->orderByDesc('id')->paginate($selected_option);
-            $users->appends(['search' => $search]);
-            // search sex
-        }elseif ($request->input('sex') != null){
-            $searchSex = $request->input('sex');
-
-            $users = User::where('role', '=', 2)
-                ->where('sex', '=', "{$searchSex}")
-                ->orderByDesc('id')->paginate($selected_option);
-            $users->appends([ 'sex' => $searchSex]);
-        }else{
-            $users = User::where('role', '=', "2")
-                ->orderByDesc('id')->paginate($selected_option);
-//            $users = User::orderByDesc('id')->simplePaginate(4);
-        }
-
-//        $search = $sex = '';
-//        if(request('search') != null)
-//        {
-//            $search = request('search');
-//        }
-//        if(request('sex') != null)
-//        {
-//            $sex = request('sex');
-//        }
+        $result = $this->userServices->getListUser($request);
+        $users = $result[0];
+        $selected_option = $result[1];
+        $search = $result[2];
+        $sex = $result[3];
 
         $user = Auth::user();
 
@@ -166,8 +61,8 @@ class UserController extends Controller
             'title' => 'Trang quản trị danh sách user',
             'user' => $user,
             'users' => $users,
-            'search' => request('search'),
-            'sex' => request('sex'),
+            'search' => $search,
+            'sex' => $sex,
         ]) ->with('i', (request()->input('page', 1) - 1) * $selected_option);
     }
 
@@ -184,20 +79,11 @@ class UserController extends Controller
 
     public function store(StoreUserRequest $request)
     {
-        $idUserCreater = Auth::user()->id;
-        $input = $request->all();
-        $input['password'] = bcrypt($input['password']);
-        $emailUser =  $input['email'];
-
-        if ($image = $request->file('avatar')) {
-            $destinationPath = 'image/';
-            $profileImage = $idUserCreater . time() . "." . $image->getClientOriginalExtension();
-            $image->move($destinationPath, $profileImage);
-            $input['avatar'] = "$profileImage";
-        }
-        $user = User::create($input);
-        Session::flash('mySuccess', 'Tài khoản ' . $emailUser .' đã được thêm mới' );
         if (Auth::user()->role == 1){
+            return redirect()->route('admin.user.listForUser');
+        }
+        $this->userServices->create($request);
+        if ($request->input('role') == 2){
             return redirect()->route('admin.user.listForUser');
         }
         return redirect()->route('admin.user.list');
@@ -206,7 +92,7 @@ class UserController extends Controller
 
     public function edit($id)
     {
-        $userEdit = User::where('id', $id)->first();
+        $userEdit = $this->userServices->getUserById($id);
         if($userEdit==null){
             return redirect()->route('admin.user.list');
         }
@@ -218,65 +104,27 @@ class UserController extends Controller
         ]);
     }
 
-    public function update(Request $request)
+    public function update(StoreUserUpdateRequest $request)
     {
-
-        $request->validate([
-            'email' => 'required|max:100|min:12|email:filter',
-//            'password' => 'required|confirmed|min:10|max:50|regex:/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{6,}$/',
-            'first_name' => 'required|max:50',
-            'last_name'=> 'required|max:50',
-            'avatar'=> 'image|mimes:jpeg,png,jpg,gif,svg|max:10240',
-        ], [
-            'email.required' => 'Email không được để trống!',
-            'email.max' => 'Địa chỉ mail không vượt quá 100 ký tự!',
-            'email.min' => 'Địa chỉ mail không được ít hơn 12 ký tự!',
-//            'password.required' => 'Mật khẩu không được để trống!',
-//            'password.confirmed' => 'Mật khẩu comfirm chưa khớp với mật khẩu!!',
-//            'password.max' => 'Mật khẩu không vượt quá 50 ký tự!',
-//            'password.min' => 'Mật khẩu không được ít hơn 10 ký tự!',
-//            'password.regex' => 'Mật khẩu có ít nhất 1 chữ cái viết hoa, 1 chữ cái thường, 1 số, 1 ký tự đặc biệt!',
-            'first_name.required' => 'Trường họ không được để trống!',
-            'first_name.max' => 'Trường họ không vượt quá 50 ký tự!',
-            'last_name.required' => 'Trường tên không được để trống!',
-            'last_name.max' => 'Trường tên không vượt quá 50 ký tự!',
-            'sex.required' => 'Trường giới tính không được để trống!',
-            'role.required' => 'Trường vai trò không được để trống!',
-            'avatar.required' => 'Trường avatar không được để trống!',
-            'avatar.image' => 'Yêu cầu file định dạng phải là ảnh!',
-            'avatar.max' => 'Yêu cầu kích thước <= 10MB!',
-        ]);
-
-        $user = User::where('email', $request->input('email'))->first();
-
-        $idUserCreater = Auth::user()->id;
-        $input = $request->all();
-//        $input['password'] = bcrypt($input['password']);
-        $emailUser =  $input['email'];
-
-        if ($image = $request->file('avatar')) {
-            $destinationPath = 'image/';
-            $profileImage = $idUserCreater . time() . "." . $image->getClientOriginalExtension();
-            $image->move($destinationPath, $profileImage);
-            $input['avatar'] = "$profileImage";
-        }else{
-            unset($input['avatar']);
-        }
-
-
-//        dd($input);
-
-        $user->update($input);
-        Session::flash('mySuccess', 'Tài khoản ' . $emailUser .' đã được chỉnh sửa' );
         if (Auth::user()->role == 1){
             return redirect()->route('admin.user.listForUser');
         }
-        return redirect()->route('admin.user.list');
+
+        $userEdit = $this->userServices->getUserByEmail($request->input('email'));
+
+        $result = $this->userServices->updateInfor($request);
+        if ($result)
+        {
+            if ($userEdit->role == 1){
+                return redirect()->route('admin.user.list');
+            }
+            return redirect()->route('admin.user.listForUser');
+        }
     }
 
     public function editPassword($id)
     {
-        $userEdit = User::where('id', $id)->first();
+        $userEdit = $this->userServices->getUserById($id);
         $user = Auth::user();
         return view('admin.crud-user.edit-password', [
             'title' => 'Sửa password user: '.$userEdit->first_name.' '.$userEdit->last_name,
@@ -285,23 +133,13 @@ class UserController extends Controller
         ]);
     }
 
-    public function updatePassword(Request $request, $id)
+    public function updatePassword(StoreUserUpdatePassRequest $request, $id)
     {
-        $request->validate([
-            'password' => 'required|confirmed|min:10|max:50|regex:/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{6,}$/',
-        ], [
-            'password.required' => 'Mật khẩu không được để trống!',
-            'password.confirmed' => 'Mật khẩu comfirm chưa khớp với mật khẩu!!',
-            'password.max' => 'Mật khẩu không vượt quá 50 ký tự!',
-            'password.min' => 'Mật khẩu không được ít hơn 10 ký tự!',
-            'password.regex' => 'Mật khẩu có ít nhất 1 chữ cái viết hoa, 1 chữ cái thường, 1 số, 1 ký tự đặc biệt!',
-        ]);
-        $userEdit = User::where('id', $id)->first();
-        $input = $request->all();
-        $input['password'] = bcrypt($input['password']);
-        $userEdit->update(['password' => $input['password']]);
-        Session::flash('mySuccess', 'Đổi mật khẩu thành công!');
-        return redirect()->route('admin.user.edit', $id);
+        $result = $this->userServices->updatePassword($request, $id);
+        if ($result)
+        {
+            return redirect()->route('admin.user.edit', $id);
+        }
 
     }
 
@@ -310,10 +148,10 @@ class UserController extends Controller
 
     public function destroy($id)
     {
-        $user = User::where('id', $id)->first();
-        User::find($id)->delete($id);
-        Session::flash('mySuccess', 'Tài khoản ' . $user->email .' đã được xóa' );
-        return redirect()->back();
+        $result = $this->userServices->destroy($id);
+        if ($result){
+            return redirect()->back();
+        }
     }
 }
 

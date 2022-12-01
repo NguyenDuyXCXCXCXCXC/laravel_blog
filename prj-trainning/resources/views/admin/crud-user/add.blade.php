@@ -49,7 +49,14 @@
                 <div class="form-group" >
                     <div style="display: flex;">
                         <label style="width: 103px;padding-top: 0px;">Mật khẩu<span style="color: red;">*</span></label>
-                        <input type="password" class="form-control" name="password" placeholder="Nhập mật khẩu">
+                        <input type="password" class="form-control" name="password" id="password-field2" placeholder="Nhập mật khẩu">
+                        <span toggle="#password-field2" class="fa fa-fw fa-eye field-icon toggle-password2" style="
+                                                                                    float: right;
+                                                                                    margin-left: -25px;
+                                                                                    margin-top: 11px;
+                                                                                    position: relative;
+                                                                                    z-index: 2;"></span>
+
                     </div>
                     @if ($errors->has('password'))
                         <p class="text-danger text-center" style="font-size: 12px;">{{ $errors->first('password') }}</p>
@@ -59,7 +66,14 @@
                 <div class="form-group" >
                     <div style="display: flex;">
                         <label style="width: 101px;">Mật khẩu confirm<span style="color: red;">*</span></label>
-                        <input type="password" class="form-control" name="password_confirmation" placeholder="Nhập mật khẩu confirm ">
+                        <input type="password" class="form-control" name="password_confirmation" id="confirm_password" placeholder="Nhập mật khẩu confirm ">
+                        <span toggle="#confirm_password" class="fa fa-fw fa-eye field-icon toggle-password3" style="
+                                                                                    float: right;
+                                                                                    margin-left: -25px;
+                                                                                    margin-top: 11px;
+                                                                                    position: relative;
+                                                                                    z-index: 2;"></span>
+
                     </div>
                     @if ($errors->has('password_confirmation'))
                         <p class="text-danger text-center" style="font-size: 12px;">{{ $errors->first('password_confirmation') }}</p>
@@ -173,5 +187,30 @@
 
             reader.readAsDataURL(this.files[0]);
         });
+
+
+        // show hide password
+        $(".toggle-password2").click(function() {
+
+            $(this).toggleClass("fa-eye fa-eye-slash");
+            var input = $($(this).attr("toggle"));
+            if (input.attr("type") == "password") {
+                input.attr("type", "text");
+            } else {
+                input.attr("type", "password");
+            }
+        });
+
+        $(".toggle-password3").click(function() {
+
+            $(this).toggleClass("fa-eye fa-eye-slash");
+            var input = $($(this).attr("toggle"));
+            if (input.attr("type") == "password") {
+                input.attr("type", "text");
+            } else {
+                input.attr("type", "password");
+            }
+        });
+        // end show hide password
     </script>
 @endsection

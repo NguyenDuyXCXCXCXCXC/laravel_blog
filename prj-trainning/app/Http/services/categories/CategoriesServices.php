@@ -4,6 +4,7 @@ namespace App\Http\services\categories;
 
 use App\Models\Categories;
 use App\Repositories\CategoriesRepository;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 
 class CategoriesServices
@@ -14,7 +15,7 @@ class CategoriesServices
         $this->categoriesRepository = $categoriesRepository;
     }
 
-    public function getAll($request)
+    public function getCategoriesByParams($request)
     {
         // su dung cho phan select so luong ban ghi
         if ($request->input('selected_option') != null && $request->input('selected_option') != ''){
@@ -22,31 +23,18 @@ class CategoriesServices
         }else{
             $selected_option = 7;
         }
-//        dd($selected_option);
         $search = $request->input('search');
-//        if($search != null)
-//        {
-//            $categories = Categories::where('name', 'LIKE', "%{$search}%")
-//            ->orderByDesc('id')->paginate($selected_option);
-//        }else{
-//            $categories = Categories::orderByDesc('id')->paginate($selected_option);
-//        }
-        $query = Categories::query();
-        if(!empty($search)){
-         $query = $query->where('name', 'LIKE', "%{$search}%");
-        }
-        $categories = $query->orderByDesc('id')->paginate($selected_option);
-        return [$categories, $selected_option];
+//        get: $categories && $selected_option
+        $categories =  $this->categoriesRepository->getCategoriesByParams($search, $selected_option);
+        return [$categories, $selected_option, $search];
     }
 
-    public function  create($request)
+    public function  createCategory($request)
     {
         $input = $request->all();
         try {
             $inputCate = $input['categories'];
-            Categories::create([
-                'name' => $input['categories']
-            ]);
+            $this->categoriesRepository->create($inputCate);
             Session::flash('mySuccess', 'Danh mục ' . $inputCate .' đã được thêm mới' );
         }catch (\Exception $err){
             Session::flash('myError', $err->getMessage() );
@@ -57,8 +45,12 @@ class CategoriesServices
 
     public function update($request, $categories)
     {
-        $categories->name = $request->input('categories');
-        $categories->save();
+        try {
+            $this->categoriesRepository->update($request, $categories);
+        }catch (\Exception $exception){
+            Log::info($exception->getMessage());
+            return false;
+        }
         return true;
     }
 
@@ -66,7 +58,7 @@ class CategoriesServices
 
     public function destroy($id)
     {
-        return Categories::find($id)->delete($id);
+        return $this->categoriesRepository->destroy($id);
     }
 
 

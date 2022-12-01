@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\User;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreRegisterRequest;
+use App\Http\services\Auth\AuthServices;
 use App\Models\User;
 use App\Models\UserVerify;
 use Illuminate\Http\Request;
@@ -14,6 +15,12 @@ use Mail;
 
 class RegisterController extends Controller
 {
+    protected $authServices;
+    public function __construct(AuthServices $authServices)
+    {
+        $this->authServices = $authServices;
+    }
+
     public function index()
     {
         if(Auth::check()){
@@ -26,58 +33,13 @@ class RegisterController extends Controller
 
     public function store(StoreRegisterRequest $request)
     {
-        $input = $request->all();
-        $input['password'] = bcrypt($input['password']);
-
-        $user = User::create($input);
-//        $user = User::create([
-//            'email' => $input['email'],
-//            'first_name' => $input['first_name'],
-//            'last_name' => $input['last_name'],
-//            'password' => $input['password'],
-//            'sex' => $input['sex'],
-//            'address' => $input['address'],
-//        ]);
-
-        $token = Str::random(64);
-
-        UserVerify::create([
-            'user_id' => $user->id,
-            'token' => $token
-        ]);
-
-        Mail::send('emails.emailVerificationEmail', ['token' => $token], function($message) use($request){
-            $message->to($request->email);
-            $message->subject('Email Verification Mail');
-        });
-
-        return redirect()->route('admin.register-succes');
-    }
-
-
-
-
-    public function verifyAccount($token)
-    {
-        $verifyUser = UserVerify::where('token', $token)->first();
-
-        $message = 'Sorry your email cannot be identified.';
-
-        if(!is_null($verifyUser) ){
-            $user = $verifyUser->user;
-
-            if(!$user->is_email_verified) {
-                $verifyUser->user->is_email_verified = 1;
-                $verifyUser->user->save();
-                $message = "Your e-mail is verified. You can now login.";
-            } else {
-                $message = "Your e-mail is already verified. You can now login.";
-            }
+        $result = $this->authServices->postRegister($request);
+        if ($result)
+        {
+            return redirect()->route('admin.register-succes');
         }
-
-//        return redirect()->route('admin.login')->with('message', $message);
-        return redirect()->route('admin.login');
     }
+
 
     public function registerSuccess()
     {
@@ -85,4 +47,16 @@ class RegisterController extends Controller
             'title' => 'Đăng ký tài khoản thành công'
         ]);
     }
+
+    public function verifyAccount($token)
+    {
+        $result = $this->authServices->verifyAccount($token);
+        if ($result)
+        {
+            return redirect()->route('admin.login');
+        }
+
+    }
+
+
 }

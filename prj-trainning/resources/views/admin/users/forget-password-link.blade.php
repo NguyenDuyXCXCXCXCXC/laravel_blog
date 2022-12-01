@@ -41,7 +41,7 @@
                 <div class="form-group" >
                     <div style="display: flex;">
                         <label style="width: 105px;">Mật khẩu confirm<span style="color: red;">*</span></label>
-                        <input type="password" class="form-control" id="confirm_password" placeholder="Nhập mật khẩu confirm">
+                        <input type="password" class="form-control" name="password_confirmation" id="confirm_password" placeholder="Nhập mật khẩu confirm">
                         <span toggle="#confirm_password" class="fa fa-fw fa-eye field-icon toggle-password3" style="
                                                                                     float: right;
                                                                                     margin-left: -25px;

@@ -21,15 +21,11 @@ class CategoriesController extends Controller
 
     public function index(Request $request)
     {
-        $result = $this->categoriesServices->getAll($request);
+        $result = $this->categoriesServices->getCategoriesByParams($request);
         $categories = $result[0];
         $selected_option = $result[1];
         $user = Auth::user();
-        $search = '';
-        if(request('search') != null)
-        {
-            $search = request('search');
-        }
+        $search = $result[2];
 
         return view('admin.categories.index', [
             'title' => 'Trang quản trị danh sách danh mục',
@@ -61,7 +57,7 @@ class CategoriesController extends Controller
      */
     public function store(StoreCategoriesRequest $request)
     {
-        $categories = $this->categoriesServices->create($request);
+        $categories = $this->categoriesServices->createCategory($request);
         return redirect()->route('admin.categories.list');
 
     }
@@ -102,9 +98,10 @@ class CategoriesController extends Controller
      */
     public function update(StoreCategoriesRequest $request, Categories $categories)
     {
+        $categoriesName = $categories->name;
         $result = $this->categoriesServices->update($request, $categories);
         if ($result){
-            Session::flash('mySuccess', 'Danh mục ' . $categories->name .' đã được chỉnh sửa' );
+            Session::flash('mySuccess', 'Danh mục ' . $categoriesName .' đã được chỉnh sửa' );
         }
         return redirect()->route('admin.categories.list');
     }
