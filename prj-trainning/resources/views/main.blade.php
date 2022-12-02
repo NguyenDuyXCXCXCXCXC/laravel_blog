@@ -22,22 +22,22 @@
     integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
 
 </head>
-<?php
-{{
-    $date = (new DateTime("now", new DateTimeZone('Asia/Ho_Chi_Minh') )) ->format('Y-m-d H:i:s') ;
-}}
-?>
+
 
 <body class="container-fluid">
   <header class="container-fluid">
     <div class="container">
         <div class="row header-first mb-2">
-            <div class="col-2 "><img class="rounded-circle" style="height: 70px;" src="/img_web/logo.jfif" alt=""></div>
-            <div class="col-2 pt-4"><span>{{$date}}</span></div>
+            <div class="col-2 ">
+                <a href="{{route('dashboard')}}">
+                    <img class="rounded-circle" style="height: 70px;" src="/img_web/logo.jfif" alt="">
+                </a>
+            </div>
+            <div class="col-2 pt-4" id="clock"></div>
             <div class="col-4 pt-3">
-                <form action="simple-results.html">
+                <form action="">
                     <div class="input-group">
-                        <input type="search" class="form-control form-control-lg" placeholder="Tìm kiếm tin tức">
+                        <input type="search" name="search" class="form-control form-control-lg" value="{{$search}}" placeholder="Tìm kiếm tin tức">
                         <div class="input-group-append">
                             <button type="submit" class="btn btn-lg btn-default">
                                 <i class="fa fa-search"></i>
@@ -48,9 +48,11 @@
             </div>
             <div class="col-3 pt-4 text-center">
                 @if(Auth::user() == null)
-                    <p class="text-primary">Đăng nhập</p>
+                    <a href="{{route('client.login')}}" class="text-decoration-none">
+                        <p class="text-primary">Đăng nhập</p>
+                    </a>
                 @else
-                    Xin chào {{Auth::user()->first_name }} {{Auth::user()->last_name }}
+                    Xin chào <strong>{{Auth::user()->first_name }} {{Auth::user()->last_name }}</strong>  <p><a href="{{route('client.logout')}}">logout</a></p>
                 @endif
 
             </div>
@@ -119,6 +121,15 @@
     <!-- AdminLTE for demo purposes -->
     {{--<script src="/template/main/dist/js/demo.js"></script>--}}
     <!-- Page specific script -->
+<script>
+
+    setInterval(myTimer, 1000);
+
+    function myTimer() {
+        const date = new Date();
+        document.getElementById("clock").innerHTML = date.toLocaleString();
+    }
+</script>
 
 </body>
 

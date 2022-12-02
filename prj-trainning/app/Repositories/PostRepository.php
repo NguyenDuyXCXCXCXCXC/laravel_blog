@@ -6,7 +6,7 @@ use App\Interfaces\PostRepositoryInterface;
 use App\Models\Post;
 use Illuminate\Support\Facades\DB;
 
-class PostRepository implements PostRepositoryInterface
+class PostRepository
 {
     protected $post;
     public function __construct(Post $post)
@@ -62,21 +62,47 @@ class PostRepository implements PostRepositoryInterface
     }
 
 
-    public function getAllPost($request, $active = null){
-        if ($active == 1){
-            $postsActive = Post::orderByDesc('post_time')->where('hot_flag', '=', 1)
-                ->limit(6)
-                ->get();
-            return $postsActive;
-        }else{
-            $postsActive = Post::orderByDesc('post_time')
-                ->limit(6)
-                ->get();
-            return $postsActive;
+    public function update($post, $input)
+    {
+        $post->update($input);
+    }
+
+
+    public function getPostById($id)
+    {
+        return $this->post->findOrFail($id);
+    }
+
+    public function destroyById($id)
+    {
+        $post = Post::find($id);
+        return $post->delete();
+    }
+
+
+
+    public function getPostInDayDashboard($searchRequest, $active)
+    {
+        $query = $this->post->query();
+        if ($active != null){
+            $query = $query->where('hot_flag', '=', $active);
         }
-
+        if(!empty($searchRequest)){
+            $query = $query->where('title', 'LIKE', "%{$searchRequest}%");
+        }
+        return $query->orderByDesc('post_time')->limit(6)->get();
     }
-    public function getAllPostById($id){
 
+
+    public function getPostsByIdCategoryDashboard($searchRequest, $idCategory)
+    {
+        $query = $this->post->query();
+        if(!empty($searchRequest)){
+            $query = $query->where('title', 'LIKE', "%{$searchRequest}%");
+        }
+        $query = $query->where('category_id', '=', "{$idCategory}");
+        return $query->orderByDesc('post_time')->limit(4)->get();
     }
+
+
 }

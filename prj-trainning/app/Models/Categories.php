@@ -14,6 +14,11 @@ class Categories extends Model
     ];
 
     public function posts() {
-        return $this->hasMany(Post::class);
+        return $this->hasMany(Post::class, 'category_id', 'id');
+    }
+
+    public function postsDashboard()
+    {
+        return $this->hasMany(Post::class, 'category_id', 'id')->orderByDesc('post_time')->limit(4);
     }
 }

@@ -22,14 +22,22 @@ class MainController extends Controller
     {
         $title = 'Trang chủ';
         $categories =  $this->categoriesServices->getAllCategories();
-        $postsActive = $this->postsServices->getPostDashboard($request, $active = 1);
-        $posts = $this->postsServices->getPostDashboard($request);
+        $postsInDayActive = $this->postsServices->getPostInDayActiveDashboardByParams($request);
+        $postsInDay = $this->postsServices->getPostInDayDashboardByParams($request);
+        $postsByCategoryFirst = $this->postsServices->getPostsByIdCategoryDashboard($request, $categories[0]->id);
+        $postsByCategorySecond = $this->postsServices->getPostsByIdCategoryDashboard($request, $categories[1]->id);
+        $postsByCategoryThird = $this->postsServices->getPostsByIdCategoryDashboard($request, $categories[2]->id);
+
 
         return view('home', [
             'title' => $title,
             'categories' => $categories,
-            'postsActive' => $postsActive,
-            'posts' =>$posts
+            'postsInDayActive' => $postsInDayActive,
+            'postsInDay' =>$postsInDay,
+            'postsByCategoryFirst' => $postsByCategoryFirst,
+            'postsByCategorySecond' => $postsByCategorySecond,
+            'postsByCategoryThird' => $postsByCategoryThird,
+            'search' => $request->search
         ]);
     }
 }

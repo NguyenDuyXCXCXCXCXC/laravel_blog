@@ -29,6 +29,7 @@ class AuthServices
     public function postRegister($request)
     {
 
+
         try {
             $input = $request->all();
             $input['password'] = bcrypt($input['password']);
@@ -38,10 +39,19 @@ class AuthServices
             $token = Str::random(64);
             $userVertify = $this->authRepositories->createUserVertify($user->id, $token);
 
-            Mail::send('emails.emailVerificationEmail', ['token' => $token], function($message) use($request){
-                $message->to($request->email);
-                $message->subject('Email Verification Mail');
-            });
+            if ($input['role'] == 2){
+                Mail::send('emails.emailVerificationEmailClient', ['token' => $token], function($message) use($request){
+                    $message->to($request->email);
+                    $message->subject('Email Verification Mail');
+                });
+            }else{
+                Mail::send('emails.emailVerificationEmail', ['token' => $token], function($message) use($request){
+                    $message->to($request->email);
+                    $message->subject('Email Verification Mail');
+                });
+            }
+
+
         }catch (\Exception $err){
             Log::info($err->getMessage());
             return false;
@@ -71,6 +81,8 @@ class AuthServices
         }
         return true;
     }
+
+
 
 
     public function submitForgetPasswordForm($request)

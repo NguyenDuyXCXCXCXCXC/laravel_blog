@@ -116,8 +116,19 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth']], function(){
 // ==================================== user ==================================
 // dashboard
 Route::get('/', [\App\Http\Controllers\MainController::class, 'index'])->name('dashboard');
+
 // login
 Route::get('login', [\App\Http\Controllers\AuthController::class, 'login'])->name('client.login');
 Route::post('login', [\App\Http\Controllers\AuthController::class, 'postLogin'])->name('client.login.store');
+
+// logout
+Route::get('logout', [\App\Http\Controllers\AuthController::class, 'logout'])->name('client.logout');
+
+// register
+Route::get('register', [\App\Http\Controllers\AuthController::class, 'indexRegister'])->name('client.register');
+Route::post('register/store', [\App\Http\Controllers\AuthController::class, 'registerStore'])->name('client.register.post');
+Route::get('account/verify/{token}', [\App\Http\Controllers\AuthController::class, 'verifyAccount'])->name('client.register.verify');
+Route::get('register-success', [\App\Http\Controllers\AuthController::class, 'registerSuccess'])->name('client.register-success');
+
 
 

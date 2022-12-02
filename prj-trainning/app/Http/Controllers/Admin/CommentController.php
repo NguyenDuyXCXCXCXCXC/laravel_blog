@@ -24,13 +24,15 @@ class CommentController extends Controller
 
     public function index(Request $request)
     {
-        $result = $this->commentServices->getAllAndSearch($request);
-//        [$comments, $search_user, $search_post, $search_status];
+        $result = $this->commentServices->getcommentsByParams($request);
         $comments = $result[0];
-        $search_user = $result[1];
-        $search_post = $result[2];
-        $search_status = $result[3];
-        $selected_option = $result[4];
+        $search = $result[1];
+        $selected_option = $result[2];
+
+        $search_user = $search[0];
+        $search_status = $search[1];
+        $search_post = $search[2];
+
         $user = Auth::user();
         return view('admin.comment.list', [
             'title' => 'Trang quản trị danh sách comment',
@@ -50,36 +52,21 @@ class CommentController extends Controller
 
     public function active(Comment $comment)
     {
-//        dd($comment->status);
-        $comment->update(['status' => 1]);
+        $this->commentServices->activeComment($comment);
         return redirect()->back();
     }
 
     public function activeAll($dataIdActive)
     {
-        $dataIdActive = explode(",", $dataIdActive);
-        foreach ($dataIdActive as $id)
-        {
-            $comment = Comment::where('id', $id)->first();
-            $comment->update(['status' => 1]);
-        }
+        $this->commentServices->activeAllComment($dataIdActive);
     }
     public function inactive(Comment $comment)
     {
-        $comment->update(['status' => 0]);
+        $this->commentServices->inactiveComment($comment);
         return redirect()->back();
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+
 
     /**
      * Display the specified resource.
@@ -99,29 +86,6 @@ class CommentController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
      * Remove the specified resource from storage.
      *
      * @param  int  $id
@@ -129,7 +93,9 @@ class CommentController extends Controller
      */
     public function destroy($id)
     {
-        Comment::find($id)->delete();
-        return redirect()->route('admin.comment.list');
+        $result = $this->commentServices->destroyById($id);
+        if ($result){
+            return redirect()->route('admin.comment.list');
+        }
     }
 }

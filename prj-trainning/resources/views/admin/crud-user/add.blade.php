@@ -52,7 +52,7 @@
                         <input type="password" class="form-control" name="password" id="password-field2" placeholder="Nhập mật khẩu">
                         <span toggle="#password-field2" class="fa fa-fw fa-eye field-icon toggle-password2" style="
                                                                                     float: right;
-                                                                                    margin-left: -25px;
+                                                                                    margin-left: -21px;
                                                                                     margin-top: 11px;
                                                                                     position: relative;
                                                                                     z-index: 2;"></span>
@@ -69,7 +69,7 @@
                         <input type="password" class="form-control" name="password_confirmation" id="confirm_password" placeholder="Nhập mật khẩu confirm ">
                         <span toggle="#confirm_password" class="fa fa-fw fa-eye field-icon toggle-password3" style="
                                                                                     float: right;
-                                                                                    margin-left: -25px;
+                                                                                    margin-left: -21px;
                                                                                     margin-top: 11px;
                                                                                     position: relative;
                                                                                     z-index: 2;"></span>

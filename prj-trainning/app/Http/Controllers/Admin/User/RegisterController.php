@@ -27,7 +27,7 @@ class RegisterController extends Controller
             return redirect()->route('admin.dashboard');
         }
         return view('admin.users.register', [
-            'title' => 'Dang ky tai khoan'
+            'title' => 'Đăng ký tài khoản'
         ]);
     }
 

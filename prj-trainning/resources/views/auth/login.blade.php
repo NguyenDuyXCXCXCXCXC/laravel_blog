@@ -17,7 +17,7 @@
             <form action="{{route('client.login.store')}}" method="post">
                 <div class="form-group" >
                     <div style="display: flex;">
-                        <label style="width: 100px;" padding-top: 6px;">Email</label>
+                        <label style="width: 100px;" >Email</label>
                         <input type="email" class="form-control" name="email" value="{{ old('email') }}"
                                placeholder="Nhập địa chỉ mail">
                     </div>
@@ -28,11 +28,11 @@
                 </div>
                 <div class="form-group" >
                     <div style="display: flex;">
-                        <label style="width: 100px;" padding-top: 6px;">Mật khẩu</label>
+                        <label style="width: 100px;">Mật khẩu</label>
                         <input type="password" class="form-control " name="password" id="password-field2" placeholder="Nhập mật khẩu">
                         <span toggle="#password-field2" class="fa fa-fw fa-eye field-icon toggle-password2" style="
                                                                                     float: right;
-                                                                                    margin-left: -25px;
+                                                                                    margin-left: -19px;
                                                                                     margin-top: 11px;
                                                                                     position: relative;
                                                                                     z-index: 2;"></span>
@@ -48,7 +48,7 @@
                     </div>
                     <!-- /.col -->
                     <div class="col-6">
-                        <a href="" class="text-center">
+                        <a href="{{route('client.register')}}" class="text-center">
                             <button type="button" class="btn btn-success btn-block">Đăng ký</button>
                         </a>
                     </div>

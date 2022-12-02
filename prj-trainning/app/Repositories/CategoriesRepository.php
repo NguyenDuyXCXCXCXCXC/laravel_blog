@@ -15,8 +15,7 @@ class CategoriesRepository implements CategoriesRepositoryInterface
 
     public function getAllCategories()
     {
-        $categories = $this->categories::orderByDesc('id')->get();
-        return $categories;
+        return $this->categories::orderByDesc('id')->get();
     }
 
     public function getCategoriesByParams($search, $selected_option)
@@ -25,8 +24,7 @@ class CategoriesRepository implements CategoriesRepositoryInterface
         if(!empty($search)){
             $query = $query->where('name', 'LIKE', "%{$search}%");
         }
-        $categories = $query->orderByDesc('id')->paginate($selected_option);
-        return $categories;
+        return $query->orderByDesc('id')->paginate($selected_option);
     }
 
     public function create($inputCate)

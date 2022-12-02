@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StorePostRequest;
+use App\Http\Requests\Admin\StorePostUpdateRequest;
 use App\Http\services\categories\CategoriesServices;
 use App\Http\services\post\PostServices;
 use App\Models\Categories;
@@ -30,30 +31,11 @@ class PostController extends Controller
 
     public function  upload(Request $request)
     {
-//        if($request->hasFile('upload')) {
-//            $userId = Auth::user()->id;
-//            $originName = $request->file('upload')->getClientOriginalName();
-//            $fileName = pathinfo($originName, PATHINFO_FILENAME);
-//            $extension = $request->file('upload')->getClientOriginalExtension();
-//            $fileName = $fileName.'_'.$userId.'_'.time().'.'.$extension;
-//
-//            $request->file('upload')->move(public_path('image'), $fileName);
-//
-//            $CKEditorFuncNum = $request->input('CKEditorFuncNum');
-//            $url = asset('image/'.$fileName);
-//            $msg = 'Hình ảnh được tải lên thành công!';
-//            $response = "<script>window.parent.CKEDITOR.tools.callFunction($CKEditorFuncNum, '$url', '$msg')</script>";
-//
-//            @header('Content-type: text/html; charset=utf-8');
-//            echo $response;
-//        }
         $this->postServices->uploadImgFromTextarea($request);
     }
 
     public function index(Request $request)
     {
-
-
         $categories = $this->categoriesServices->getAllCategories();
         $result = $this->postServices->getPostByParams($request);
 
@@ -134,8 +116,7 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-//        dd($post);
-        $categories = Categories::all();
+        $categories = $this->categoriesServices->getAllCategories();
         $user = Auth::user();
         return view('admin.post.edit', [
             'title' => 'Sửa bài viết: '. \Illuminate\Support\Str::limit($post->title, 40),
@@ -152,7 +133,7 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Post $post)
+    public function update(StorePostUpdateRequest $request, Post $post)
     {
         $result = $this->postServices->update($request, $post);
         if($result)
@@ -170,8 +151,9 @@ class PostController extends Controller
      */
     public function destroy($id)
     {
-        $post = Post::where('id', $id)->first();
-        $result = $this->postServices->destroy($id);
+        $post = $this->postServices->getPostById($id);
+        $result = $this->postServices->destroyById($id);
+
         if($result)
         {
             Session::flash('mySuccess', 'Bài Posts: ' . $post->title .' đã được xóa thành công!' );

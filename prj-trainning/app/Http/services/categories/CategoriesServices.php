@@ -66,6 +66,5 @@ class CategoriesServices
     public function getAllCategories()
     {
         return $this->categoriesRepository->getAllCategories();
-
     }
 }

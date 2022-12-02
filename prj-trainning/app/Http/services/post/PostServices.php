@@ -9,6 +9,7 @@ use http\Env\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Models\Post;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 
 class PostServices
@@ -82,21 +83,6 @@ class PostServices
 
     public function update($request, $post)
     {
-        $request->validate([
-            'title'  =>'required|max:200',
-            'categories_id' =>'required',
-            'hot_flag' =>'required',
-            'content' =>'required',
-            'photo'=> 'image|mimes:jpeg,png,jpg,gif,svg|max:10240',
-        ], [
-            'title.required' => 'Tiêu đề không được để trống!',
-            'title.max' => 'Tiêu đề không vượt quá 200 ký tự!',
-            'categories_id.required' => 'Danh mục không được để trống!',
-            'hot_flag.required' => 'Trạng thái nổi bật không được để trống!',
-            'content.required' => 'Nội dung bài viết không được để trống!',
-            'photo.image' => 'Yêu cầu file định dạng phải là ảnh!',
-            'photo.max' => 'Yêu cầu kích thước <= 10MB!',
-        ]);
         $input = $request->all();
         $postTitle = $post->title;
         $idUserCreater = Auth::user()->id;
@@ -109,13 +95,12 @@ class PostServices
             unset($input['photo']);
         }
 
-        // bien request ko dat giong database
+        // bien request ko dat giong database nen phai dat lai
         $input['category_id'] = $input['categories_id'];
         unset($input['categories_id']);
-//        dd($input['categories_id']);
-//        dd($input, $post);
+
         try {
-            $post->update($input);
+            $this->postRepository->update($post, $input);
             Session::flash('mySuccess', 'Bài Posts: ' . $postTitle .' đã được sửa thành công!' );
         }catch (\Exception $err){
             Session::flash('myError', $err->getMessage() );
@@ -124,19 +109,39 @@ class PostServices
         return true;
     }
 
-    public function destroy($id)
+    public function getPostById($id)
     {
-        Post::find($id)->delete();
+        return $this->postRepository->getPostById($id);
+    }
+
+    public function destroyById($id)
+    {
+        try {
+            $this->postRepository->destroyById($id);
+        }catch (\Exception $err){
+            Log::info($err->getMessage());
+            return false;
+        }
         return true;
     }
 
 
-
-
-    //    ==== for client ===
-    public function getPostDashboard($request, $active = null)
+    public function getPostInDayActiveDashboardByParams($request)
     {
-        return $this->postRepository->getAllPost($request, $active);
+        $searchRequest = $request->search;
+        return $this->postRepository->getPostInDayDashboard($searchRequest, $active = 1);
+    }
+
+    public function getPostInDayDashboardByParams($request)
+    {
+        $searchRequest = $request->search;
+        return $this->postRepository->getPostInDayDashboard($searchRequest, $active = null);
+    }
+
+    public function getPostsByIdCategoryDashboard($request, $idCategory)
+    {
+        $searchRequest = $request->search;
+        return $this->postRepository->getPostsByIdCategoryDashboard($searchRequest, $idCategory);
     }
 
 }
