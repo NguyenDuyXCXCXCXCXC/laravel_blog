@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StorePostRequest;
+use App\Http\services\categories\CategoriesServices;
 use App\Http\services\post\PostServices;
 use App\Models\Categories;
 use App\Models\Post;
@@ -19,45 +20,52 @@ class PostController extends Controller
      * @return \Illuminate\Http\Response
      */
     protected $postServices;
+    protected $categoriesServices;
 
-    public function __construct(PostServices $postServices)
+    public function __construct(PostServices $postServices, CategoriesServices $categoriesServices)
     {
         $this->postServices = $postServices;
+        $this->categoriesServices = $categoriesServices;
     }
 
     public function  upload(Request $request)
     {
-        if($request->hasFile('upload')) {
-            $userId = Auth::user()->id;
-            $originName = $request->file('upload')->getClientOriginalName();
-            $fileName = pathinfo($originName, PATHINFO_FILENAME);
-            $extension = $request->file('upload')->getClientOriginalExtension();
-            $fileName = $fileName.'_'.$userId.'_'.time().'.'.$extension;
-
-            $request->file('upload')->move(public_path('image'), $fileName);
-
-            $CKEditorFuncNum = $request->input('CKEditorFuncNum');
-            $url = asset('image/'.$fileName);
-            $msg = 'Hình ảnh được tải lên thành công!';
-            $response = "<script>window.parent.CKEDITOR.tools.callFunction($CKEditorFuncNum, '$url', '$msg')</script>";
-
-            @header('Content-type: text/html; charset=utf-8');
-            echo $response;
-        }
+//        if($request->hasFile('upload')) {
+//            $userId = Auth::user()->id;
+//            $originName = $request->file('upload')->getClientOriginalName();
+//            $fileName = pathinfo($originName, PATHINFO_FILENAME);
+//            $extension = $request->file('upload')->getClientOriginalExtension();
+//            $fileName = $fileName.'_'.$userId.'_'.time().'.'.$extension;
+//
+//            $request->file('upload')->move(public_path('image'), $fileName);
+//
+//            $CKEditorFuncNum = $request->input('CKEditorFuncNum');
+//            $url = asset('image/'.$fileName);
+//            $msg = 'Hình ảnh được tải lên thành công!';
+//            $response = "<script>window.parent.CKEDITOR.tools.callFunction($CKEditorFuncNum, '$url', '$msg')</script>";
+//
+//            @header('Content-type: text/html; charset=utf-8');
+//            echo $response;
+//        }
+        $this->postServices->uploadImgFromTextarea($request);
     }
 
     public function index(Request $request)
     {
 
 
-        $categories = Categories::all();
-        $result = $this->postServices->getAllWithSearch($request);
+        $categories = $this->categoriesServices->getAllCategories();
+        $result = $this->postServices->getPostByParams($request);
+
         $posts = $result[0];
-        $search_categories_id = $result[1];
-        $search_hot_flag = $result[2];
-        $search_title = $result[3];
-        $search_user = $result[4];
-        $selected_option = $result[5];
+        $search = $result[1];
+        $selected_option = $result[2];
+
+        $search_categories_id = $search[0];
+        $search_hot_flag = $search[1];
+        $search_title = $search[2];
+        $search_user = $search[3];
+
         $user = Auth::user();
         return view('admin.post.list', [
             'title' => 'Trang quản trị danh sách post',
@@ -79,7 +87,7 @@ class PostController extends Controller
     public function add()
     {
         $user = Auth::user();
-        $categories = Categories::all();
+        $categories = $this->categoriesServices->getAllCategories();
         return view('admin.post.add', [
             'title' => 'Thêm mới bài posts',
             'user' => $user,

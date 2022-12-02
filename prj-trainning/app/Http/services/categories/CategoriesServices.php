@@ -63,7 +63,6 @@ class CategoriesServices
 
 
 
-//    ==== for client ===
     public function getAllCategories()
     {
         return $this->categoriesRepository->getAllCategories();
