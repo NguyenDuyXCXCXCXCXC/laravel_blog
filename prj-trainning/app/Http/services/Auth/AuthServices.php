@@ -3,6 +3,7 @@
 namespace App\Http\services\Auth;
 
 use App\Repositories\AuthRepositories;
+use App\Repositories\UserRepositories;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
@@ -11,9 +12,11 @@ use Mail;
 class AuthServices
 {
     protected $authRepositories;
-    public function __construct(AuthRepositories $authRepositories)
+    protected $userRepositories;
+    public function __construct(AuthRepositories $authRepositories, UserRepositories $userRepositories)
     {
         $this->authRepositories = $authRepositories;
+        $this->userRepositories = $userRepositories;
     }
 
     public function postLoginClient($request)
@@ -93,10 +96,21 @@ class AuthServices
 
             $this->authRepositories->createEmailReset($email, $token);
 
-            Mail::send('emails.forgetPassword', ['token' => $token, 'email' => $email], function($message) use($request){
-                $message->to($request->email);
-                $message->subject('Reset Password');
-            });
+            $user = $this->userRepositories->getUserByEmail($email);
+
+            if ($user->role == 2){
+                Mail::send('emails.forgetPasswordClient', ['token' => $token, 'email' => $email], function($message) use($request){
+                    $message->to($request->email);
+                    $message->subject('Reset Password');
+                });
+            }else{
+                Mail::send('emails.forgetPassword', ['token' => $token, 'email' => $email], function($message) use($request){
+                    $message->to($request->email);
+                    $message->subject('Reset Password');
+                });
+            }
+
+
         }catch (\Exception $err){
             Log::info($err->getMessage());
             return false;

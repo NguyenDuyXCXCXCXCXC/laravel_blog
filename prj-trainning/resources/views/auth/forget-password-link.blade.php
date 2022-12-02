@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    @include('admin.users.layouts.head')
+    @include('auth.layouts.head')
 </head>
 <body class="hold-transition login-page">
 <div class="login-box">
     <div class="card card-outline card-primary">
         <div class="card-header text-center">
-            <h1><b>Quản trị viên</b></h1>
             <p>Thay đổi mật khẩu</p>
         </div>
         @if (\Illuminate\Support\Facades\Session::has('myError'))
@@ -67,7 +66,7 @@
 </div>
 <!-- /.login-box -->
 
-@include('admin.users.layouts.footer')
+@include('auth.layouts.footer')
 <script>
 
     // show hide password

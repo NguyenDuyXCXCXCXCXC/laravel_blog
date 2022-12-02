@@ -61,7 +61,7 @@
             <!-- /.social-auth-links -->
 
             <p class="mb-1 text-center">
-                <a href="">Quên mật khẩu ?</a>
+                <a href="{{route('client.forget-password')}}">Quên mật khẩu ?</a>
             </p>
         </div>
         <!-- /.login-card-body -->

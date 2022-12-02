@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    @include('admin.users.layouts.head')
+    @include('auth.layouts.head')
 </head>
 <body class="hold-transition login-page">
 <div class="login-box">
     <div class="card card-outline card-primary">
         <div class="card-header text-center">
-            <h1><b>Quản trị viên</b></h1>
-            <p>Quên mật khẩu</p>
+            <h4>Quên mật khẩu</h4>
         </div>
         <div class="card-body">
             <p class="login-box-msg">Vui lòng nhập email của bạn để nhận mật khẩu mới.</p>
@@ -17,7 +16,7 @@
                     {{ Session::get('message') }}
                 </div>
             @endif
-            <form action="{{ route('admin.forget-password.post') }}" method="post">
+            <form action="" method="post">
                 @csrf
                 <div class="form-group" >
                     <div style="display: flex;">
@@ -25,7 +24,7 @@
                         <input type="email" name="email" class="form-control" placeholder="Nhập địa chỉ mail">
                     </div>
                     @if ($errors->has('email'))
-                            <span class="text-danger text-center">{{ $errors->first('email') }}</span>
+                        <span class="text-danger text-center">{{ $errors->first('email') }}</span>
                     @endif
                 </div>
                 <div class="row">
@@ -33,7 +32,7 @@
                         <button type="submit" class="btn btn-primary btn-block">Hoàn thành</button>
                     </div>
                     <div class="col-6">
-                        <a href="{{ route('admin.login') }}" ><button type="button" class="btn btn-danger btn-block">Đăng nhập</button></a>
+                        <a href="" ><button type="button" class="btn btn-danger btn-block">Đăng nhập</button></a>
                     </div>
                     <!-- /.col -->
                 </div>
@@ -44,6 +43,6 @@
 </div>
 <!-- /.login-box -->
 
-@include('admin.users.layouts.footer')
+@include('auth.layouts.footer')
 </body>
 </html>

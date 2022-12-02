@@ -113,7 +113,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['auth']], function(){
 
 
 
-// ==================================== user ==================================
+// ==================================== client ==================================
 // dashboard
 Route::get('/', [\App\Http\Controllers\MainController::class, 'index'])->name('dashboard');
 
@@ -129,6 +129,13 @@ Route::get('register', [\App\Http\Controllers\AuthController::class, 'indexRegis
 Route::post('register/store', [\App\Http\Controllers\AuthController::class, 'registerStore'])->name('client.register.post');
 Route::get('account/verify/{token}', [\App\Http\Controllers\AuthController::class, 'verifyAccount'])->name('client.register.verify');
 Route::get('register-success', [\App\Http\Controllers\AuthController::class, 'registerSuccess'])->name('client.register-success');
+
+// forget password
+Route::get('forgetPassword', [\App\Http\Controllers\AuthController::class, 'indexForgetPassword'])->name('client.forget-password');
+Route::post('forgetPassword', [\App\Http\Controllers\AuthController::class, 'submitForgetPasswordForm'])->name('admin.forget-password.post');
+Route::get('forgetPasswordLink/{token}/{email}', [\App\Http\Controllers\AuthController::class, 'showResetPasswordForm'])->name('client.forget-password-link.get');
+Route::post('reset-password', [\App\Http\Controllers\AuthController::class, 'submitResetPasswordForm'])->name('client.password.post');
+Route::get('changePasswordSuccess', [\App\Http\Controllers\AuthController::class, 'showChangePasswordSuccess'])->name('client.showChangePasswordSuccess');
 
 
 
