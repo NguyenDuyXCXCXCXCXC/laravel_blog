@@ -52,7 +52,8 @@
                         <p class="text-primary">Đăng nhập</p>
                     </a>
                 @else
-                    Xin chào <strong>{{Auth::user()->first_name }} {{Auth::user()->last_name }}</strong>  <p><a href="{{route('client.logout')}}">logout</a></p>
+                    Xin chào <strong>{{Auth::user()->first_name }} {{Auth::user()->last_name }}</strong>
+                    <p><a class="text-decoration-none text-info" href="{{route('client.profile')}}">Profile</a> <a class="text-decoration-none text-danger" href="{{route('client.logout')}}">logout</a></p>
                 @endif
 
             </div>

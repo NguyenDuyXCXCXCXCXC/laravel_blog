@@ -144,6 +144,8 @@ class UserServices
                 $input['password'] = bcrypt($input['password']);
                 $this->userRepositories->updatePassword($input, $userEdit);
                 Session::flash('mySuccess', 'Đổi mật khẩu thành công!');
+            }else{
+                return false;
             }
         }catch (\Exception $exception){
             Log::info($exception->getMessage());

@@ -138,4 +138,12 @@ Route::post('reset-password', [\App\Http\Controllers\AuthController::class, 'sub
 Route::get('changePasswordSuccess', [\App\Http\Controllers\AuthController::class, 'showChangePasswordSuccess'])->name('client.showChangePasswordSuccess');
 
 
+// client/profile
+Route::group(['prefix' => 'client', 'middleware' => ['auth_user']], function(){
+    Route::get('/profile', [\App\Http\Controllers\ProfileController::class, 'profile'])->name('client.profile');
+    Route::get('/profile/edit', [\App\Http\Controllers\ProfileController::class, 'profileEdit'])->name('client.profile.edit');
+    Route::post('/profile/edit', [\App\Http\Controllers\ProfileController::class, 'profileUpdate'])->name('client.profile.update');
+    Route::get('/profile/edit-password/{id}', [\App\Http\Controllers\ProfileController::class, 'editPassword'])->name('client.profile.editPassword');
+    Route::post('/profile/edit-password', [\App\Http\Controllers\ProfileController::class, 'profileUpdatePassword'])->name('client.profile.updatePassword');
+});
 
