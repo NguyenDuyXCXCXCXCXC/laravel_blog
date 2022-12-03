@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Interfaces\CategoriesRepositoryInterface;
 use App\Models\Categories;
+use Illuminate\Support\Str;
 
 class CategoriesRepository implements CategoriesRepositoryInterface
 {
@@ -27,16 +28,18 @@ class CategoriesRepository implements CategoriesRepositoryInterface
         return $query->orderByDesc('id')->paginate($selected_option);
     }
 
-    public function create($inputCate)
+    public function create($input)
     {
         return $this->categories::create([
-            'name' => $inputCate
+            'name' => $input['categories'],
+            'slug' => Str::slug($input['categories'], '-').'-'.time().'.html'
         ]);
     }
 
     public function update($request, $categories)
     {
         $categories->name = $request->input('categories');
+        $categories->slug = \Str::slug($request->input('categories'), '-').'-'.time().'.html';
         $categories->save();
         return $categories;
     }

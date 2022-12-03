@@ -53,6 +53,7 @@ class PostRepository
         return $this->post->create([
             'user_id' => $input['user_id'],
             'title' => $input['title'],
+            'slug' => \Str::slug($input['title'], '-').'-'.time().'.html',
             'category_id' => $input['categories_id'],
             'hot_flag' => $input['hot_flag'],
             'content' => $input['content'],

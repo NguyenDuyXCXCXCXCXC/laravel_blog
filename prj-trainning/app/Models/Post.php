@@ -18,6 +18,7 @@ class Post extends Model
         'hot_flag',
         'post_time',
         'views',
+        'slug'
     ];
 
     // be longs to

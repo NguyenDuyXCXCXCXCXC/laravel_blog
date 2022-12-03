@@ -84,6 +84,7 @@ class PostServices
     public function update($request, $post)
     {
         $input = $request->all();
+        $input['slug'] = \Str::slug($input['title'], '-').'-'.time().'.html';
         $postTitle = $post->title;
         $idUserCreater = Auth::user()->id;
         if ($image = $request->file('photo')) {

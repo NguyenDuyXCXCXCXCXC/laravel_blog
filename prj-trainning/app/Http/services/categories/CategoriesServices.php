@@ -34,7 +34,7 @@ class CategoriesServices
         $input = $request->all();
         try {
             $inputCate = $input['categories'];
-            $this->categoriesRepository->create($inputCate);
+            $this->categoriesRepository->create($input);
             Session::flash('mySuccess', 'Danh mục ' . $inputCate .' đã được thêm mới' );
         }catch (\Exception $err){
             Session::flash('myError', $err->getMessage() );
