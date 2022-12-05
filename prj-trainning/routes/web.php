@@ -147,3 +147,5 @@ Route::group(['prefix' => 'client', 'middleware' => ['auth_user']], function(){
     Route::post('/profile/edit-password', [\App\Http\Controllers\ProfileController::class, 'profileUpdatePassword'])->name('client.profile.updatePassword');
 });
 
+// list posts by categories
+Route::get("/{slugCategory}", [\App\Http\Controllers\MainController::class, 'indexCategory'])->name('category.posts');

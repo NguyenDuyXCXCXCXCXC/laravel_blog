@@ -7,7 +7,7 @@
         <div class="row"  id="posts">
             @foreach($postsInDayActive as $postAc)
             <div class="col-6 mt-3">
-                <article class="my-article">
+                <article class="my-article mb-2">
                     <div class="article-left">
                         <img src="/image/{{$postAc->photo}}" alt="ảnh"/>
                     </div>

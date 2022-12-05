@@ -105,5 +105,17 @@ class PostRepository
         return $query->orderByDesc('post_time')->limit(4)->get();
     }
 
+    public function getPostsActiveByIdCategoryAndParams($searchRequest, $idCategory)
+    {
+        $query = $this->post->query();
+        if(!empty($searchRequest)){
+            $query = $query->where('title', 'LIKE', "%{$searchRequest}%");
+        }
+        $query = $query
+            ->where('hot_flag', '=', 1)
+            ->where('category_id', '=', "{$idCategory}");
+        return $query->orderByDesc('post_time')->paginate(10);
+    }
+
 
 }

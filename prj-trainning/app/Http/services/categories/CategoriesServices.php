@@ -67,4 +67,10 @@ class CategoriesServices
     {
         return $this->categoriesRepository->getAllCategories();
     }
+
+
+    public function getCategoryBySlug($slugCategory)
+    {
+        return $this->categoriesRepository->getCategoryBySlug($slugCategory);
+    }
 }

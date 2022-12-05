@@ -145,4 +145,12 @@ class PostServices
         return $this->postRepository->getPostsByIdCategoryDashboard($searchRequest, $idCategory);
     }
 
+
+
+    public function getPostsActiveByIdCategoryAndParams($request, $idCategory)
+    {
+        $searchRequest = $request->search;
+        return $this->postRepository->getPostsActiveByIdCategoryAndParams($searchRequest, $idCategory);
+    }
+
 }

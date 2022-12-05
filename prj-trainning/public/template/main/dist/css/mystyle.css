@@ -7,7 +7,7 @@ body.container-fluid {
 article.my-article {
     display: flex;
     width: 450px;
-    height: 120px;
+    height: 140px;
     background-color: white;
 }
 

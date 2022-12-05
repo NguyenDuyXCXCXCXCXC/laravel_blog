@@ -49,4 +49,9 @@ class CategoriesRepository implements CategoriesRepositoryInterface
         return $this->categories->find($id)->delete();
     }
 
+
+    public function getCategoryBySlug($slugCategory)
+    {
+        return $this->categories->where('slug', $slugCategory)->first();
+    }
 }

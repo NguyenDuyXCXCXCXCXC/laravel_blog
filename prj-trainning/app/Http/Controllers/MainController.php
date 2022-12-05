@@ -40,4 +40,22 @@ class MainController extends Controller
             'search' => $request->search
         ]);
     }
+
+
+    public function indexCategory(Request $request, $slugCategory)
+    {
+        $title = 'Trang chủ';
+        $categories =  $this->categoriesServices->getAllCategories();
+        $category = $this->categoriesServices->getCategoryBySlug($slugCategory);
+        $idCategory = $category->id;
+        $postsInDayActiveBySluCategory = $this->postsServices->getPostsActiveByIdCategoryAndParams($request, $idCategory);
+//        dd($postsInDayActiveBySluCategory);
+        return view('category', [
+            'title' => $title,
+            'categories' => $categories,
+            'posts' => $postsInDayActiveBySluCategory,
+            'search' => $request->search
+        ]);
+    }
+
 }
