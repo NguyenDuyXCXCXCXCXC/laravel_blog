@@ -25,7 +25,7 @@
                 </div>
                 <h4>Bình luận</h4>
                 <hr />
-                <div class="form">
+                <div class="form" id="comment-zone">
                     <div class="form-group">
                         <textarea class="form-control" name="comment" id="comment{{$idParent}}" placeholder="Viết comments . . . "></textarea>
                         @if ($errors->has('comment'))

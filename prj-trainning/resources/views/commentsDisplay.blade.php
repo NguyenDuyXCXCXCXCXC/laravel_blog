@@ -1,5 +1,5 @@
 @foreach($comments as $comment)
-{{--    @if($comment->active == 0 && $comment->user->id == Auth::user()->id)--}}
+{{--    @if(($comment->active == 0 && $comment->user->id == Auth::user()->id ) || $comment->active == 1)--}}
         <div class="display-comment" @if($comment->parent_id != null) style="margin-left:40px;" @endif>
             <div class="">
                 <div class="border row ">

@@ -89,7 +89,7 @@ class MainController extends Controller
     public function postComment(Request $request)
     {
         $result = $this->commentServices->createComment($request);
-        return $result;
+        $post = $this->postsServices->getPostById($request->post_id);
     }
 
 }
