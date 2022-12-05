@@ -9,10 +9,12 @@
             <div class="col-6 mt-3">
                 <article class="my-article mb-2">
                     <div class="article-left">
-                        <img src="/image/{{$postAc->photo}}" alt="ảnh"/>
+                        <a href="{{route('client.post.detail', $postAc->slug)}}">
+                            <img src="/image/{{$postAc->photo}}" alt="ảnh"/>
+                        </a>
                     </div>
                     <div class="article-right">
-                        <a href="#" class="text-decoration-none"> <h5 class="article-title">{{$postAc->title}}</h5></a>
+                        <a href="{{route('client.post.detail', $postAc->slug)}}" class="text-decoration-none"> <h5 class="article-title">{{$postAc->title}}</h5></a>
                         <div class="article-content">{!! \Illuminate\Support\Str::limit($postAc->content, 80, $end = '...') !!}<a href="#"  style="font-size: 11px;" class="text-danger">xem thêm </a></div>
                         <p class="article-time">{{$postAc->post_time}}</p>
                     </div>
@@ -33,10 +35,12 @@
                 <div class="col-6 mt-3">
                     <article class="my-article">
                         <div class="article-left">
-                            <img src="/image/{{$post->photo}}" alt="ảnh"/>
+                            <a href="{{route('client.post.detail', $post->slug)}}">
+                                <img src="/image/{{$post->photo}}" alt="ảnh"/>
+                            </a>
                         </div>
                         <div class="article-right">
-                            <a href="#" class="text-decoration-none"> <h5 class="article-title">{{$post->title}}</h5></a>
+                            <a href="{{route('client.post.detail', $post->slug)}}" class="text-decoration-none"> <h5 class="article-title">{{$post->title}}</h5></a>
                             <div class="article-content">{!! \Illuminate\Support\Str::limit($post->content, 80, $end = '...') !!}<a href="#"  style="font-size: 11px;" class="text-danger">xem thêm </a></div>
                             <p class="article-time">{{$post->post_time}}</p>
                         </div>
@@ -59,10 +63,12 @@
             <div class="col-6 mt-3">
                 <article class="my-article">
                     <div class="article-left">
-                        <img src="/image/{{$postF->photo}}" alt="ảnh"/>
+                        <a href="{{route('client.post.detail', $postF->slug)}}">
+                            <img src="/image/{{$postF->photo}}" alt="ảnh"/>
+                        </a>
                     </div>
                     <div class="article-right">
-                        <a href="#" class="text-decoration-none"> <h5 class="article-title">{{$postF->title}}</h5></a>
+                        <a href="{{route('client.post.detail', $postF->slug)}}" class="text-decoration-none"> <h5 class="article-title">{{$postF->title}}</h5></a>
                         <div class="article-content">{!! \Illuminate\Support\Str::limit($postF->content, 80, $end = '...') !!}<a href="#"  style="font-size: 11px;" class="text-danger">xem thêm </a></div>
                         <p class="article-time">{{$postF->post_time}}</p>
                     </div>
@@ -83,10 +89,12 @@
             <div class="col-6 mt-3">
                 <article class="my-article">
                     <div class="article-left">
-                        <img src="/image/{{$postS->photo}}" alt="ảnh"/>
+                        <a href="{{route('client.post.detail', $postS->slug)}}">
+                            <img src="/image/{{$postS->photo}}" alt="ảnh"/>
+                        </a>
                     </div>
                     <div class="article-right">
-                        <a href="#" class="text-decoration-none"> <h5 class="article-title">{{$postS->title}}</h5></a>
+                        <a href="{{route('client.post.detail', $postS->slug)}}" class="text-decoration-none"> <h5 class="article-title">{{$postS->title}}</h5></a>
                         <div class="article-content">{!! \Illuminate\Support\Str::limit($postS->content, 80, $end = '...') !!}<a href="#"  style="font-size: 11px;" class="text-danger">xem thêm </a></div>
                         <p class="article-time">{{$postS->post_time}}</p>
                     </div>
@@ -108,10 +116,12 @@
             <div class="col-6 mt-3">
                 <article class="my-article">
                     <div class="article-left">
-                        <img src="/image/{{$postT->photo}}" alt="ảnh"/>
+                        <a href="{{route('client.post.detail', $postT->slug)}}">
+                            <img src="/image/{{$postT->photo}}" alt="ảnh"/>
+                        </a>
                     </div>
                     <div class="article-right">
-                        <a href="#" class="text-decoration-none"> <h5 class="article-title">{{$postT->title}}</h5></a>
+                        <a href="{{route('client.post.detail', $postT->slug)}}" class="text-decoration-none"> <h5 class="article-title">{{$postT->title}}</h5></a>
                         <div class="article-content">{!! \Illuminate\Support\Str::limit($postT->content, 80, $end = '...') !!}<a href="#"  style="font-size: 11px;" class="text-danger">xem thêm </a></div>
                         <p class="article-time">{{$postT->post_time}}</p>
                     </div>

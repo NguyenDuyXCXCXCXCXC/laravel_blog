@@ -13,6 +13,7 @@
 {{--                <div class="col-9">--}}
 {{--                    <p>{{ $comment->comment }}</p>--}}
 {{--                </div>--}}
+
                 <textarea disabled class="col-10">{{ $comment->comment }}</textarea>
                 <a href="" id="reply"></a>
             </div>
@@ -27,7 +28,9 @@
                             <a href="{{route('admin.comment.active', $comment->id)}}"><button type="button" id="target" data-selected="true" value = "{{$comment->id}}" class="btn btn-primary btl-active">Active</button></a>
                         </div>
                     @elseif($comment->status == 1)
-                        <span type=""  class="bg-success rounded p-1">Đã phê duyệt</span>
+                        <div class="pb-2">
+                            <span type=""  class="bg-success rounded p-1">Đã phê duyệt</span>
+                        </div>
                     @endif
                 </div>
             </div>

@@ -20,7 +20,7 @@ class PostServices
         $this->postRepository = $postRepository;
     }
 
-    public function getPostByParams($request)
+    public function getPostsByParams($request)
     {
         // su dung cho phan select so luong ban ghi
         if ($request->input('selected_option') != null && $request->input('selected_option') != ''){
@@ -127,16 +127,16 @@ class PostServices
     }
 
 
-    public function getPostInDayActiveDashboardByParams($request)
+    public function getPostsInDayActiveDashboardByParams($request)
     {
         $searchRequest = $request->search;
-        return $this->postRepository->getPostInDayDashboard($searchRequest, $active = 1);
+        return $this->postRepository->getPostsInDayDashboard($searchRequest, $active = 1);
     }
 
-    public function getPostInDayDashboardByParams($request)
+    public function getPostsInDayDashboardByParams($request)
     {
         $searchRequest = $request->search;
-        return $this->postRepository->getPostInDayDashboard($searchRequest, $active = null);
+        return $this->postRepository->getPostsInDayDashboard($searchRequest, $active = null);
     }
 
     public function getPostsByIdCategoryDashboard($request, $idCategory)
@@ -151,6 +151,17 @@ class PostServices
     {
         $searchRequest = $request->search;
         return $this->postRepository->getPostsActiveByIdCategoryAndParams($searchRequest, $idCategory);
+    }
+
+    public function getPostBySlug($slugPost)
+    {
+        return $this->postRepository->getPostBySlug($slugPost);
+    }
+
+    public function getPostsByIdCategoryRandom($request, $idCategoryByPost, $idPost)
+    {
+        $searchRequest = $request->search;
+        return $this->postRepository->getPostsByIdCategoryRandom($searchRequest, $idCategoryByPost, $idPost);
     }
 
 }

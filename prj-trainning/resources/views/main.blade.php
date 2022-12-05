@@ -73,7 +73,7 @@
 {{--                  </li>--}}
                     @foreach($categories as $ca)
                         <li class="nav-item" style="margin-right: 24px;">
-                            <a class="nav-link" href="{{route('category.posts', $ca->slug)}}">{{$ca->name}}</a>
+                            <a class="nav-link" href="{{route('client.category.posts', $ca->slug)}}">{{$ca->name}}</a>
                         </li>
                     @endforeach
                 </ul>

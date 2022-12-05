@@ -9,7 +9,7 @@ class Comment extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'parent_id', 'user_id', 'user_id', 'comment', 'status'
+        'parent_id', 'user_id', 'user_id', 'comment', 'status', 'post_id', 'comment_time'
     ];
 
     // be longs to
@@ -28,8 +28,8 @@ class Comment extends Model
         return $this->hasMany(Comment::class, 'parent_id');
     }
 
-    // has many for admin
-    public function repliesForUser()
+    // has many active
+    public function repliesActive()
     {
         return $this->hasMany(Comment::class, 'parent_id')->where('status', '=', '1');
     }

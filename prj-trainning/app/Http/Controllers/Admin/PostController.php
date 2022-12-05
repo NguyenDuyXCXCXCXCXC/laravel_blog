@@ -37,7 +37,7 @@ class PostController extends Controller
     public function index(Request $request)
     {
         $categories = $this->categoriesServices->getAllCategories();
-        $result = $this->postServices->getPostByParams($request);
+        $result = $this->postServices->getPostsByParams($request);
 
         $posts = $result[0];
         $search = $result[1];

@@ -66,4 +66,19 @@ class CommentServices
         return true;
     }
 
+    public function createComment($request)
+    {
+        $input = $request->all();
+        $input['user_id'] = auth()->user()->id;
+        $input['parent_id'] = $request->parent_id;
+        try {
+            $this->commentRepositories->createComment($input);
+            return true;
+        }catch (\Exception $exception){
+            Log::info($exception->getMessage());
+            return false;
+        }
+
+    }
+
 }

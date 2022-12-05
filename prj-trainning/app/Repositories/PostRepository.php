@@ -82,7 +82,7 @@ class PostRepository
 
 
 
-    public function getPostInDayDashboard($searchRequest, $active)
+    public function getPostsInDayDashboard($searchRequest, $active)
     {
         $query = $this->post->query();
         if ($active != null){
@@ -117,5 +117,25 @@ class PostRepository
         return $query->orderByDesc('post_time')->paginate(10);
     }
 
+
+    public function getPostBySlug($slugPost)
+    {
+        return $this->post->where('slug', $slugPost)->first();
+    }
+
+
+    public function getPostsByIdCategoryRandom($searchRequest, $idCategoryByPost, $idPost)
+    {
+        $query = $this->post->query();
+        if(!empty($searchRequest)){
+            $query = $query->where('title', 'LIKE', "%{$searchRequest}%");
+        }
+        $query = $query
+            ->where('id', '!=', "{$idPost}")
+            ->where('category_id', '=', "{$idCategoryByPost}");
+        $query =   $query->orderBy('post_time', 'desc')->limit(10)->get();
+        $result = $query->shuffle();
+        return $result;
+    }
 
 }

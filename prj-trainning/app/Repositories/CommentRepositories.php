@@ -56,4 +56,15 @@ class CommentRepositories
     {
         return $this->comment->find($id)->delete();
     }
+
+    public function createComment($input)
+    {
+        return $this->comment->create([
+            'user_id' => $input['user_id'],
+            'parent_id' => $input['parent_id'],
+            'post_id' => $input['post_id'],
+            'comment' => $input['comment'],
+            'comment_time' => \Illuminate\Support\Carbon::now()->toDateTime()
+        ]);
+    }
 }

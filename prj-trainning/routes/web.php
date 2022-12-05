@@ -148,4 +148,12 @@ Route::group(['prefix' => 'client', 'middleware' => ['auth_user']], function(){
 });
 
 // list posts by categories
-Route::get("/{slugCategory}", [\App\Http\Controllers\MainController::class, 'indexCategory'])->name('category.posts');
+Route::get("/c/{slugCategory}", [\App\Http\Controllers\MainController::class, 'indexCategory'])->name('client.category.posts');
+
+// detail post
+Route::get("/{slugPost}", [\App\Http\Controllers\MainController::class, 'indexPost'])->name('client.post.detail');
+
+// store comment
+Route::post('/comment', [\App\Http\Controllers\MainController::class, 'postComment'])->name('client.post.comment');
+
+

@@ -33,7 +33,7 @@ class Post extends Model
 
     // has many for admin
     public function comments() {
-        return $this->hasMany(Comment::class)->whereNull('parent_id');
+        return $this->hasMany(Comment::class)->whereNull('parent_id')->orderByDesc('comment_time');
     }
 
     // has many for user
