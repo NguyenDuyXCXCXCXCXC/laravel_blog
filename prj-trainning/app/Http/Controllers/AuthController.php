@@ -6,6 +6,8 @@ use App\Http\Requests\Admin\LoginRequest;
 use App\Http\Requests\Admin\StoreRegisterRequest;
 use App\Http\Requests\Admin\StoreUserUpdatePassRequest;
 use App\Http\services\Auth\AuthServices;
+use App\Http\services\categories\CategoriesServices;
+use App\Http\services\post\PostServices;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
@@ -13,26 +15,65 @@ use Illuminate\Support\Facades\Session;
 class AuthController extends Controller
 {
     protected $authServices;
-    public function __construct(AuthServices $authServices)
+    protected $postServices;
+    protected $categoriesServices;
+    public function __construct(AuthServices $authServices, PostServices $postServices, CategoriesServices $categoriesServices)
     {
         $this->authServices = $authServices;
+        $this->postServices = $postServices;
+        $this->categoriesServices = $categoriesServices;
     }
 
-    public function login()
+    public function login(Request $request)
     {
+        if ($request->slug_post != null){
+            $slug_post = $request->slug_post;
+        }else{
+            $slug_post = '';
+        }
         return view('auth.login', [
             'title' => 'Dang nhap he thong',
+            'slug_post' => $slug_post
         ]);
     }
 
     public function postLogin(LoginRequest $request)
     {
-        $result = $this->authServices->postLoginClient($request);
-        if($result){
-            return redirect()->route('dashboard');
-        }else{
-            return redirect()->back()->withInput($request->input());
+//        login thong thuong
+        if ($request->slug_post == null){
+            $result = $this->authServices->postLoginClient($request);
+            if($result){
+                return redirect()->route('dashboard');
+            }else{
+                return redirect()->back()->withInput($request->input());
+            }
+        }else{ // login cho phan comment
+            $result = $this->authServices->postLoginClient($request);
+
+            if($result){
+                $post = $this->postServices->getPostBySlug($request->slug_post);
+                if (empty($post))
+                {
+                    return redirect()->back();
+                }
+                $title = $post->title;
+                $categories =  $this->categoriesServices->getAllCategories();
+                $idCategoryByPost = $post->category_id;
+                $idPost = $post->id;
+//                $postRandom = $this->postsServices->getPostsByIdCategoryRandom($request, $idCategoryByPost, $idPost);
+                $postRandom = $this->postServices->getPostsByIdCategoryRandom($request, $idCategoryByPost, $idPost);
+                return view('post', [
+                    'title' => $title,
+                    'categories' => $categories,
+                    'post' => $post,
+                    'postRandom' => $postRandom,
+                    'search' => $request->search
+                ]);
+            }else{
+                return redirect()->back()->withInput($request->input());
+            }
         }
+
     }
 
     public function logout()

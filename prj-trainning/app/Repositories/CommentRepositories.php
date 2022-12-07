@@ -64,7 +64,7 @@ class CommentRepositories
             'parent_id' => $input['parent_id'],
             'post_id' => $input['post_id'],
             'comment' => $input['comment'],
-            'comment_time' => \Illuminate\Support\Carbon::now()->toDateTime()
+            'comment_time' => \Illuminate\Support\Carbon::now('Asia/Ho_Chi_Minh')->toDateTime()
         ]);
     }
 }

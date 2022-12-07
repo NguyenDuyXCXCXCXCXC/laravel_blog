@@ -25,7 +25,7 @@
                 </div>
                 <h4>Bình luận</h4>
                 <hr />
-                <div class="form" id="comment-zone">
+                <div class="form" >
                     <div class="form-group">
                         <textarea class="form-control" name="comment" id="comment{{$idParent}}" placeholder="Viết comments . . . "></textarea>
                         @if ($errors->has('comment'))
@@ -37,11 +37,17 @@
                         <div class="row">
                             <div class="col-10"></div>
                             <div class="col-2">
-                                <input type="submit" class="btn btn-success" id="{{$idParent}}" onclick="addComment({{$idParent}})"  value="Hoàn thành" />
+                                @if(Auth::user() == null)
+                                    <input type="submit" class="btn btn-success" onclick="alertLoginToComment()" value="Hoàn thành" />
+                                @else
+                                    <input type="submit" class="btn btn-success" id="{{$idParent}}" onclick="addComment({{$idParent}})"   value="Hoàn thành" />
+                                @endif
                             </div>
                         </div>
                     </div>
-                    @include('commentsDisplay', ['comments' => $post->comments, 'post_id' => $post->id])
+                    <div id="comment-zone">
+                        @include('commentsDisplay', ['comments' => $post->comments, 'post_id' => $post->id])
+                    </div>
                 </div>
                 <hr />
             </div>
@@ -65,7 +71,23 @@
     </div>
 </div>
     <script>
+
+        function alertLoginToComment()
+        {
+            if (confirm("Đăng nhập để bình luận!")){
+                window.location.href = "{{route('client.login')}}?slug_post={{$post->slug}}";
+            }
+
+        }
         function addComment(id){
+
+            // tgian khi them cmt moi
+            const dt = new Date();
+            const padL = (nr, len = 2, chr = `0`) => `${nr}`.padStart(2, chr);
+            timeFormat = `  ${dt.getFullYear()}-${padL(dt.getMonth()+1)}-${padL(dt.getDate())}
+            ${padL(dt.getHours())}:${padL(dt.getMinutes())}:${padL(dt.getSeconds())}   `;
+
+            // lay cac value khi them moi cmt
             if(id == 0){
                 parentId = null;
             }else {
@@ -73,6 +95,8 @@
             }
             comment = document.getElementById('comment' +id).value;
             postId = document.getElementById('post_id'+id).value;
+            zoneCommentParrent = document.getElementById('comment-zone');
+
 
             if(comment != ""){
                 $.ajax({
@@ -84,13 +108,63 @@
                         comment: comment,
                         post_id: postId,
                     },
-                    success: function(results){
-                        if(results == true){
-                            location.reload();
-                        }else {
-                            alert('Lỗi ko comment được!');
+                    success: function(comment){
+
+                        // lay gia tri comment xuat ra html
+                        console.log(comment);
+                            let html = `<div class="">
+                            <div class="border row ">
+                                <div class="col-2 border-right">
+                                @if(Auth::user() != null && (Auth::user()->avatar == null || Auth::user()->avatar == ''))
+                                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTVhcVcxgW8LzmIu36MCeJb81AHXlI8CwikrHNh5vzY8A&s" alt="Avatar" class="avatar" style="display: block;">
+                                @elseif(Auth::user() != null )
+                                <img src="/image/{{ Auth::user()->avatar}}" alt="Avatar" class="avatar" style="display: block;">
+                                @endif
+
+                                 Bạn
+                        </div>
+                            <textarea disabled class="col-10">${comment.comment}</textarea>
+                            <a href="" id="reply"></a>
+                        </div>
+                            <div class="row">
+                                <div class="col-7"></div>
+                                <div class="col-5">
+                                    <p style="margin-bottom: 0px;"><span class="bg-danger">Chờ phê duyệt</span> ${timeFormat}</p>
+                                    <div class="form" style="display: flex">
+                                        <div class="form-group mr-1">
+                                {{--                            <input type="text" name="body" class="form-control" />--}}
+                                <textarea name="comment" id="comment${comment.id}"></textarea>
+                                            <input type="hidden" id="post_id${comment.id}" name="post_id"  value="${comment.post_id}" />
+                                            <input type="hidden" id="parent_id${comment.id}" name="parent_id" value="${comment.id}" />
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="submit"  onclick="addComment(${comment.id})"  class="btn btn-warning" value="Bình luận" />
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                            <div class="display-comment" id="cmt${comment.id}" style="margin-left:40px;" >
+                            </div>`;
+
+
+                        if(comment.parent_id == null){
+                            $('#comment-zone').prepend(html);// voi cmt la cmt dau tien
+                        }
+                        else {
+                            $(`#cmt${id}`).append(html); // voi cmt la cmt thu n
                         }
 
+                        // console.log(comment.comment)
+                        // if(results == true){
+                        //     location.reload();
+                        // }else {
+                        //     alert('Lỗi ko comment được!');
+                        // }
+
+                        document.getElementById('comment' +id).value = '';
                     }
                 });
             }

@@ -18,6 +18,7 @@
                 <div class="form-group" >
                     <div style="display: flex;">
                         <label style="width: 100px;" >Email</label>
+                        <input type="hidden" name="slug_post" value="{{$slug_post}}">
                         <input type="email" class="form-control" name="email" value="{{ old('email') }}"
                                placeholder="Nhập địa chỉ mail">
                     </div>
