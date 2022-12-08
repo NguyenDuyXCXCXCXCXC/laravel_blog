@@ -58,7 +58,7 @@ class UserServices
     public function create($request)
     {
         try {
-            $idUserCreater = Auth::user()->id;
+            $idUserCreater = Auth::guard('admin')->user()->id;
             $input = $request->all();
             $input['password'] = bcrypt($input['password']);
             $emailUser =  $input['email'];
@@ -89,11 +89,11 @@ class UserServices
     }
 
 
-    public function updateInfor($request)
+    public function updateInfor($request, $user)
     {
         try {
             $userEdit = $this->userRepositories->getUserByEmail($request->input('email'));
-            $idUserCreater = Auth::user()->id;
+            $idUserCreater = $user->id;
             $input = $request->all();
             $emailUser =  $input['email'];
 
@@ -131,12 +131,12 @@ class UserServices
         return true;
     }
 
-    public function updatePasswordProfile($request)
+    public function updatePasswordProfile($request, $user)
     {
         try {
             $input = $request->all();
             $userEdit = $this->getUserById($input['id_user_changepass']);
-            if(Auth::attempt([
+            if($user->attempt([
                 'email' => $userEdit->email,
                 'password' => $request->input('password_old'),
             ]))

@@ -15,6 +15,7 @@ use function GuzzleHttp\Promise\all;
 
 class UserController extends Controller
 {
+
     protected $userServices;
     public function __construct(UserServices $userServices)
     {
@@ -25,7 +26,7 @@ class UserController extends Controller
     public function index(Request $request)
     {
         // check role, chi manager ms vao dc list admin & manager
-        if(Auth::user()->role != 3)
+        if(Auth::guard('admin')->user()->role != 3)
         {
             return redirect()->route('admin.user.listForUser');
         }
@@ -35,7 +36,7 @@ class UserController extends Controller
         $search = $result[2];
         $sex = $result[3];
 
-        $user = Auth::user();
+        $user = Auth::guard('admin')->user();
 
         return view('admin.crud-user.list', [
             'title' => 'Trang quản trị danh sách admin',
@@ -55,7 +56,7 @@ class UserController extends Controller
         $search = $result[2];
         $sex = $result[3];
 
-        $user = Auth::user();
+        $user = Auth::guard('admin')->user();
 
         return view('admin.crud-user.list', [
             'title' => 'Trang quản trị danh sách user',
@@ -69,7 +70,7 @@ class UserController extends Controller
 
     public function add()
     {
-        $user = Auth::user();
+        $user = Auth::guard('admin')->user();
         return view('admin.crud-user.add', [
             'title' => 'Thêm mới user',
             'user' => $user,
@@ -79,7 +80,7 @@ class UserController extends Controller
 
     public function store(StoreUserRequest $request)
     {
-        if (Auth::user()->role == 1){
+        if (Auth::guard('admin')->user()->role == 1){
             return redirect()->route('admin.user.listForUser');
         }
         $this->userServices->create($request);
@@ -96,7 +97,7 @@ class UserController extends Controller
         if($userEdit==null){
             return redirect()->route('admin.user.list');
         }
-        $user = Auth::user();
+        $user = Auth::guard('admin')->user();
         return view('admin.crud-user.edit', [
             'title' => 'Sửa user: '.$userEdit->first_name.' '.$userEdit->last_name,
             'user' => $user,
@@ -106,13 +107,13 @@ class UserController extends Controller
 
     public function update(StoreUserUpdateRequest $request)
     {
-        if (Auth::user()->role == 1){
+        if (Auth::guard('admin')->user()->role == 1){
             return redirect()->route('admin.user.listForUser');
         }
 
         $userEdit = $this->userServices->getUserByEmail($request->input('email'));
 
-        $result = $this->userServices->updateInfor($request);
+        $result = $this->userServices->updateInfor($request, Auth::guard('admin')->user());
         if ($result)
         {
             if ($userEdit->role == 1){
@@ -125,7 +126,7 @@ class UserController extends Controller
     public function editPassword($id)
     {
         $userEdit = $this->userServices->getUserById($id);
-        $user = Auth::user();
+        $user = Auth::guard('admin')->user();
         return view('admin.crud-user.edit-password', [
             'title' => 'Sửa password user: '.$userEdit->first_name.' '.$userEdit->last_name,
             'user' => $user,

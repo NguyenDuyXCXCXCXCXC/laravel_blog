@@ -20,7 +20,7 @@ class LoginController extends Controller
 
     public function index()
     {
-        if(Auth::check()){
+        if(Auth::guard('admin')->check()){
             return redirect()->route('admin.dashboard');
         }
         return view('admin.users.login', [
@@ -41,7 +41,7 @@ class LoginController extends Controller
     public function logout()
     {
         Session::flush();
-        Auth::logout();
+        Auth::guard('admin')->logout();
         return Redirect('/admin/login');
     }
 

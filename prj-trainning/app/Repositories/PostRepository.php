@@ -138,4 +138,11 @@ class PostRepository
         return $result;
     }
 
+    public function addViewPost($post, $view)
+    {
+        $post->update([
+            'views' => $view
+        ]);
+    }
+
 }

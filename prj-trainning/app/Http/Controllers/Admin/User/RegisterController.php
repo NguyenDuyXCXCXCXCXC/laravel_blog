@@ -23,7 +23,7 @@ class RegisterController extends Controller
 
     public function index()
     {
-        if(Auth::check()){
+        if(Auth::guard('admin')->check()){
             return redirect()->route('admin.dashboard');
         }
         return view('admin.users.register', [

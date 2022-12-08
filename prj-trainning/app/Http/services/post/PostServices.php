@@ -42,7 +42,7 @@ class PostServices
     public function create($request)
     {
         $input = $request->all();
-        $idUserCreater = Auth::user()->id;
+        $idUserCreater = Auth::guard('admin')->user()->id;
         if ($image = $request->file('photo')) {
             $destinationPath = 'image/';
             $profileImage = $idUserCreater . '_' . time() . "." . $image->getClientOriginalExtension();
@@ -63,7 +63,7 @@ class PostServices
     public function uploadImgFromTextarea($request)
     {
         if ($request->hasFile('upload')) {
-            $userId = Auth::user()->id;
+            $userId = Auth::guard('admin')->user()->id;
             $originName = $request->file('upload')->getClientOriginalName();
             $fileName = pathinfo($originName, PATHINFO_FILENAME);
             $extension = $request->file('upload')->getClientOriginalExtension();
@@ -86,7 +86,7 @@ class PostServices
         $input = $request->all();
         $input['slug'] = \Str::slug($input['title'], '-').'-'.time().'.html';
         $postTitle = $post->title;
-        $idUserCreater = Auth::user()->id;
+        $idUserCreater = Auth::guard('admin')->user()->id;
         if ($image = $request->file('photo')) {
             $destinationPath = 'image/';
             $profileImage = $idUserCreater . '_' . time() . "." . $image->getClientOriginalExtension();
@@ -162,6 +162,17 @@ class PostServices
     {
         $searchRequest = $request->search;
         return $this->postRepository->getPostsByIdCategoryRandom($searchRequest, $idCategoryByPost, $idPost);
+    }
+
+    public function addViewPost($post)
+    {
+        $view = $post->views;
+        if ($view == null){
+            $view = 1;
+        }else{
+            $view = $view + 1;
+        }
+        return $this->postRepository->addViewPost($post, $view);
     }
 
 }

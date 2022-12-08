@@ -24,7 +24,7 @@ class CategoriesController extends Controller
         $result = $this->categoriesServices->getCategoriesByParams($request);
         $categories = $result[0];
         $selected_option = $result[1];
-        $user = Auth::user();
+        $user = Auth::guard('admin')->user();
         $search = $result[2];
 
         return view('admin.categories.index', [
@@ -42,7 +42,7 @@ class CategoriesController extends Controller
      */
     public function add()
     {
-        $user = Auth::user();
+        $user = Auth::guard('admin')->user();
         return view('admin.categories.add', [
             'title' => 'Thêm mới categories',
             'user' => $user,
@@ -81,7 +81,7 @@ class CategoriesController extends Controller
      */
     public function edit(Request $request,  Categories $categories)
     {
-        $user = Auth::user();
+        $user = Auth::guard('admin')->user();
         return view('admin.categories.edit', [
             'title' => 'Sửa danh mục: '.$categories->name,
             'user' => $user,

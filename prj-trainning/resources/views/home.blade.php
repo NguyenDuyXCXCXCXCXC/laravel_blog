@@ -16,14 +16,24 @@
                     <div class="article-right">
                         <a href="{{route('client.post.detail', $postAc->slug)}}" class="text-decoration-none"> <h5 class="article-title">{{$postAc->title}}</h5></a>
                         <div class="article-content">{!! \Illuminate\Support\Str::limit($postAc->content, 80, $end = '...') !!}<a href="#"  style="font-size: 11px;" class="text-danger">xem thêm </a></div>
-                        <p class="article-time">{{$postAc->post_time}}</p>
+                        <p class="article-time">{{$postAc->post_time}}
+                            &nbsp;  &nbsp;
+                            <i class="text-info">
+                                lượt xem:
+                                @if($postAc->views == null)
+                                    0
+                                @else
+                                    {{$postAc->views}}
+                                @endif
+                            </i>
+                        </p>
                     </div>
                 </article>
             </div>
             @endforeach
 
         </div>
-        <p class="see-more load-more" id="see-more">xem thêm</p>
+{{--        <p class="see-more load-more" id="see-more">xem thêm</p>--}}
     </div>
 
 
@@ -42,14 +52,24 @@
                         <div class="article-right">
                             <a href="{{route('client.post.detail', $post->slug)}}" class="text-decoration-none"> <h5 class="article-title">{{$post->title}}</h5></a>
                             <div class="article-content">{!! \Illuminate\Support\Str::limit($post->content, 80, $end = '...') !!}<a href="#"  style="font-size: 11px;" class="text-danger">xem thêm </a></div>
-                            <p class="article-time">{{$post->post_time}}</p>
+                            <p class="article-time">{{$post->post_time}}
+                                &nbsp;  &nbsp;
+                                <i class="text-info">
+                                    lượt xem:
+                                    @if($post->views == null)
+                                        0
+                                    @else
+                                        {{$post->views}}
+                                    @endif
+                                </i>
+                            </p>
                         </div>
                     </article>
                 </div>
             @endforeach
 
         </div>
-        <p class="see-more load-more" id="see-more">xem thêm</p>
+{{--        <p class="see-more load-more" id="see-more">xem thêm</p>--}}
     </div>
 
 
@@ -70,14 +90,24 @@
                     <div class="article-right">
                         <a href="{{route('client.post.detail', $postF->slug)}}" class="text-decoration-none"> <h5 class="article-title">{{$postF->title}}</h5></a>
                         <div class="article-content">{!! \Illuminate\Support\Str::limit($postF->content, 80, $end = '...') !!}<a href="#"  style="font-size: 11px;" class="text-danger">xem thêm </a></div>
-                        <p class="article-time">{{$postF->post_time}}</p>
+                        <p class="article-time">{{$postF->post_time}}
+                            &nbsp;  &nbsp;
+                            <i class="text-info">
+                                lượt xem:
+                                @if($postF->views == null)
+                                    0
+                                @else
+                                    {{$postF->views}}
+                                @endif
+                            </i>
+                        </p>
                     </div>
                 </article>
             </div>
         @endforeach
 
     </div>
-    <p class="see-more load-more" id="see-more">xem thêm</p>
+{{--    <p class="see-more load-more" id="see-more">xem thêm</p>--}}
 </div>
 
 
@@ -96,14 +126,24 @@
                     <div class="article-right">
                         <a href="{{route('client.post.detail', $postS->slug)}}" class="text-decoration-none"> <h5 class="article-title">{{$postS->title}}</h5></a>
                         <div class="article-content">{!! \Illuminate\Support\Str::limit($postS->content, 80, $end = '...') !!}<a href="#"  style="font-size: 11px;" class="text-danger">xem thêm </a></div>
-                        <p class="article-time">{{$postS->post_time}}</p>
+                        <p class="article-time">{{$postS->post_time}}
+                            &nbsp;  &nbsp;
+                            <i class="text-info">
+                                lượt xem:
+                                @if($postS->views == null)
+                                    0
+                                @else
+                                    {{$postS->views}}
+                                @endif
+                            </i>
+                        </p>
                     </div>
                 </article>
             </div>
         @endforeach
 
     </div>
-    <p class="see-more load-more" id="see-more">xem thêm</p>
+{{--    <p class="see-more load-more" id="see-more">xem thêm</p>--}}
 </div>
 
 
@@ -123,14 +163,25 @@
                     <div class="article-right">
                         <a href="{{route('client.post.detail', $postT->slug)}}" class="text-decoration-none"> <h5 class="article-title">{{$postT->title}}</h5></a>
                         <div class="article-content">{!! \Illuminate\Support\Str::limit($postT->content, 80, $end = '...') !!}<a href="#"  style="font-size: 11px;" class="text-danger">xem thêm </a></div>
-                        <p class="article-time">{{$postT->post_time}}</p>
+                        <p class="article-time">
+                            {{$postT->post_time}}
+                            &nbsp;  &nbsp;
+                            <i class="text-info">
+                                lượt xem:
+                                @if($postT->views == null)
+                                    0
+                                @else
+                                    {{$postT->views}}
+                                @endif
+                            </i>
+                        </p>
                     </div>
                 </article>
             </div>
         @endforeach
 
     </div>
-    <p class="see-more load-more" id="see-more">xem thêm</p>
+{{--    <p class="see-more load-more" id="see-more">xem thêm</p>--}}
 </div>
 
 <script>

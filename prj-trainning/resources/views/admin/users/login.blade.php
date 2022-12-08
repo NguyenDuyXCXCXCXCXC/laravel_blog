@@ -70,6 +70,7 @@
 </div>
 <!-- /.login-box -->
 
+{{--{{dd(\Illuminate\Support\Facades\Auth::guard('admin')->user())}}--}}
 
 @include('admin.users.layouts.footer')
 <script>

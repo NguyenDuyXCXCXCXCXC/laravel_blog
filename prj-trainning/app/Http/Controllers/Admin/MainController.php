@@ -22,7 +22,7 @@ class MainController extends Controller
 
     public function index()
     {
-        $user = Auth::user();
+        $user = Auth::guard('admin')->user();
 
         return view('admin.home', [
             'title' => 'Trang quản trị admin',
@@ -32,7 +32,7 @@ class MainController extends Controller
 
     public function profile()
     {
-        $user = Auth::user();
+        $user = Auth::guard('admin')->user();
 
         return view('admin.users.profile', [
             'title' => 'Trang quản trị admin profile',
@@ -42,7 +42,7 @@ class MainController extends Controller
 
     public function profileEdit()
     {
-        $user = Auth::user();
+        $user = Auth::guard('admin')->user();
 
         return view('admin.users.profile-edit', [
             'title' => 'Trang chỉnh sửa profile',
@@ -52,7 +52,7 @@ class MainController extends Controller
 
     public function profileUpdate(StoreUserUpdateRequest $request)
     {
-        $result = $this->userServices->updateInfor($request);
+        $result = $this->userServices->updateInfor($request, Auth::guard('admin')->user());
         if ($result){
             return redirect()->route('admin.profile');
         }
@@ -61,7 +61,7 @@ class MainController extends Controller
 
     public function editPassword($id)
     {
-        $user = Auth::user();
+        $user = Auth::guard('admin')->user();
         return view('admin.users.profile-edit-password', [
             'title' => 'Trang chỉnh sửa Password Profile',
             'user' => $user,
@@ -71,7 +71,7 @@ class MainController extends Controller
 
     public function profileUpdatePassword(StoreUserUpdatePassRequest $request)
     {
-        $result = $this->userServices->updatePasswordProfile($request);
+        $result = $this->userServices->updatePasswordProfile($request, auth()->guard('admin'));
         if ($result){
             return redirect()->route('admin.profile.edit');
         }

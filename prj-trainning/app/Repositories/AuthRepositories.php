@@ -39,7 +39,7 @@ class AuthRepositories
 
     public function postLoginAdmin($request)
     {
-        if (Auth::attempt(
+        if (Auth::guard('admin')->attempt(
             [
                 'email' => $request->input('email'),
                 'password' => $request->input('password'),

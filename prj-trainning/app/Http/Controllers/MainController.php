@@ -67,6 +67,8 @@ class MainController extends Controller
     public function indexPost(Request $request, $slugPost)
     {
         $post = $this->postsServices->getPostBySlug($slugPost);
+        $addView = $this->postsServices->addViewPost($post);
+
         if (empty($post))
         {
             return redirect()->back();

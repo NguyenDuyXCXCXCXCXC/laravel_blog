@@ -49,7 +49,7 @@ class ProfileController extends Controller
 
     public function profileUpdate(StoreUserUpdateRequest $request)
     {
-        $result = $this->userServices->updateInfor($request);
+        $result = $this->userServices->updateInfor($request, Auth::user());
         if ($result){
             return redirect()->route('client.profile');
         }
@@ -72,7 +72,7 @@ class ProfileController extends Controller
 
     public function profileUpdatePassword(StoreUserUpdatePassRequest $request)
     {
-        $result = $this->userServices->updatePasswordProfile($request);
+        $result = $this->userServices->updatePasswordProfile($request, auth());
 
         if ($result){
             return redirect()->route('client.profile.edit');

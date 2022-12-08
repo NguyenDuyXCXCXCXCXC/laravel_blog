@@ -48,7 +48,7 @@ class PostController extends Controller
         $search_title = $search[2];
         $search_user = $search[3];
 
-        $user = Auth::user();
+        $user = Auth::guard('admin')->user();
         return view('admin.post.list', [
             'title' => 'Trang quản trị danh sách post',
             'user' => $user,
@@ -68,7 +68,7 @@ class PostController extends Controller
      */
     public function add()
     {
-        $user = Auth::user();
+        $user = Auth::guard('admin')->user();
         $categories = $this->categoriesServices->getAllCategories();
         return view('admin.post.add', [
             'title' => 'Thêm mới bài posts',
@@ -100,7 +100,7 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        $user = Auth::user();
+        $user = Auth::guard('admin')->user();
         return view('admin.post.show', [
             'title' => 'Chi tiết bài viết: '. \Illuminate\Support\Str::limit($post->title, 40),
             'user' => $user,
@@ -117,7 +117,7 @@ class PostController extends Controller
     public function edit(Post $post)
     {
         $categories = $this->categoriesServices->getAllCategories();
-        $user = Auth::user();
+        $user = Auth::guard('admin')->user();
         return view('admin.post.edit', [
             'title' => 'Sửa bài viết: '. \Illuminate\Support\Str::limit($post->title, 40),
             'user' => $user,

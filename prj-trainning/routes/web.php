@@ -46,7 +46,7 @@ Route::prefix('admin')->group(function () {
 });
 
 
-Route::group(['prefix' => 'admin', 'middleware' => ['auth']], function(){
+Route::group(['prefix' => 'admin', 'middleware' => ['isAdmin']], function(){
     // admin/main
     Route::get('dashboard', [\App\Http\Controllers\Admin\MainController::class, 'index'])->name('admin.dashboard');
     Route::get('/', [\App\Http\Controllers\Admin\MainController::class, 'index'])->name('admin.dashboard');
@@ -139,7 +139,7 @@ Route::get('changePasswordSuccess', [\App\Http\Controllers\AuthController::class
 
 
 // client/profile
-Route::group(['prefix' => 'client', 'middleware' => ['auth_user']], function(){
+Route::group(['prefix' => 'client', 'middleware' => ['isUser']], function(){
     Route::get('/profile', [\App\Http\Controllers\ProfileController::class, 'profile'])->name('client.profile');
     Route::get('/profile/edit', [\App\Http\Controllers\ProfileController::class, 'profileEdit'])->name('client.profile.edit');
     Route::post('/profile/edit', [\App\Http\Controllers\ProfileController::class, 'profileUpdate'])->name('client.profile.update');

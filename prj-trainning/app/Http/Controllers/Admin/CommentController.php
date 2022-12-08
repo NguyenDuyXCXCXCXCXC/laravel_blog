@@ -33,7 +33,7 @@ class CommentController extends Controller
         $search_status = $search[1];
         $search_post = $search[2];
 
-        $user = Auth::user();
+        $user = Auth::guard('admin')->user();
         return view('admin.comment.list', [
             'title' => 'Trang quản trị danh sách comment',
             'user' => $user,
@@ -77,7 +77,7 @@ class CommentController extends Controller
     public function show(Comment $comment)
     {
 //        dd($comment->user->first_name, $comment->user->last_name, $comment->post->title);
-        $user = Auth::user();
+        $user = Auth::guard('admin')->user();
         return view('admin.comment.show', [
             'title' => 'Chi tiết comment',
             'user' => $user,

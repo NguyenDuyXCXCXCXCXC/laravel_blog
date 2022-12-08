@@ -12,7 +12,7 @@
                             <img src="/image/{{$post->photo}}" alt="ảnh"/>
                         </div>
                         <div class="article-right">
-                            <a href="#" class="text-decoration-none"> <h5 class="article-title">{{$post->title}}</h5></a>
+                            <a href="{{route('client.post.detail', $post->slug)}}" class="text-decoration-none"> <h5 class="article-title">{{$post->title}}</h5></a>
                             <div class="article-content">{!! \Illuminate\Support\Str::limit($post->content, 80, $end = '...') !!}<a href="#"  style="font-size: 11px;" class="text-danger">xem thêm </a></div>
                             <p class="article-time">{{$post->post_time}}</p>
                         </div>
