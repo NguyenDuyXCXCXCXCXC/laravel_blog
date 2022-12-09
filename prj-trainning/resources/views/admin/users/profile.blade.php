@@ -22,7 +22,14 @@
             <div class="form-group" >
                 <div style="display: flex;">
                     <label style="width: 102px;padding-top: 6px;">Giới tính</label>
-                    <input type="text" class="form-control" value="{{  ($user->sex == 0 ? 'Nam' : 'Nữ') }}" readonly >
+                    <input type="text" class="form-control" 
+                        {{-- value="{{  ($user->sex == 0 ? 'Nam' : 'Nữ') }}"  --}}
+                        value = 
+                        "@if (($user->sex) == 0) Nam
+                        @elseif (($user->sex) == 1) Nữ
+                        @else Khác
+                        @endif"
+                    readonly >
                 </div>
             </div>
 

@@ -87,7 +87,7 @@ class UserController extends Controller
         if ($request->input('role') == 2){
             return redirect()->route('admin.user.listForUser');
         }
-        return redirect()->route('admin.user.list');
+        return redirect()->route('admin.list');
     }
 
 
@@ -95,7 +95,7 @@ class UserController extends Controller
     {
         $userEdit = $this->userServices->getUserById($id);
         if($userEdit==null){
-            return redirect()->route('admin.user.list');
+            return redirect()->route('admin.list');
         }
         $user = Auth::guard('admin')->user();
         return view('admin.crud-user.edit', [
@@ -117,7 +117,7 @@ class UserController extends Controller
         if ($result)
         {
             if ($userEdit->role == 1){
-                return redirect()->route('admin.user.list');
+                return redirect()->route('admin.list');
             }
             return redirect()->route('admin.user.listForUser');
         }

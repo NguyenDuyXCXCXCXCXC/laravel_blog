@@ -28,8 +28,9 @@ class StoreUserRequest extends FormRequest
             'password' => 'required|confirmed|min:10|max:50|regex:/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{6,}$/',
             'first_name' => 'required|max:50',
             'last_name'=> 'required|max:50',
-            'sex'=> 'required',
-            'role'=> 'required',
+            'sex'=> 'required|integer|min:0|max:2',
+            'role'=> 'required|integer|min:1|max:3',
+            'birthday'=> 'date',
             'avatar'=> 'image|mimes:jpeg,png,jpg,gif,svg|max:10240',
 
         ];

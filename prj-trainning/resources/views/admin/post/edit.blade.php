@@ -103,18 +103,50 @@
             filebrowserUploadUrl: "{{route('ckeditor.upload', ['_token' => csrf_token() ])}}",
             filebrowserUploadMethod: 'form'
         });
+
+
+        // upload image
         $('#photo').change(function(){
 
-            $('#upload_file').empty();
-            $('#upload_file').prepend('<img id="preview-photo-before-upload" src="" class="ml-4"  alt="image-preview" width="50" height="60"/>');
-            let reader = new FileReader();
+            if(ValidateSingleInput(this)){
+                $('#upload_file').empty();
+                $('#upload_file').prepend('<img id="preview-avatar-before-upload" src="" class="ml-4"  alt="image-preview" width="50" height="60"/>');
+                let reader = new FileReader();
 
-            reader.onload = (e) => {
+                reader.onload = (e) => {
 
-                $('#preview-photo-before-upload').attr('src', e.target.result);
+                    $('#preview-avatar-before-upload').attr('src', e.target.result);
+                }
+
+                reader.readAsDataURL(this.files[0]);
             }
-
-            reader.readAsDataURL(this.files[0]);
         });
+
+        // validate image before preview
+        var _validFileExtensions = [".jpg", ".jpeg", ".bmp", ".gif", ".png"];
+        function ValidateSingleInput(oInput)
+        {
+            if (oInput.type == "file") {
+                var sFileName = oInput.value;
+                if (sFileName.length > 0) {
+                    var blnValid = false;
+                    for (var j = 0; j < _validFileExtensions.length; j++) {
+                        var sCurExtension = _validFileExtensions[j];
+                        if (sFileName.substr(sFileName.length - sCurExtension.length, sCurExtension.length).toLowerCase() == sCurExtension.toLowerCase()) {
+                            blnValid = true;
+                            break;
+                        }
+                    }
+
+                    if (!blnValid) {
+                        alert("Xin lỗi, file " + sFileName + " không hợp lệ, các file phải thuộc các định dạng sau: " + _validFileExtensions.join(", "));
+                        oInput.value = "";
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+        // end upload image
     </script>
 @endsection

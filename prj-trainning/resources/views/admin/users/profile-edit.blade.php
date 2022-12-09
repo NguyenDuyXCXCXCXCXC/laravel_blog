@@ -75,7 +75,7 @@
                 <div class="form-group" >
                     <div style="display: flex;">
                         <label style="width: 91px;padding-top: 6px;">Avatar</label>
-                        <input type="file" name="avatar" id="avatar" class="form-control" placeholder="image">
+                        <input type="file" name="avatar" id="avatar" class="form-control"   placeholder="image">
                     </div>
                     @if ($errors->has('avatar'))
                         <p class="text-danger text-center" style="font-size: 12px;">{{ $errors->first('avatar') }}</p>
@@ -113,19 +113,49 @@
     </div>
     <script>
 
-        // xem trc anh avatar
+
+        // upload image
         $('#avatar').change(function(){
+            if(ValidateSingleInput(this)){
+                $('#upload_file').empty();
+                $('#upload_file').prepend('<img id="preview-avatar-before-upload" src=""  alt="image-preview" width="50" height="60"/>');
+                let reader = new FileReader();
 
-            $('#upload_file').empty();
-            $('#upload_file').prepend('<img id="preview-avatar-before-upload" src=""  alt="image-preview" width="50" height="60"/>');
-            let reader = new FileReader();
+                reader.onload = (e) => {
 
-            reader.onload = (e) => {
+                    $('#preview-avatar-before-upload').attr('src', e.target.result);
+                }
 
-                $('#preview-avatar-before-upload').attr('src', e.target.result);
+                reader.readAsDataURL(this.files[0]);
             }
-
-            reader.readAsDataURL(this.files[0]);
         });
+
+        // validate image before preview
+        var _validFileExtensions = [".jpg", ".jpeg", ".bmp", ".gif", ".png"];
+        function ValidateSingleInput(oInput)
+        {
+            if (oInput.type == "file") {
+                var sFileName = oInput.value;
+                if (sFileName.length > 0) {
+                    var blnValid = false;
+                    for (var j = 0; j < _validFileExtensions.length; j++) {
+                        var sCurExtension = _validFileExtensions[j];
+                        if (sFileName.substr(sFileName.length - sCurExtension.length, sCurExtension.length).toLowerCase() == sCurExtension.toLowerCase()) {
+                            blnValid = true;
+                            break;
+                        }
+                    }
+
+                    if (!blnValid) {
+                        alert("Xin lỗi, file " + sFileName + " không hợp lệ, các file phải thuộc các định dạng sau: " + _validFileExtensions.join(", "));
+                        oInput.value = "";
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+        // end upload image
+
     </script>
 @endsection

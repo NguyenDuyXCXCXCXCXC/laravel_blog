@@ -23,7 +23,8 @@
                     <div class="col-7"></div>
                     <div class="col-5">
                         <p style="margin-bottom: 0px;">{{ $comment->comment_time }}</p>
-                        <div class="form" style="display: flex">
+                            <p id="reply{{$comment->id}}" class="text-info mb-3" style="cursor: pointer;" onclick="appearFromReply({{$comment->id}})">phản hồi</>
+                            <div class="form" id="form{{$comment->id}}" style="display: none">
                             <div class="form-group mr-1">
                                 {{--                            <input type="text" name="body" class="form-control" />--}}
                                 <textarea name="comment" id="comment{{$comment->id}}"></textarea>
@@ -31,6 +32,7 @@
                                 <input type="hidden" id="parent_id{{$comment->id}}" name="parent_id" value="{{ $comment->id }}" />
                             </div>
                             <div class="form-group">
+
                                 @if(Auth::user() == null)
                                    <input type="submit"class="btn btn-warning" value="Bình luận" onclick="alertLoginToComment()" />
                                 @else
@@ -44,9 +46,10 @@
                 </div>
 
             </div>
+
+            @include('commentsDisplay', ['comments' => $comment->replies])
             <div class="display-comment" id="cmt{{$comment->id}}" style="margin-left:40px;" >
             </div>
-            @include('commentsDisplay', ['comments' => $comment->replies])
         </div>
 
     @elseif(Auth::user() != null && ($comment->user->id == Auth::user()->id) && $comment->status == 0  )
@@ -74,7 +77,8 @@
                     <div class="col-7"></div>
                     <div class="col-5">
                             <p style="margin-bottom: 0px;"><span class="bg-danger">Chờ phê duyệt</span> {{ $comment->comment_time }}</p>
-                        <div class="form" style="display: flex">
+                        <p id="reply{{$comment->id}}" class="text-info mb-3" style="cursor: pointer;" onclick="appearFromReply({{$comment->id}})">phản hồi</>
+                        <div class="form" id="form{{$comment->id}}" style="display: none">
                             <div class="form-group mr-1">
                                 {{--                            <input type="text" name="body" class="form-control" />--}}
                                 <textarea name="comment" id="comment{{$comment->id}}"></textarea>
@@ -95,9 +99,10 @@
                 </div>
 
             </div>
+
+            @include('commentsDisplay', ['comments' => $comment->replies])
             <div class="display-comment" id="cmt{{$comment->id}}" style="margin-left:40px;" >
             </div>
-            @include('commentsDisplay', ['comments' => $comment->replies])
         </div>
     @endif
 

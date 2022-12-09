@@ -79,6 +79,13 @@
             }
 
         }
+
+
+        function appearFromReply(id){
+            $(`#form${id}`).css('display', 'flex');
+            $(`#reply${id}`).css('display', 'none');
+        }
+
         function addComment(id){
 
             // tgian khi them cmt moi

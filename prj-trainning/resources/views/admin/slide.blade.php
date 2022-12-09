@@ -26,7 +26,7 @@
                 <!-- Add icons to the links using the .nav-icon class
                      with font-awesome or any other icon font library -->
                 <li class="nav-item">
-                    <a href="{{route('admin.profile')}}" class="nav-link">
+                    <a href="{{route('admin.profile')}}" class="nav-link {{ Route::is('admin.profile*')  ? 'active' : '' }}">
                         <p>
                             Profile
                         </p>
@@ -36,7 +36,7 @@
 
                 @if($user->role == 3)
                     <li class="nav-item">
-                        <a href="{{ route('admin.user.list') }}" class="nav-link">
+                        <a href="{{ route('admin.list') }}" class="nav-link {{ Route::is('admin.list')  ? 'active' : '' }} ">
                             <p>
                                 Admin
                             </p>
@@ -45,7 +45,7 @@
                     </li>
                 @endif
                 <li class="nav-item">
-                    <a href="{{route('admin.user.listForUser')}}" class="nav-link">
+                    <a href="{{route('admin.user.listForUser')}}" class="nav-link {{ Route::is('admin.user*')  ? 'active' : '' }}">
                         <p>
                             Users
                         </p>
@@ -54,14 +54,14 @@
                 </li>
 
                 <li class="nav-item">
-                    <a href="{{route('admin.categories.list')}}" class="nav-link">
+                    <a href="{{route('admin.categories.list')}}" class="nav-link {{ Route::is('admin.categories*')  ? 'active' : '' }}">
                         <p>
                             Categories
                         </p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{route('admin.post.list')}}" class="nav-link">
+                    <a href="{{route('admin.post.list')}}" class="nav-link {{ Route::is('admin.post*')  ? 'active' : '' }}">
                         <p>
                             Posts
                         </p>
@@ -69,7 +69,7 @@
                 </li>
 
                 <li class="nav-item ">
-                    <a href="{{route('admin.comment.list')}}" class="nav-link">
+                    <a href="{{route('admin.comment.list')}}" class="nav-link {{ Route::is('admin.comment*')  ? 'active' : '' }}">
                         <p>
                             Comments
                         </p>

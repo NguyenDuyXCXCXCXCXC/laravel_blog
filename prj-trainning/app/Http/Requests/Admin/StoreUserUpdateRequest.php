@@ -27,6 +27,9 @@ class StoreUserUpdateRequest extends FormRequest
             'email' => 'required|max:100|min:12|email:filter',
             'first_name' => 'required|max:50',
             'last_name'=> 'required|max:50',
+            'sex'=> 'required|integer|min:0|max:2',
+            'role'=> 'integer|min:1|max:3',
+            'birthday'=> 'date',
             'avatar'=> 'image|mimes:jpeg,png,jpg,gif,svg|max:10240',
         ];
     }

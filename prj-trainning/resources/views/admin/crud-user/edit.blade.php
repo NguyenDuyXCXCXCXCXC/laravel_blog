@@ -6,7 +6,7 @@
             @if($userEdit->role == 2)
                 / <a href="{{route('admin.user.listForUser')}}">Users</a>
             @else
-                / <a href="{{route('admin.user.list')}}">Users</a>
+                / <a href="{{route('admin.list')}}">Users</a>
             @endif
 
             / Edit
@@ -142,7 +142,7 @@
                         @if (($user->role) === 1)
                             <a href="{{route('admin.user.listForUser')}}" ><button type="button" class="btn btn-primary btn-block">Danh sách Users</button></a>
                         @elseif (($user->role) === 3)
-                            <a href="{{route('admin.user.list')}}" ><button type="button" class="btn btn-primary btn-block">Danh sách Users</button></a>
+                            <a href="{{route('admin.list')}}" ><button type="button" class="btn btn-primary btn-block">Danh sách Users</button></a>
                         @endif
                     </div>
                 </div>
@@ -151,18 +151,47 @@
 
     </div>
     <script>
+        // upload image
         $('#avatar').change(function(){
+            if(ValidateSingleInput(this)){
+                $('#upload_file').empty();
+                $('#upload_file').prepend('<img id="preview-avatar-before-upload" src=""  alt="image-preview" width="50" height="60"/>');
+                let reader = new FileReader();
 
-            $('#upload_file').empty();
-            $('#upload_file').prepend('<img id="preview-avatar-before-upload" src=""  alt="image-preview" width="50" height="60"/>');
-            let reader = new FileReader();
+                reader.onload = (e) => {
 
-            reader.onload = (e) => {
+                    $('#preview-avatar-before-upload').attr('src', e.target.result);
+                }
 
-                $('#preview-avatar-before-upload').attr('src', e.target.result);
+                reader.readAsDataURL(this.files[0]);
             }
+        })
 
-            reader.readAsDataURL(this.files[0]);
-        });
+        // validate image before preview
+        var _validFileExtensions = [".jpg", ".jpeg", ".bmp", ".gif", ".png"];
+        function ValidateSingleInput(oInput)
+        {
+            if (oInput.type == "file") {
+                var sFileName = oInput.value;
+                if (sFileName.length > 0) {
+                    var blnValid = false;
+                    for (var j = 0; j < _validFileExtensions.length; j++) {
+                        var sCurExtension = _validFileExtensions[j];
+                        if (sFileName.substr(sFileName.length - sCurExtension.length, sCurExtension.length).toLowerCase() == sCurExtension.toLowerCase()) {
+                            blnValid = true;
+                            break;
+                        }
+                    }
+
+                    if (!blnValid) {
+                        alert("Xin lỗi, file " + sFileName + " không hợp lệ, các file phải thuộc các định dạng sau: " + _validFileExtensions.join(", "));
+                        oInput.value = "";
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+        // end upload image
     </script>
 @endsection

@@ -26,7 +26,7 @@ class StorePostUpdateRequest extends FormRequest
         return [
             'title'  =>'required|max:200',
             'categories_id' =>'required',
-            'hot_flag' =>'required',
+            'hot_flag' =>'required|integer|min:0|max:1',
             'content' =>'required',
             'photo'=> 'image|mimes:jpeg,png,jpg,gif,svg|max:10240',
         ];

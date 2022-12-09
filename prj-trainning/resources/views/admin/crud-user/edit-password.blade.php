@@ -6,7 +6,7 @@
             @if($userEdit->role == 2)
                 / <a href="{{route('admin.user.listForUser')}}">Users</a>
             @else
-                / <a href="{{route('admin.user.list')}}">Users</a>
+                / <a href="{{route('admin.list')}}">Users</a>
             @endif
 
             / Edit
